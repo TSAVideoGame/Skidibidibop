@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/home/mihir/Coding/tsa/game",
+  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/sdl  -o CMakeFiles/game.dir/src/main.cpp.o -c /home/mihir/Coding/tsa/game/src/main.cpp",
+  "file": "/home/mihir/Coding/tsa/game/src/main.cpp"
+},
+{
+  "directory": "/home/mihir/Coding/tsa/game",
+  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/sdl  -o CMakeFiles/game.dir/src/core/core.cpp.o -c /home/mihir/Coding/tsa/game/src/core/core.cpp",
+  "file": "/home/mihir/Coding/tsa/game/src/core/core.cpp"
+},
+{
+  "directory": "/home/mihir/Coding/tsa/game",
+  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/sdl  -o CMakeFiles/game.dir/src/sdl/window.cpp.o -c /home/mihir/Coding/tsa/game/src/sdl/window.cpp",
+  "file": "/home/mihir/Coding/tsa/game/src/sdl/window.cpp"
+}
+]
