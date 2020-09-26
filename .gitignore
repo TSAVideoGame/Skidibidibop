@@ -6,3 +6,6 @@ CMakeFiles
 # Build stuff
 Makefile
 bin
+
+# Game data stuff
+*.sbbd

@@ -101,8 +101,31 @@ int Data::Parser::Parse(const std::string& fpath)
     }
   }
 
-  // Parser
-  
+  /*
+   * There will be no parser and no WDYM until I
+   * have time for a side project, meanwhile all
+   * the data will just get convered to binary.
+   */
+  std::ofstream dataFile(fpath.substr(0, fpath.length() - 3) + "sbbd", std::ios::trunc | std::ios::binary);
+  for (Token* t : tokens)
+  {
+    switch (t->type)
+    {
+      case Token::Type::U_INT:
+      {
+        dataFile.write(reinterpret_cast<char*>(t->data), sizeof(unsigned int));
+        break;
+      }
+      case Token::Type::BOOL:
+      {
+        dataFile.write(reinterpret_cast<char*>(t->data), sizeof(bool));
+      }
+      default:
+      {
+        break;
+      }
+    }
+  }
   
   // Free up memory
   for (Token* t : tokens)

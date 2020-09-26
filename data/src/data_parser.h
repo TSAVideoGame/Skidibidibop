@@ -42,7 +42,15 @@ namespace Data
     struct Data
     {
       enum class Type {COLLECTION, U_INT, BOOL};
+      Type type;
+      void* data = nullptr;
+      size_t size;
 
+      ~Data()
+      {
+        if (data != nullptr)
+          free(data);
+      }
     };
   };
 };
