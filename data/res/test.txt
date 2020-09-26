@@ -3,18 +3,16 @@
 # Rows, Columns
 # The size of the map
 #
-# Spawn
-# Row, Column
-# Where the player will spawn on the map
-#
 # Data
 # (Sprite) Id, (Collision) Top, Bottom, Left, Right, (State) Id
 # The tile data
+#
+# Spawn
+# Row, Column
+# Where the player will spawn on the map
 
 @SIZE
 8, 8
-@SPAWN
-0, 0
 @DATA
 [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0],
 [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0],
@@ -24,3 +22,5 @@
 [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0],
 [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0],
 [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0], [0, [f, f, f, f], 0]
+@SPAWN
+0, 0

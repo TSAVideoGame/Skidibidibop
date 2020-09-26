@@ -2,7 +2,7 @@
 
 int main()
 {
-  Data::Parser::Parse("test.txt");
+  Data::Parser::Parse("res/test.txt");
 
   return 0;
 }
