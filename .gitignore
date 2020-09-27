@@ -6,6 +6,7 @@ CMakeFiles
 # Build stuff
 Makefile
 bin
+lib
 
 # Editor stuff
 .clangd
