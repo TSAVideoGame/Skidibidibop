@@ -2,18 +2,30 @@ cmake_minimum_required(VERSION 3.10)
 
 project(game)
 
+# The data stuff should be made into a shared library
 add_executable(game
   ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
 
   ${CMAKE_CURRENT_LIST_DIR}/src/core/core.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/core/core_object.cpp
 
+  ${CMAKE_CURRENT_LIST_DIR}/src/map/map.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/map/tile.cpp
+
+  ${CMAKE_CURRENT_LIST_DIR}/src/sdl/renderer.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/sdl/texture.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/sdl/window.cpp
+
+  ${CMAKE_CURRENT_LIST_DIR}/../data/src/data_save.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/../data/src/data_types.cpp
 )
 
 target_include_directories(game PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/src
   ${CMAKE_CURRENT_LIST_DIR}/src/core
+  ${CMAKE_CURRENT_LIST_DIR}/src/map
   ${CMAKE_CURRENT_LIST_DIR}/src/sdl
+  ${CMAKE_CURRENT_LIST_DIR}/../data/src
 )
 
 target_link_libraries(game SDL2 SDL2_image)

@@ -1,17 +1,52 @@
 [
 {
   "directory": "/home/mihir/Coding/tsa/game",
-  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/sdl  -o CMakeFiles/game.dir/src/main.cpp.o -c /home/mihir/Coding/tsa/game/src/main.cpp",
+  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/map -I/home/mihir/Coding/tsa/game/src/sdl -I/home/mihir/Coding/tsa/game/../data/src  -o CMakeFiles/game.dir/src/main.cpp.o -c /home/mihir/Coding/tsa/game/src/main.cpp",
   "file": "/home/mihir/Coding/tsa/game/src/main.cpp"
 },
 {
   "directory": "/home/mihir/Coding/tsa/game",
-  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/sdl  -o CMakeFiles/game.dir/src/core/core.cpp.o -c /home/mihir/Coding/tsa/game/src/core/core.cpp",
+  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/map -I/home/mihir/Coding/tsa/game/src/sdl -I/home/mihir/Coding/tsa/game/../data/src  -o CMakeFiles/game.dir/src/core/core.cpp.o -c /home/mihir/Coding/tsa/game/src/core/core.cpp",
   "file": "/home/mihir/Coding/tsa/game/src/core/core.cpp"
 },
 {
   "directory": "/home/mihir/Coding/tsa/game",
-  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/sdl  -o CMakeFiles/game.dir/src/sdl/window.cpp.o -c /home/mihir/Coding/tsa/game/src/sdl/window.cpp",
+  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/map -I/home/mihir/Coding/tsa/game/src/sdl -I/home/mihir/Coding/tsa/game/../data/src  -o CMakeFiles/game.dir/src/core/core_object.cpp.o -c /home/mihir/Coding/tsa/game/src/core/core_object.cpp",
+  "file": "/home/mihir/Coding/tsa/game/src/core/core_object.cpp"
+},
+{
+  "directory": "/home/mihir/Coding/tsa/game",
+  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/map -I/home/mihir/Coding/tsa/game/src/sdl -I/home/mihir/Coding/tsa/game/../data/src  -o CMakeFiles/game.dir/src/map/map.cpp.o -c /home/mihir/Coding/tsa/game/src/map/map.cpp",
+  "file": "/home/mihir/Coding/tsa/game/src/map/map.cpp"
+},
+{
+  "directory": "/home/mihir/Coding/tsa/game",
+  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/map -I/home/mihir/Coding/tsa/game/src/sdl -I/home/mihir/Coding/tsa/game/../data/src  -o CMakeFiles/game.dir/src/map/tile.cpp.o -c /home/mihir/Coding/tsa/game/src/map/tile.cpp",
+  "file": "/home/mihir/Coding/tsa/game/src/map/tile.cpp"
+},
+{
+  "directory": "/home/mihir/Coding/tsa/game",
+  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/map -I/home/mihir/Coding/tsa/game/src/sdl -I/home/mihir/Coding/tsa/game/../data/src  -o CMakeFiles/game.dir/src/sdl/renderer.cpp.o -c /home/mihir/Coding/tsa/game/src/sdl/renderer.cpp",
+  "file": "/home/mihir/Coding/tsa/game/src/sdl/renderer.cpp"
+},
+{
+  "directory": "/home/mihir/Coding/tsa/game",
+  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/map -I/home/mihir/Coding/tsa/game/src/sdl -I/home/mihir/Coding/tsa/game/../data/src  -o CMakeFiles/game.dir/src/sdl/texture.cpp.o -c /home/mihir/Coding/tsa/game/src/sdl/texture.cpp",
+  "file": "/home/mihir/Coding/tsa/game/src/sdl/texture.cpp"
+},
+{
+  "directory": "/home/mihir/Coding/tsa/game",
+  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/map -I/home/mihir/Coding/tsa/game/src/sdl -I/home/mihir/Coding/tsa/game/../data/src  -o CMakeFiles/game.dir/src/sdl/window.cpp.o -c /home/mihir/Coding/tsa/game/src/sdl/window.cpp",
   "file": "/home/mihir/Coding/tsa/game/src/sdl/window.cpp"
+},
+{
+  "directory": "/home/mihir/Coding/tsa/game",
+  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/map -I/home/mihir/Coding/tsa/game/src/sdl -I/home/mihir/Coding/tsa/game/../data/src  -o CMakeFiles/game.dir/home/mihir/Coding/tsa/data/src/data_save.cpp.o -c /home/mihir/Coding/tsa/data/src/data_save.cpp",
+  "file": "/home/mihir/Coding/tsa/data/src/data_save.cpp"
+},
+{
+  "directory": "/home/mihir/Coding/tsa/game",
+  "command": "/usr/bin/c++  -I/home/mihir/Coding/tsa/game/src -I/home/mihir/Coding/tsa/game/src/core -I/home/mihir/Coding/tsa/game/src/map -I/home/mihir/Coding/tsa/game/src/sdl -I/home/mihir/Coding/tsa/game/../data/src  -o CMakeFiles/game.dir/home/mihir/Coding/tsa/data/src/data_types.cpp.o -c /home/mihir/Coding/tsa/data/src/data_types.cpp",
+  "file": "/home/mihir/Coding/tsa/data/src/data_types.cpp"
 }
 ]

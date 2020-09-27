@@ -119,6 +119,7 @@ int Data::Parser::Parse(const std::string& fpath)
       case Token::Type::BOOL:
       {
         dataFile.write(reinterpret_cast<char*>(t->data), sizeof(bool));
+        break;
       }
       default:
       {

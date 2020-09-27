@@ -25,7 +25,7 @@ namespace Data
       Types::Map map;
     };
 
-    Data load(std::string& fpath);
+    Data load(const std::string& fpath);
     void save(Data);
   };
 };

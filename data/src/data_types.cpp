@@ -10,6 +10,11 @@ Data::Types::Base::Base(Type type)
   this->type = type;
 }
 
+Data::Types::Base::~Base()
+{
+
+}
+
 /*
  * ==========================================
  * Data::Types::Map
@@ -33,7 +38,7 @@ void Data::Types::Map::load(std::ifstream& file)
   // Load the data
   tiles.reserve(size.x * size.y);
 
-  for (size_t i; i < size.x * size.y; i++)
+  for (size_t i = 0; i < size.x * size.y; i++)
   {
     Tile t;
     file.read(reinterpret_cast<char*>(&t.id), sizeof(t.id));
