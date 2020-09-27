@@ -10,6 +10,7 @@ lib
 
 # Editor stuff
 .clangd
+compile_commands.json
 
 # Game data stuff
 *.sbbd

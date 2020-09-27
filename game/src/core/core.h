@@ -2,6 +2,7 @@
 #define SKIDIBIDIBOP_GAME_CORE_CORE
 
 #include "sdl.h"
+#include "camera.h"
 
 namespace Game
 {
@@ -31,6 +32,8 @@ namespace Game
       static bool isRunning() { return running; }
       static State getState() { return state; }
       static SDL::Texture* const getTexture() { return texture; }
+
+      static Game::Core::Camera camera;
     private:
       Core();
 

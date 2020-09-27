@@ -10,6 +10,8 @@ Game::SDL::Window* Game::Core::Core::window;
 Game::SDL::Renderer* Game::Core::Core::renderer;
 Game::SDL::Texture* Game::Core::Core::texture;
 
+Game::Core::Camera Game::Core::Core::camera = {0, 0};
+
 static Game::Map::Manager* mapManager;
 
 void Game::Core::Core::init()
@@ -45,6 +47,34 @@ void Game::Core::Core::input()
       case SDL_QUIT:
       {
         running = false;
+        break;
+      }
+      // Bad code, input object/struct should be made to deal with inputs
+      case SDL_KEYDOWN:
+      {
+        switch (e.key.keysym.sym)
+        {
+          case SDLK_w:
+          {
+            camera.y -= 8;
+            break;
+          }
+          case SDLK_s:
+          {
+            camera.y += 8;
+            break;
+          }
+          case SDLK_a:
+          {
+            camera.x -= 8;
+            break;
+          }
+          case SDLK_d:
+          {
+            camera.x += 8;
+            break;
+          }
+        }
         break;
       }
     }

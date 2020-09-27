@@ -17,5 +17,6 @@ Game::Core::Object::Object::~Object()
 
 void Game::Core::Object::Object::draw()
 {
-  renderer->copy(Core::Core::getTexture(), &srcRect, &destRect);
+  SDL_Rect dRect = {destRect.x - Core::camera.x, destRect.y - Core::camera.y, destRect.w, destRect.h};
+  renderer->copy(Core::Core::getTexture(), &srcRect, &dRect);
 }
