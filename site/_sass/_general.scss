@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'Major Mono Display';
+  src: url('/assets/fonts/major_mono_display/MajorMonoDisplay-Regular.ttf');
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: rgba(0,0,0,.2);
+}
+
+h1 {
+  font-family: 'Major Mono Display', sans-serif;
+  color: #33322e
+};
