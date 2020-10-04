@@ -3,5 +3,32 @@ layout: default
 ---
 
 <div style="width:100vw;height:100vh;display:flex;justify-content:center;align-items:center">
-  <h1 style="font-size:8vw">SKIDIBIDIBOP</h1>
+  <h1 id="title" style="font-size:8vw">SKIDIBIDIBOP</h1>
 </div>
+<script type="text/javascript">
+  const element = document.getElementById('title');
+  const fps = 30;
+  const frameDelay = 1000 / fps;
+
+  let frameStart;
+  let frameTime;
+
+  let ticks = 0;
+
+  function animate(timestamp) {
+    frameStart = timestamp;
+
+    ticks++;
+    element.style.transform = 'translateY(' + (20 * Math.sin(.02 * ticks)) + 'px)';
+
+    frametime = timestamp - frameStart;
+
+    while (frameDelay > frameTime) {
+      frameTime = timestamp - frameStart;
+    }
+
+    window.requestAnimationFrame(animate);
+  }
+
+  window.requestAnimationFrame(animate);
+</script>
