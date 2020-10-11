@@ -1,18 +1,15 @@
 #include "core.h"
 #include <SDL2/SDL.h>
 
-#include "map.h"
-#include "data.h"
-
 bool Game::Core::Core::running = true;
-Game::Core::State Game::Core::Core::state = State::GAME;
+Game::Core::States::State Game::Core::Core::state = {Game::Core::States::States::TITLE, {}};
+Game::Core::Inputs::Pressed Game::Core::Core::inputs = {false, false, false, false, false, false, false, false};
 Game::SDL::Window* Game::Core::Core::window;
 Game::SDL::Renderer* Game::Core::Core::renderer;
 Game::SDL::Texture* Game::Core::Core::texture;
+Game::Core::ManagerManager* Game::Core::Core::manager;
 
 Game::Core::Camera Game::Core::Core::camera = {0, 0};
-
-static Game::Map::Manager* mapManager;
 
 void Game::Core::Core::init()
 {
@@ -23,12 +20,16 @@ void Game::Core::Core::init()
   renderer = new SDL::Renderer(window);
   texture = new SDL::Texture("res/spritesheet.png", renderer);
 
-  mapManager = new Map::Manager(renderer, Data::Save::load("res/test.sbbd").map);
+  // This is for testing purposes
+  state.current = States::States::GAME;
+  state.data.game.state = States::Game::States::NORMAL;
+
+  manager = new ManagerManager(renderer);
 }
 
 void Game::Core::Core::close()
 {
-  delete mapManager;
+  delete manager;
 
   delete texture;
   delete renderer;
@@ -49,29 +50,55 @@ void Game::Core::Core::input()
         running = false;
         break;
       }
-      // Bad code, input object/struct should be made to deal with inputs
       case SDL_KEYDOWN:
       {
         switch (e.key.keysym.sym)
         {
-          case SDLK_w:
+          case Inputs::UP_KEY:
           {
-            camera.y -= 8;
+            inputs.up = true;
             break;
           }
-          case SDLK_s:
+          case Inputs::RIGHT_KEY:
           {
-            camera.y += 8;
+            inputs.right = true;
             break;
           }
-          case SDLK_a:
+          case Inputs::DOWN_KEY:
           {
-            camera.x -= 8;
+            inputs.down = true;
             break;
           }
-          case SDLK_d:
+          case Inputs::LEFT_KEY:
           {
-            camera.x += 8;
+            inputs.left = true;
+            break;
+          }
+        }
+        break;
+      }
+      case SDL_KEYUP:
+      {
+        switch (e.key.keysym.sym)
+        {
+          case Inputs::UP_KEY:
+          {
+            inputs.up = false;
+            break;
+          }
+          case Inputs::RIGHT_KEY:
+          {
+            inputs.right = false;
+            break;
+          }
+          case Inputs::DOWN_KEY:
+          {
+            inputs.down = false;
+            break;
+          }
+          case Inputs::LEFT_KEY:
+          {
+            inputs.left = false;
             break;
           }
         }
@@ -83,7 +110,7 @@ void Game::Core::Core::input()
 
 void Game::Core::Core::update()
 {
-
+  manager->update();
 }
 
 void Game::Core::Core::draw()
@@ -91,7 +118,7 @@ void Game::Core::Core::draw()
   renderer->setDrawColor(0, 0, 0, 255);
   renderer->clear();
 
-  mapManager->draw();
+  manager->draw();
 
   renderer->present();
 }

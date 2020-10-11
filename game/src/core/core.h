@@ -3,6 +3,9 @@
 
 #include "sdl.h"
 #include "camera.h"
+#include "core_states.h"
+#include "core_manager_manager.h"
+#include "core_inputs.h"
 
 namespace Game
 {
@@ -17,7 +20,7 @@ namespace Game
       } WINDOW;
     } CONSTANTS;
 
-    enum class State {TITLE, GAME};
+    enum class Directions {TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT};
 
     class Core
     {
@@ -30,7 +33,8 @@ namespace Game
       static void draw();
 
       static bool isRunning() { return running; }
-      static State getState() { return state; }
+      static States::State getState() { return state; }
+      static Inputs::Pressed getInputs() { return inputs; }
       static SDL::Texture* const getTexture() { return texture; }
 
       static Game::Core::Camera camera;
@@ -38,10 +42,12 @@ namespace Game
       Core();
 
       static bool running;
-      static State state;
+      static States::State state;
+      static Inputs::Pressed inputs;
       static SDL::Window* window;
       static SDL::Renderer* renderer;
       static SDL::Texture* texture;
+      static ManagerManager* manager;
     };
   };
 };

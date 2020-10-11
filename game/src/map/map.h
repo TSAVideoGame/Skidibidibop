@@ -2,25 +2,22 @@
 #define SKIDIBIDIBOP_GAME_MAP
 
 #include "data.h"
-#include <vector>
 #include "tile.h"
 #include "sdl.h"
+#include "core_object_manager.h"
 
 // Full temporary until I get the Core::Object::Manager situated
 namespace Game
 {
   namespace Map
   {
-    class Manager
+    class Manager : public Core::Object::Manager
     {
     public:
-      Manager(SDL::Renderer*, Data::Types::Map);
-      ~Manager();
-
-      void update();
-      void draw();
+      Manager(SDL::Renderer*, const Data::Types::Map&);
+      void loadMap(const Data::Types::Map&);
     private:
-      std::vector<Tile> tiles;
+      SDL::Renderer* renderer;
     };
   };
 };

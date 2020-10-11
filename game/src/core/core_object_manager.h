@@ -17,13 +17,16 @@ namespace Game
        * Manages objects of a type
        * ========================================
        */
-      class Manager
+      class Manager : public Base
       {
       public:
         Manager();
-        ~Manager();
-      private:
-        std::deque<Base> objects;
+        virtual ~Manager();
+        virtual void update();
+        virtual void draw();
+      protected:
+        std::deque<Base*> objects;
+        void empty();
       };
     };
   };
