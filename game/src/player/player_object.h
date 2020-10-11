@@ -14,6 +14,8 @@ namespace Game
       Object(SDL::Renderer*);
       void update();
     private:
+      static float maxVelocity;
+
       Core::Directions direction;
       struct
       {
@@ -21,12 +23,13 @@ namespace Game
       } Position;
       struct
       {
-        int x, y;
+        float x, y;
       } Velocity;
       bool moving;
 
       void setDirection();
       void move();
+      void prepareDraw();
     };
   };
 };

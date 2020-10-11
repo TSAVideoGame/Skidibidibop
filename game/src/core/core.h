@@ -20,7 +20,8 @@ namespace Game
       } WINDOW;
     } CONSTANTS;
 
-    enum class Directions {TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT};
+    // Using an enum rather than an enum class to make some of the math easier
+    enum Directions {DIR_TOP, DIR_TOP_RIGHT, DIR_RIGHT, DIR_BOTTOM_RIGHT, DIR_BOTTOM, DIR_BOTTOM_LEFT, DIR_LEFT, DIR_TOP_LEFT};
 
     class Core
     {
