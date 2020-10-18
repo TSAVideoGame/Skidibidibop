@@ -1,6 +1,7 @@
 # Skidibidibop
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/774f9363464d4a2ca5655b1bd5a8b44b)](https://www.codacy.com/gh/TSAVideoGame/Skidibidibop/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=TSAVideoGame/Skidibidibop&amp;utm_campaign=Badge_Grade)
+[![GitHub](https://img.shields.io/github/license/TSAVideoGame/Skidibidibop)](https://github.com/TSAVideoGame/Skidibidibop/blob/master/LICENSE)
 
 TSA Adventure Game 2020-21
 
