@@ -17,14 +17,16 @@ target_include_directories(editor PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/src/tools
   ${CMAKE_CURRENT_LIST_DIR}/src/window
   ${CMAKE_CURRENT_LIST_DIR}/../data/include
+  ${CMAKE_CURRENT_LIST_DIR}/../sdlw/include
   /usr/include/SDL2
 )
 
 target_link_directories(editor PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../data/lib
+  ${CMAKE_CURRENT_LIST_DIR}/../sdlw/lib
 )
 
-target_link_libraries(editor sbbdata SDL2 SDL2_image SDL2_ttf)
+target_link_libraries(editor sbbdata sdlw SDL2 SDL2_image SDL2_ttf)
 
 set_target_properties(editor PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
 

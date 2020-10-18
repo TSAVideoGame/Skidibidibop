@@ -11,7 +11,7 @@ namespace Game
     class Object : public Core::Object::Object
     {
     public:
-      Object(SDL::Renderer*);
+      Object(SDLW::Renderer*);
       void update();
     private:
       static float maxVelocity;

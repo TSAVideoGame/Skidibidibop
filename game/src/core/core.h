@@ -1,7 +1,7 @@
 #ifndef SKIDIBIDIBOP_GAME_CORE_CORE
 #define SKIDIBIDIBOP_GAME_CORE_CORE
 
-#include "sdl.h"
+#include "sdlw.h"
 #include "camera.h"
 #include "core_states.h"
 #include "core_manager_manager.h"
@@ -36,7 +36,7 @@ namespace Game
       static bool isRunning() { return running; }
       static States::State getState() { return state; }
       static Inputs::Pressed getInputs() { return inputs; }
-      static SDL::Texture* const getTexture() { return texture; }
+      static SDLW::Texture* const getTexture() { return texture; }
 
       static Game::Core::Camera camera;
     private:
@@ -45,9 +45,9 @@ namespace Game
       static bool running;
       static States::State state;
       static Inputs::Pressed inputs;
-      static SDL::Window* window;
-      static SDL::Renderer* renderer;
-      static SDL::Texture* texture;
+      static SDLW::Window* window;
+      static SDLW::Renderer* renderer;
+      static SDLW::Texture* texture;
       static ManagerManager* manager;
     };
   };

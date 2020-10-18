@@ -1,6 +1,6 @@
 #include "tool_manager.h"
 
-Editor::Tool::Manager::Manager(SDL_Renderer* renderer)
+Editor::Tool::Manager::Manager(SDLW::Renderer* renderer)
 {
   tabs.reserve(4);
 

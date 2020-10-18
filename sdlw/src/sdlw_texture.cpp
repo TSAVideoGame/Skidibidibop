@@ -2,6 +2,10 @@
 #include <SDL2/SDL_image.h>
 #include "sdlw_renderer.h"
 
+SDLW::Texture::Texture(SDL_Texture* texture_t)
+{
+  texture = texture_t;
+}
 /*
  * ========================================
  * This is an expensive operation, use it

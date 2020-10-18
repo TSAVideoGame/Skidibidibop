@@ -6,7 +6,7 @@ Game::Core::Object::Base::~Base()
 
 }
 
-Game::Core::Object::Object::Object(SDL::Renderer* renderer)
+Game::Core::Object::Object::Object(SDLW::Renderer* renderer)
 {
   this->renderer = renderer;
 }

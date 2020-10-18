@@ -15,10 +15,6 @@ add_executable(game
 
   ${CMAKE_CURRENT_LIST_DIR}/src/map/map.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/map/tile.cpp
-
-  ${CMAKE_CURRENT_LIST_DIR}/src/sdl/renderer.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/sdl/texture.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/sdl/window.cpp
 )
 
 # Ignore the /usr/include/SDL2 part, my VIM is messed up :(
@@ -29,14 +25,16 @@ target_include_directories(game PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/src/player
   ${CMAKE_CURRENT_LIST_DIR}/src/sdl
   ${CMAKE_CURRENT_LIST_DIR}/../data/include
+  ${CMAKE_CURRENT_LIST_DIR}/../sdlw/include
   /usr/include/SDL2
 )
 
 target_link_directories(game PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../data/lib
+  ${CMAKE_CURRENT_LIST_DIR}/../sdlw/lib
 )
 
-target_link_libraries(game sbbdata SDL2 SDL2_image)
+target_link_libraries(game sbbdata sdlw SDL2)
 
 set_target_properties(game PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
 

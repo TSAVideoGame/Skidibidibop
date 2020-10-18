@@ -1,8 +1,7 @@
 #ifndef SKIDIBIDIBOP_GAME_OBJECT
 #define SKIDIBIDIBOP_GAME_OBJECT
 
-#include <SDL2/SDL.h>
-#include "sdl.h"
+#include "sdlw.h"
 
 namespace Game
 {
@@ -28,14 +27,14 @@ namespace Game
       class Object : public Base
       {
       public:
-        Object(SDL::Renderer*);
+        Object(SDLW::Renderer*);
         virtual ~Object();
         virtual void update() = 0;
         void draw();
       protected:
         SDL_Rect srcRect;
         SDL_Rect destRect;
-        SDL::Renderer* renderer;
+        SDLW::Renderer* renderer;
       };
     };
   };

@@ -2,7 +2,7 @@
 #define SKIDIBIDIBOP_GAME_PLAYER_MANAGER
 
 #include "core_object_manager.h"
-#include "sdl.h"
+#include "sdlw.h"
 
 namespace Game
 {
@@ -11,7 +11,7 @@ namespace Game
     class Manager : public Core::Object::Manager
     {
     public:
-      Manager(SDL::Renderer*);
+      Manager(SDLW::Renderer*);
     };
   };
 };

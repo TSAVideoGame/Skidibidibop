@@ -4,9 +4,9 @@
 bool Game::Core::Core::running = true;
 Game::Core::States::State Game::Core::Core::state = {Game::Core::States::States::TITLE, {}};
 Game::Core::Inputs::Pressed Game::Core::Core::inputs = {false, false, false, false, false, false, false, false};
-Game::SDL::Window* Game::Core::Core::window;
-Game::SDL::Renderer* Game::Core::Core::renderer;
-Game::SDL::Texture* Game::Core::Core::texture;
+SDLW::Window* Game::Core::Core::window;
+SDLW::Renderer* Game::Core::Core::renderer;
+SDLW::Texture* Game::Core::Core::texture;
 Game::Core::ManagerManager* Game::Core::Core::manager;
 
 Game::Core::Camera Game::Core::Core::camera = {0, 0};
@@ -16,9 +16,9 @@ void Game::Core::Core::init()
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     running = false;
 
-  window = new SDL::Window("Skidibidibop", 0, 0, CONSTANTS.WINDOW.WIDTH, CONSTANTS.WINDOW.HEIGHT, 0);
-  renderer = new SDL::Renderer(window);
-  texture = new SDL::Texture("res/spritesheet.png", renderer);
+  window = new SDLW::Window("Skidibidibop", 0, 0, CONSTANTS.WINDOW.WIDTH, CONSTANTS.WINDOW.HEIGHT, 0);
+  renderer = new SDLW::Renderer(window);
+  texture = new SDLW::Texture("res/spritesheet.png", renderer);
 
   // This is for testing purposes
   state.current = States::States::GAME;

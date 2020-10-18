@@ -1,7 +1,7 @@
 #ifndef SKIDIBIDIBOP_EDITOR_TOOL
 #define SKIDIBIDIBOP_EDITOR_TOOL
 
-#include <SDL2/SDL.h>
+#include "sdlw.h"
 #include "window_inputs.h"
 #include "constants.h"
 #include <string>
@@ -33,7 +33,7 @@ namespace Editor
     class Tab
     {
     public:
-      Tab(SDL_Renderer*, const std::string&, int x, int y, SDL_Color);
+      Tab(SDLW::Renderer*, const std::string&, int x, int y, SDL_Color);
       ~Tab();
 
       void update(MouseState);
@@ -46,9 +46,9 @@ namespace Editor
       int x, y;
       SDL_Color color;
       std::string text;
-      SDL_Texture* texture;
+      SDLW::Texture* texture;
       std::vector<Base*> tools;
-      SDL_Renderer* renderer;
+      SDLW::Renderer* renderer;
     };
   };
 };

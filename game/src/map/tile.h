@@ -19,7 +19,7 @@ namespace Game
       };
 
       // The x and y are temporary until there is a better solution found
-      Tile(SDL::Renderer*, unsigned int id, Collision, unsigned int state, int x, int y);
+      Tile(SDLW::Renderer*, unsigned int id, Collision, unsigned int state, int x, int y);
 
       void update();
     private:

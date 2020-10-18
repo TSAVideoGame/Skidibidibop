@@ -10,6 +10,7 @@ namespace SDLW
   class Texture
   {
   public:
+    Texture(SDL_Texture*);
     Texture(const char*, Renderer*);
     ~Texture();
 

@@ -3,7 +3,7 @@
 
 #include "data.h"
 #include "tile.h"
-#include "sdl.h"
+#include "sdlw.h"
 #include "core_object_manager.h"
 
 // Full temporary until I get the Core::Object::Manager situated
@@ -14,10 +14,10 @@ namespace Game
     class Manager : public Core::Object::Manager
     {
     public:
-      Manager(SDL::Renderer*, const Data::Types::Map&);
+      Manager(SDLW::Renderer*, const Data::Types::Map&);
       void loadMap(const Data::Types::Map&);
     private:
-      SDL::Renderer* renderer;
+      SDLW::Renderer* renderer;
     };
   };
 };

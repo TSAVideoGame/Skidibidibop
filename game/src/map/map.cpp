@@ -1,6 +1,6 @@
 #include "map.h"
 
-Game::Map::Manager::Manager(SDL::Renderer* ren, const Data::Types::Map& data) : Core::Object::Manager()
+Game::Map::Manager::Manager(SDLW::Renderer* ren, const Data::Types::Map& data) : Core::Object::Manager()
 {
   renderer = ren;
   loadMap(data);

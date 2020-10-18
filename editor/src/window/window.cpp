@@ -3,8 +3,8 @@
 
 Editor::Window::Window()
 {
-  window = SDL_CreateWindow("SBB Editor", 64, 64, Constants::Window.width, Constants::Window.height, 0);
-  renderer = SDL_CreateRenderer(window, -1, 0);
+  window = new SDLW::Window("SBB Editor", 64, 64, Constants::Window.width, Constants::Window.height, 0);
+  renderer = new SDLW::Renderer(window);
   inputs = {false, false, 0, 0, 0, 0, 0, 0, 0};
   running = true;
   toolManager = new Tool::Manager(renderer);
@@ -13,8 +13,8 @@ Editor::Window::Window()
 Editor::Window::~Window()
 {
   delete toolManager;
-  SDL_DestroyWindow(window);
-  SDL_DestroyRenderer(renderer);
+  delete renderer;
+  delete window;
 }
 
 void Editor::Window::input()
@@ -95,16 +95,16 @@ static void drawGrid(SDL_Renderer* renderer)
 
 void Editor::Window::draw()
 {
-  SDL_SetRenderDrawColor(renderer, 10, 56, 69, 255);
-  SDL_RenderClear(renderer);
+  renderer->setDrawColor(10, 56, 69, 255);
+  renderer->clear();
 
-  drawGrid(renderer);
+  drawGrid(renderer->getSDL());
   // Draw the toolbar
   SDL_Color c = toolManager->getColor();
-  SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, 255);
+  renderer->setDrawColor(c.r, c.g, c.b, 255);
   SDL_Rect toolbar = {0, Constants::Window.height - Constants::Window.toolBarHeight, Constants::Window.width, Constants::Window.toolBarHeight};
-  SDL_RenderFillRect(renderer, &toolbar);
+  SDL_RenderFillRect(renderer->getSDL(), &toolbar);
   toolManager->draw();
 
-  SDL_RenderPresent(renderer);
+  renderer->present();
 }

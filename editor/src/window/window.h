@@ -1,7 +1,7 @@
 #ifndef SKIDIBIDIBOP_EDITOR_WINDOW
 #define SKIDIBIDIBOP_EDITOR_WINDOW
 
-#include <SDL2/SDL.h>
+#include "sdlw.h"
 #include "window_inputs.h"
 #include "tool_manager.h"
 
@@ -28,8 +28,8 @@ namespace Editor
     Inputs getInputs() { return inputs; }
   private:
     bool running;
-    SDL_Window* window;
-    SDL_Renderer* renderer;
+    SDLW::Window* window;
+    SDLW::Renderer* renderer;
     Inputs inputs;
     Tool::Manager* toolManager;
   };

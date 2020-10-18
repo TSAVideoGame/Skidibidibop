@@ -2,7 +2,7 @@
 
 float Game::Player::Object::maxVelocity = 10;
 
-Game::Player::Object::Object(SDL::Renderer* renderer) : Core::Object::Object(renderer)
+Game::Player::Object::Object(SDLW::Renderer* renderer) : Core::Object::Object(renderer)
 {
   Position = {0, 0};
   Velocity = {0, 0};

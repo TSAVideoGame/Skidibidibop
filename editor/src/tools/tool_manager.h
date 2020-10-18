@@ -4,7 +4,7 @@
 #include "tool.h"
 #include "window_inputs.h"
 #include <vector>
-#include <SDL2/SDL.h>
+#include "sdlw.h"
 
 namespace Editor
 {
@@ -13,7 +13,7 @@ namespace Editor
     class Manager
     {
     public:
-      Manager(SDL_Renderer*);
+      Manager(SDLW::Renderer*);
       ~Manager();
 
       void update(MouseState, Inputs);

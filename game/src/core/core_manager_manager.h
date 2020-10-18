@@ -2,7 +2,7 @@
 #define SKIDIBIDIBOP_GAME_CORE_MANAGER_MANAGER
 
 #include "core_object_manager.h"
-#include "sdl.h"
+#include "sdlw.h"
 
 namespace Game
 {
@@ -16,7 +16,7 @@ namespace Game
     class ManagerManager : public Object::Manager
     {
     public:
-      ManagerManager(SDL::Renderer*);
+      ManagerManager(SDLW::Renderer*);
       void update();
     private:
       std::deque<Object::Base*> activeObjects;

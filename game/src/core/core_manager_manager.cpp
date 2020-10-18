@@ -3,7 +3,7 @@
 #include "data.h"
 #include "player_manager.h"
 
-Game::Core::ManagerManager::ManagerManager(SDL::Renderer* renderer) : Manager()
+Game::Core::ManagerManager::ManagerManager(SDLW::Renderer* renderer) : Manager()
 {
   objects.push_back(new Map::Manager(renderer, Data::Save::load("res/test.sbbd").map));
   objects.push_back(new Player::Manager(renderer));

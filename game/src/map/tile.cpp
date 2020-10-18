@@ -1,6 +1,6 @@
 #include "tile.h"
 
-Game::Map::Tile::Tile(SDL::Renderer* ren, unsigned int id, Collision collision, unsigned int state, int x, int y) : Core::Object::Object(ren)
+Game::Map::Tile::Tile(SDLW::Renderer* ren, unsigned int id, Collision collision, unsigned int state, int x, int y) : Core::Object::Object(ren)
 {
   this->id = id;
   this->collision = collision;
