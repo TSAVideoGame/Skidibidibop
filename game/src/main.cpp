@@ -7,18 +7,15 @@ int main(int argc, char* args[])
 
   Game::Core::Core::init();
 
-  Uint32 frameStart;
-  int frameTime;
-
   while (Game::Core::Core::isRunning())
   {
-    frameStart = SDL_GetTicks();
+    Uint32 frameStart = SDL_GetTicks();
 
     Game::Core::Core::input();
     Game::Core::Core::update();
     Game::Core::Core::draw();
 
-    frameTime = SDL_GetTicks() - frameStart;
+    int frameTime = SDL_GetTicks() - frameStart;
 
     while (FRAME_DELAY > frameTime)
     {

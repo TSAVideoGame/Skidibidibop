@@ -9,7 +9,7 @@ Data::Save::Data Data::Save::load(const std::string& fpath)
   return d;
 }
 
-void Data::Save::save(Data data)
+void Data::Save::save(Data& data)
 {
 
 }

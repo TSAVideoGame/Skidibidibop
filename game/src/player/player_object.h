@@ -8,6 +8,16 @@ namespace Game
 {
   namespace Player
   {
+    struct Position
+    {
+      int x, y;
+    };
+
+    struct Velocity
+    {
+      float x, y;
+    };
+
     class Object : public Core::Object::Object
     {
     public:
@@ -16,15 +26,9 @@ namespace Game
     private:
       static float maxVelocity;
 
+      Position position;
+      Velocity velocity;
       Core::Directions direction;
-      struct
-      {
-        int x, y;
-      } Position;
-      struct
-      {
-        float x, y;
-      } Velocity;
       bool moving;
 
       void setDirection();

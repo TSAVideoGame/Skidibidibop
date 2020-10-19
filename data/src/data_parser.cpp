@@ -28,19 +28,18 @@ int Data::Parser::Parse(const std::string& fpath)
   // File needs to exist
   if (!textFile.is_open())
   {
-    std::cout << "ERROR::Map::Parser::Parse::FILE_NOT_FOUND " << fpath << std::endl; // Should probably make a logger class
+    std::cout << "ERROR::Data::Parser::Parse::FILE_NOT_FOUND " << fpath << std::endl; // Should probably make a logger class
     return -1;
   }
 
   // Tokenizer / Lexical Analysis
   std::deque<Token*> tokens;
-  char currentChar;
   Token::Type currentType;
   std::string currentData;
 
   while (!textFile.eof())
   {
-    currentChar = textFile.get();
+    char currentChar = textFile.get();
     if (currentChar == '@') // Property
     {
       if (currentData.compare(""))
@@ -162,9 +161,9 @@ Data::Parser::Token* Data::Parser::makeTokenData(const std::string& data)
       {
         *(reinterpret_cast<unsigned int*>(t->data)) = std::stoul(data);
       }
-      catch (std::invalid_argument e)
+      catch (std::invalid_argument& e)
       {
-        std::cout << "ERROR::Map::Parser::makeTokenData::INVALID_UNSIGNED_INTEGER " << data << std::endl;
+        std::cout << "ERROR::Data::Parser::makeTokenData::INVALID_UNSIGNED_INTEGER " << data << std::endl;
         *(reinterpret_cast<unsigned int*>(t->data)) = 0;
       }
     }

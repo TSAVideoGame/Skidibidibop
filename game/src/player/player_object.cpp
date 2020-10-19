@@ -2,14 +2,13 @@
 
 float Game::Player::Object::maxVelocity = 10;
 
-Game::Player::Object::Object(SDLW::Renderer* renderer) : Core::Object::Object(renderer)
+Game::Player::Object::Object(SDLW::Renderer* renderer) : Core::Object::Object(renderer),
+  position({0, 0}),
+  velocity({0, 0}),
+  direction(Core::DIR_BOTTOM)
 {
-  Position = {0, 0};
-  Velocity = {0, 0};
-  direction = Core::DIR_BOTTOM;
-
   srcRect = {0, 32, 32, 32};
-  destRect = {Position.x, Position.y, 32, 32};
+  destRect = {position.x, position.y, 32, 32};
 }
 
 void Game::Player::Object::update()
@@ -76,75 +75,75 @@ void Game::Player::Object::move()
     {
       case Core::DIR_TOP:
       {
-        if (Velocity.y > -maxVelocity)
-          Velocity.y -= velIncrease;
+        if (velocity.y > -maxVelocity)
+          velocity.y -= velIncrease;
 
-        Velocity.x /= 2;
+        velocity.x /= 2;
 
         break;
       }
       case Core::DIR_TOP_RIGHT:
       {
-        if (Velocity.y > -maxVelocity)
-          Velocity.y -= velIncrease;
+        if (velocity.y > -maxVelocity)
+          velocity.y -= velIncrease;
 
-        if (Velocity.x < maxVelocity)
-          Velocity.x += velIncrease;
+        if (velocity.x < maxVelocity)
+          velocity.x += velIncrease;
         
         break;
       }
       case Core::DIR_RIGHT:
       {
-        if (Velocity.x < maxVelocity)
-          Velocity.x += velIncrease;
+        if (velocity.x < maxVelocity)
+          velocity.x += velIncrease;
 
-        Velocity.y /= 2;
+        velocity.y /= 2;
 
         break;
       }
       case Core::DIR_BOTTOM_RIGHT:
       {
-        if (Velocity.y < maxVelocity)
-          Velocity.y += velIncrease;
+        if (velocity.y < maxVelocity)
+          velocity.y += velIncrease;
 
-        if (Velocity.x < maxVelocity)
-          Velocity.x += velIncrease;
+        if (velocity.x < maxVelocity)
+          velocity.x += velIncrease;
 
         break;
       }
       case Core::DIR_BOTTOM:
       {
-        if (Velocity.y < maxVelocity)
-          Velocity.y += velIncrease;
+        if (velocity.y < maxVelocity)
+          velocity.y += velIncrease;
 
-        Velocity.x /= 2;
+        velocity.x /= 2;
 
         break;
       }
       case Core::DIR_BOTTOM_LEFT:
       {
-        if (Velocity.y < maxVelocity)
-          Velocity.y += velIncrease;
+        if (velocity.y < maxVelocity)
+          velocity.y += velIncrease;
 
-        if (Velocity.x > -maxVelocity)
-          Velocity.x -= velIncrease;
+        if (velocity.x > -maxVelocity)
+          velocity.x -= velIncrease;
 
         break;
       }
       case Core::DIR_LEFT:
       {
-        if (Velocity.x > -maxVelocity)
-          Velocity.x -= velIncrease;
+        if (velocity.x > -maxVelocity)
+          velocity.x -= velIncrease;
 
-        Velocity.y /= 2;
+        velocity.y /= 2;
       }
       case Core::DIR_TOP_LEFT:
       {
-        if (Velocity.y > -maxVelocity)
-          Velocity.y -= velIncrease;
+        if (velocity.y > -maxVelocity)
+          velocity.y -= velIncrease;
 
-        if (Velocity.x > -maxVelocity)
-          Velocity.x -= velIncrease;
+        if (velocity.x > -maxVelocity)
+          velocity.x -= velIncrease;
 
         break;
       }
@@ -153,19 +152,19 @@ void Game::Player::Object::move()
   // Handle actual movement
   if (moving)
   {
-    Position.x += Velocity.x;
-    Position.y += Velocity.y;
+    position.x += velocity.x;
+    position.y += velocity.y;
   }
   else
   {
-    Velocity.x /= 2;
-    Velocity.y /= 2;
+    velocity.x /= 2;
+    velocity.y /= 2;
   }
 }
 
 void Game::Player::Object::prepareDraw()
 {
   srcRect = {0, direction * 32 + 32, 32, 32};
-  destRect.x = Position.x;
-  destRect.y = Position.y;
+  destRect.x = position.x;
+  destRect.y = position.y;
 }

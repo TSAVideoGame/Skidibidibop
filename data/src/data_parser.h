@@ -1,8 +1,7 @@
-#ifndef TSA_GAME_DATA_PARSER
-#define TSA_GAME_DATA_PARSER
+#ifndef SKIDIBIDIBOP_DATA_PARSER
+#define SKIDIBIDIBOP_DATA_PARSER
 
 #include <string>
-#include <variant>
 
 namespace Data
 {
