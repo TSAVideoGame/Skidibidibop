@@ -7,6 +7,11 @@ add_executable(editor
 
   ${CMAKE_CURRENT_LIST_DIR}/src/window/window.cpp
 
+  ${CMAKE_CURRENT_LIST_DIR}/src/confirmation/confirmation.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/confirmation/confirmation_bool.cpp
+
+  ${CMAKE_CURRENT_LIST_DIR}/src/tools/tool.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/tools/tool_main.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/tools/tool_manager.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/tools/tool_tab.cpp
 )
@@ -14,6 +19,7 @@ add_executable(editor
 # Ignore the /usr/include/SDL2 part, my VIM is messed up :(
 target_include_directories(editor PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/src
+  ${CMAKE_CURRENT_LIST_DIR}/src/confirmation
   ${CMAKE_CURRENT_LIST_DIR}/src/tools
   ${CMAKE_CURRENT_LIST_DIR}/src/window
   ${CMAKE_CURRENT_LIST_DIR}/../data/include

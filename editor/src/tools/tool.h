@@ -17,7 +17,7 @@ namespace Editor
     public:
       static const int WIDTH = 2 * Constants::Grid.size, HEIGHT = Constants::Grid.size;
 
-      Base(const std::string&, int x, int y);
+      Base(SDLW::Renderer*, const std::string&, int x, int y);
       virtual ~Base();
 
       virtual void update(MouseState, Inputs) = 0;
@@ -25,31 +25,13 @@ namespace Editor
 
       bool selected;
     protected:
-      std::string text;
-      SDL_Texture* texture;
-    };
-
-    // Tabs organize tools
-    class Tab
-    {
-    public:
-      Tab(SDLW::Renderer*, const std::string&, int x, int y, SDL_Color);
-      ~Tab();
-
-      void update(MouseState);
-      void draw();
-
-      bool isHovered(int mx, int my);
-
-      SDL_Color getColor() { return color; }
-    private:
-      int x, y;
-      SDL_Color color;
-      std::string text;
-      SDLW::Texture* texture;
-      std::vector<Base*> tools;
       SDLW::Renderer* renderer;
+      std::string text;
+      int x, y;
+      SDL_Rect destRect;
+      SDLW::Texture* texture;
     };
+
   };
 };
 

@@ -4,6 +4,7 @@
 #include "sdlw.h"
 #include "window_inputs.h"
 #include "tool_manager.h"
+#include <string>
 
 namespace Editor
 {
@@ -32,6 +33,7 @@ namespace Editor
     SDLW::Renderer* renderer;
     Inputs inputs;
     Tool::Manager* toolManager;
+    std::string currentFile;
   };
 };
 

@@ -1,13 +1,24 @@
 #include "window.h"
 #include "constants.h"
+#include <ctime>
 
 Editor::Window::Window()
 {
-  window = new SDLW::Window("SBB Editor", 64, 64, Constants::Window.width, Constants::Window.height, 0);
+  window = new SDLW::Window("SBB Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Constants::Window.width, Constants::Window.height, 0);
   renderer = new SDLW::Renderer(window);
   inputs = {false, false, 0, 0, 0, 0, 0, 0, 0};
   running = true;
   toolManager = new Tool::Manager(renderer);
+
+  // The default file name is SBBD_time.sbbd
+  char timeNameBuffer[20];
+  std::time_t rawtime;
+  time(&rawtime);
+  std::tm* timeinfo = localtime(&rawtime);
+  strftime(timeNameBuffer, sizeof(timeNameBuffer), "%Y_%m_%d_%T", timeinfo);
+  currentFile = "SBBD_";
+  currentFile.append(timeNameBuffer);
+  currentFile += ".sbbd";
 }
 
 Editor::Window::~Window()

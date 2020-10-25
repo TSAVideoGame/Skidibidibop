@@ -1,7 +1,7 @@
 #ifndef SKIDIBIDIBOP_EDITOR_TOOL_MANAGER
 #define SKIDIBIDIBOP_EDITOR_TOOL_MANAGER
 
-#include "tool.h"
+#include "tool_tab.h"
 #include "window_inputs.h"
 #include <vector>
 #include "sdlw.h"
