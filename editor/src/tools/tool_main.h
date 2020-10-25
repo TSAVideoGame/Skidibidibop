@@ -14,7 +14,7 @@ namespace Editor
       public:
         Save(SDLW::Renderer*, int x, int y);
 
-        void update(MouseState, Inputs);
+        void update(MouseState);
       };
 
       class Load : public Base
@@ -22,25 +22,7 @@ namespace Editor
       public:
         Load(SDLW::Renderer*, int x, int y);
 
-        void update(MouseState, Inputs);
-      };
-
-      class Col : public Base
-      {
-      public:
-        Col(SDLW::Renderer*, int x, int y);
-
-        void update(MouseState, Inputs);
-        void draw();
-      };
-
-      class Row : public Base
-      {
-      public:
-        Row(SDLW::Renderer*, int x, int y);
-
-        void update(MouseState, Inputs);
-        void draw();
+        void update(MouseState);
       };
     };
   };

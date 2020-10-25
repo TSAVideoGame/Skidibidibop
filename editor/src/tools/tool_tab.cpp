@@ -1,5 +1,6 @@
 #include "tool.h"
 #include "tool_main.h"
+#include "tool_tile.h"
 #include <SDL2/SDL_ttf.h>
 #include "constants.h"
 #include "window.h"
@@ -29,12 +30,12 @@ Editor::Tool::Tab::~Tab()
   tools.clear();
 }
 
-void Editor::Tool::Tab::update(MouseState ms, Inputs inputs)
+void Editor::Tool::Tab::update(MouseState ms)
 {
   if (isSelected)
   {
     for (Base* t : tools)
-      t->update(ms, inputs);
+      t->update(ms);
   }
 }
 
@@ -67,6 +68,11 @@ Editor::Tool::Tabs::Main::Main(SDLW::Renderer* renderer, const std::string& text
 {
   tools.push_back(new Tool::Main::Save(renderer, 0, Constants::Window.height - Constants::Window.toolBarHeight));
   tools.push_back(new Tool::Main::Load(renderer, 0, Constants::Window.height - Constants::Window.toolBarHeight + Base::HEIGHT * 1));
-  tools.push_back(new Tool::Main::Col(renderer, 0, Constants::Window.height - Constants::Window.toolBarHeight + Base::HEIGHT * 2));
-  tools.push_back(new Tool::Main::Row(renderer, 0, Constants::Window.height - Constants::Window.toolBarHeight + Base::HEIGHT * 3));
+}
+
+// Tile tab
+Editor::Tool::Tabs::Tile::Tile(SDLW::Renderer* renderer, const std::string& text, int x, int y, SDL_Color color) : Tab(renderer, text, x, y, color)
+{
+  tools.push_back(new Tool::Tile::Col(renderer, 0, Constants::Window.height - Constants::Window.toolBarHeight));
+  tools.push_back(new Tool::Tile::Row(renderer, 0, Constants::Window.height - Constants::Window.toolBarHeight + Base::HEIGHT * 1));
 }

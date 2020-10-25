@@ -16,7 +16,7 @@ namespace Editor
       Manager(SDLW::Renderer*);
       ~Manager();
 
-      void update(MouseState, Inputs);
+      void update(MouseState);
       void draw();
 
       SDL_Color getColor() { return selectedTab->getColor(); }

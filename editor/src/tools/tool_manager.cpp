@@ -1,4 +1,5 @@
 #include "tool_manager.h"
+#include "window.h"
 
 Editor::Tool::Manager::Manager(SDLW::Renderer* renderer)
 {
@@ -8,7 +9,7 @@ Editor::Tool::Manager::Manager(SDLW::Renderer* renderer)
   int width = Constants::Grid.size * 2;
 
   tabs.push_back(new Tabs::Main(renderer, "Main",   0,                                     y, { 20,  20,  20}));
-  tabs.push_back(new Tab(renderer, "Tiles",  Constants::Window.width - (width * 1), y, { 20, 160,  20}));
+  tabs.push_back(new Tabs::Tile(renderer, "Tiles",  Constants::Window.width - (width * 1), y, { 30, 140,  10}));
   tabs.push_back(new Tab(renderer, "Player", Constants::Window.width - (width * 2), y, { 10,  60, 160}));
   tabs.push_back(new Tab(renderer, "Monst.", Constants::Window.width - (width * 3), y, {160,  20,  10}));
 
@@ -24,8 +25,9 @@ Editor::Tool::Manager::~Manager()
   tabs.clear();
 }
 
-void Editor::Tool::Manager::update(MouseState ms, Inputs inputs)
+void Editor::Tool::Manager::update(MouseState ms)
 {
+  Inputs inputs = Window::getInputs();
   // Update self
   switch (ms)
   {
@@ -51,7 +53,7 @@ void Editor::Tool::Manager::update(MouseState ms, Inputs inputs)
 
   // Update tabs
   for (Tab* t : tabs)
-    t->update(ms, inputs);
+    t->update(ms);
 }
 
 void Editor::Tool::Manager::draw()

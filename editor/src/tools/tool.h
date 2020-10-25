@@ -20,7 +20,7 @@ namespace Editor
       Base(SDLW::Renderer*, const std::string&, int x, int y);
       virtual ~Base();
 
-      virtual void update(MouseState, Inputs) = 0;
+      virtual void update(MouseState) = 0;
       virtual void draw();
 
       bool selected;

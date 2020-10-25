@@ -9,11 +9,13 @@ add_executable(editor
 
   ${CMAKE_CURRENT_LIST_DIR}/src/confirmation/confirmation.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/confirmation/confirmation_bool.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/confirmation/confirmation_string.cpp
 
   ${CMAKE_CURRENT_LIST_DIR}/src/tools/tool.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/tools/tool_main.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/tools/tool_manager.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/tools/tool_tab.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/tools/tool_tile.cpp
 )
 
 # Ignore the /usr/include/SDL2 part, my VIM is messed up :(

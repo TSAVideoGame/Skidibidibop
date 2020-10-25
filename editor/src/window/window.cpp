@@ -1,9 +1,22 @@
 #include "window.h"
 #include "constants.h"
 #include <ctime>
+#include <SDL2/SDL_ttf.h>
 
-Editor::Window::Window()
+bool Editor::Window::running;
+SDLW::Window* Editor::Window::window;
+SDLW::Renderer* Editor::Window::renderer;
+Editor::Inputs Editor::Window::inputs;
+Editor::Tool::Manager* Editor::Window::toolManager;
+std::string Editor::Window::currentFile;
+SDLW::Texture* Editor::Window::currentFileTex;
+Data::Save::Data Editor::Window::data = Data::Save::load("res/default.sbbd");
+
+void Editor::Window::init()
 {
+  SDL_Init(SDL_INIT_EVERYTHING);
+  TTF_Init();
+
   window = new SDLW::Window("SBB Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Constants::Window.width, Constants::Window.height, 0);
   renderer = new SDLW::Renderer(window);
   inputs = {false, false, 0, 0, 0, 0, 0, 0, 0};
@@ -19,13 +32,19 @@ Editor::Window::Window()
   currentFile = "SBBD_";
   currentFile.append(timeNameBuffer);
   currentFile += ".sbbd";
+  currentFileTex = nullptr;
+  setCurrentFile(currentFile);
 }
 
-Editor::Window::~Window()
+void Editor::Window::close()
 {
+  delete currentFileTex;
   delete toolManager;
   delete renderer;
   delete window;
+
+  TTF_Quit();
+  SDL_Quit();
 }
 
 void Editor::Window::input()
@@ -88,7 +107,7 @@ void Editor::Window::update()
   {
     if (!inputs.oldMouseDown) // Click
     {
-      toolManager->update(MouseState::CLICK, inputs);
+      toolManager->update(MouseState::CLICK);
     }
   }
 }
@@ -117,5 +136,28 @@ void Editor::Window::draw()
   SDL_RenderFillRect(renderer->getSDL(), &toolbar);
   toolManager->draw();
 
+  // Draw the current file
+  SDL_Rect dRect = {4, Constants::Window.height - 24, 0, 0};
+  SDL_QueryTexture(currentFileTex->getSDL(), 0, 0, &dRect.w, &dRect.h);
+  renderer->copy(currentFileTex, 0, &dRect);
+
   renderer->present();
 }
+
+void Editor::Window::setCurrentFile(const std::string& newFile)
+{
+  currentFile = newFile;
+  std::string displayText = "File: " + newFile;
+  
+  TTF_Font* font = TTF_OpenFont("res/fonts/open-sans/OpenSans-Regular.ttf", 16);
+  SDL_Surface* txtSurface = TTF_RenderText_Blended(font, displayText.c_str(), {255, 255, 255});
+  if (currentFileTex != nullptr)
+    delete currentFileTex;
+  currentFileTex = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->getSDL(), txtSurface));
+  SDL_FreeSurface(txtSurface);
+  TTF_CloseFont(font);
+}
+
+bool Editor::Window::isRunning() { return running; }
+Editor::Inputs Editor::Window::getInputs() { return inputs; }
+std::string Editor::Window::getCurrentFile() { return currentFile; };

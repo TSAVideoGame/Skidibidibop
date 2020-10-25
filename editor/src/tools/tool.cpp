@@ -27,11 +27,6 @@ Editor::Tool::Base::~Base()
 
 }
 
-void Editor::Tool::Base::update(MouseState ms, Inputs inputs)
-{
-
-}
-
 void Editor::Tool::Base::draw()
 {
   renderer->copy(texture, 0, &destRect);

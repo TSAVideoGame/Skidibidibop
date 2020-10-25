@@ -1,5 +1,7 @@
 #include "tool_main.h"
 #include "confirmation_bool.h"
+#include "confirmation_string.h"
+#include "window.h"
 
 /*
  * ========================================
@@ -12,8 +14,9 @@ Editor::Tool::Main::Save::Save(SDLW::Renderer* renderer, int x, int y) : Editor:
 
 }
 
-void Editor::Tool::Main::Save::update(MouseState ms, Inputs inputs)
+void Editor::Tool::Main::Save::update(MouseState ms)
 {
+  Inputs inputs = Window::getInputs();
   switch (ms)
   {
     case MouseState::HOVER:
@@ -56,8 +59,9 @@ Editor::Tool::Main::Load::Load(SDLW::Renderer* renderer, int x, int y) : Editor:
 
 }
 
-void Editor::Tool::Main::Load::update(MouseState ms, Inputs inputs)
+void Editor::Tool::Main::Load::update(MouseState ms)
 {
+  Inputs inputs = Window::getInputs();
   switch (ms)
   {
     case MouseState::HOVER:
@@ -66,6 +70,20 @@ void Editor::Tool::Main::Load::update(MouseState ms, Inputs inputs)
     }
     case MouseState::CLICK:
     {
+      if (inputs.mouseX >= x && inputs.mouseX < x + WIDTH && inputs.mouseY >= y && inputs.mouseY < y + HEIGHT)
+      {
+        Confirmation::String confirm("Type something");
+        while (confirm.getData()->result == nullptr)
+        {
+          confirm.input();
+          confirm.update();
+          confirm.draw();
+        }
+        char text[confirm.getData()->size];
+        strcpy(text, reinterpret_cast<const char*>(confirm.getData()->result));
+        // Text now has the file name
+        // TODO: Make sure file can be found, then load it up
+      }
       break;
     }
     case MouseState::DRAG:
@@ -77,82 +95,4 @@ void Editor::Tool::Main::Load::update(MouseState ms, Inputs inputs)
       break;
     }
   }
-}
-
-/*
- * ========================================
- * Col(umns) Tool
- * ========================================
- */
-
-Editor::Tool::Main::Col::Col(SDLW::Renderer* renderer, int x, int y) : Editor::Tool::Base(renderer, "Col", x , y)
-{
-
-}
-
-void Editor::Tool::Main::Col::update(MouseState ms, Inputs inputs)
-{
-  switch (ms)
-  {
-    case MouseState::HOVER:
-    {
-       break;
-    }
-    case MouseState::CLICK:
-    {
-      break;
-    }
-    case MouseState::DRAG:
-    {
-      break;
-    }
-    case MouseState::RELEASE:
-    {
-      break;
-    }
-  }
-}
-
-void Editor::Tool::Main::Col::draw()
-{
-  Base::draw();
-}
-
-/*
- * ========================================
- * Col(umns) Tool
- * ========================================
- */
-
-Editor::Tool::Main::Row::Row(SDLW::Renderer* renderer, int x, int y) : Editor::Tool::Base(renderer, "Row", x , y)
-{
-
-}
-
-void Editor::Tool::Main::Row::update(MouseState ms, Inputs inputs)
-{
-  switch (ms)
-  {
-    case MouseState::HOVER:
-    {
-       break;
-    }
-    case MouseState::CLICK:
-    {
-      break;
-    }
-    case MouseState::DRAG:
-    {
-      break;
-    }
-    case MouseState::RELEASE:
-    {
-      break;
-    }
-  }
-}
-
-void Editor::Tool::Main::Row::draw()
-{
-  Base::draw();
 }

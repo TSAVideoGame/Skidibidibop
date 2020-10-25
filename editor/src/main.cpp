@@ -3,20 +3,16 @@
 
 int main(int argc, char* args[])
 {
-  SDL_Init(SDL_INIT_EVERYTHING);
-  TTF_Init();
+  Editor::Window::init();
 
-  Editor::Window window;
-
-  while (window.isRunning())
+  while (Editor::Window::isRunning())
   {
-    window.input();
-    window.draw();
-    window.update();
+    Editor::Window::input();
+    Editor::Window::draw();
+    Editor::Window::update();
   }
 
-  TTF_Quit();
-  SDL_Quit();
+  Editor::Window::close();
 
   return 0;
 }

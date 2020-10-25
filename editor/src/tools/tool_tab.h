@@ -15,7 +15,7 @@ namespace Editor
       Tab(SDLW::Renderer*, const std::string&, int x, int y, SDL_Color);
       ~Tab();
 
-      void update(MouseState, Inputs);
+      void update(MouseState);
       void draw();
 
       bool isHovered(int mx, int my);
@@ -39,6 +39,12 @@ namespace Editor
       {
       public:
         Main(SDLW::Renderer*, const std::string&, int x, int y, SDL_Color);
+      };
+
+      class Tile : public Tab
+      {
+      public:
+        Tile(SDLW::Renderer*, const std::string&, int x, int y, SDL_Color);
       };
     };
   };
