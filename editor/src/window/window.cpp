@@ -11,6 +11,8 @@ Editor::Tool::Manager* Editor::Window::toolManager;
 std::string Editor::Window::currentFile;
 SDLW::Texture* Editor::Window::currentFileTex;
 Data::Save::Data Editor::Window::data = Data::Save::load("res/default.sbbd");
+SDLW::Texture* Editor::Window::spritesheet;
+size_t Editor::Window::firstTile; // Top-left most tile
 
 void Editor::Window::init()
 {
@@ -22,6 +24,7 @@ void Editor::Window::init()
   inputs = {false, false, 0, 0, 0, 0, 0, 0, 0};
   running = true;
   toolManager = new Tool::Manager(renderer);
+  spritesheet = new SDLW::Texture("res/spritesheet.png", renderer);
 
   // The default file name is SBBD_time.sbbd
   char timeNameBuffer[20];
@@ -34,10 +37,13 @@ void Editor::Window::init()
   currentFile += ".sbbd";
   currentFileTex = nullptr;
   setCurrentFile(currentFile);
+
+  firstTile = 0;
 }
 
 void Editor::Window::close()
 {
+  delete spritesheet;
   delete currentFileTex;
   delete toolManager;
   delete renderer;
@@ -123,12 +129,39 @@ static void drawGrid(SDL_Renderer* renderer)
     SDL_RenderDrawLine(renderer, 0, i * Editor::Constants::Grid.size, Editor::Constants::Window.width, i * Editor::Constants::Grid.size);
 }
 
+void Editor::Window::drawTiles()
+{
+  SDL_Rect dRect = {0, 0, Constants::Grid.size, Constants::Grid.size};
+  SDL_Rect sRect = {0, 0, 32, 32};
+  unsigned int windowXTiles = Constants::Window.width / Constants::Grid.size;
+  unsigned int maxXTiles = data.map.size.x - (firstTile % data.map.size.x) < windowXTiles ? data.map.size.x - (firstTile % data.map.size.x) : windowXTiles;
+  unsigned int windowYTiles = (Constants::Window.height - Constants::Window.toolBarHeight) / Constants::Grid.size;
+  unsigned int maxYTiles = data.map.size.y - (firstTile / data.map.size.y) < windowYTiles ? data.map.size.y - (firstTile / data.map.size.y) : windowYTiles;
+
+  for (unsigned int row = 0; row < maxYTiles; ++row)
+  {
+    for (unsigned int col = 0; col < maxXTiles; ++col)
+    {
+      sRect.x = data.map.tiles[firstTile + (row * maxXTiles) + col].id;
+      renderer->copy(spritesheet, &sRect, &dRect);
+      dRect.x += Constants::Grid.size;
+    }
+
+    dRect.x = 0;
+    dRect.y += Constants::Grid.size;
+  }
+}
+
 void Editor::Window::draw()
 {
   renderer->setDrawColor(10, 56, 69, 255);
   renderer->clear();
 
+  // Draw map stuff
   drawGrid(renderer->getSDL());
+  drawTiles();
+
+  // Draw tool stuff
   // Draw the toolbar
   SDL_Color c = toolManager->getColor();
   renderer->setDrawColor(c.r, c.g, c.b, 255);

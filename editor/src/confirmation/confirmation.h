@@ -32,7 +32,6 @@ namespace Editor
       SDLW::Window* window;
       SDLW::Renderer* renderer;
       Data* data;
-      Uint32 windowID;
       Inputs inputs;
     };
   };

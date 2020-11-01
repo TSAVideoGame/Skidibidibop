@@ -35,6 +35,9 @@ namespace Editor
     Window();
     ~Window();
 
+    static void drawTiles();
+    static size_t firstTile; // Top-left most tile
+
     static bool running;
     static SDLW::Window* window;
     static SDLW::Renderer* renderer;
@@ -42,6 +45,7 @@ namespace Editor
     static Tool::Manager* toolManager;
     static std::string currentFile;
     static SDLW::Texture* currentFileTex;
+    static SDLW::Texture* spritesheet;
   };
 };
 

@@ -7,8 +7,6 @@ Editor::Confirmation::Base::Base() :
   renderer = new SDLW::Renderer(window);
 
   data = new Data;
-
-  windowID = SDL_GetWindowID(window->getSDL());
 }
 
 Editor::Confirmation::Base::~Base()
