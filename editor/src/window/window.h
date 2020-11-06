@@ -6,6 +6,7 @@
 #include "tool_manager.h"
 #include "data.h"
 #include <string>
+#include "tool.h"
 
 namespace Editor
 {
@@ -29,8 +30,10 @@ namespace Editor
     static bool isRunning();
     static Inputs getInputs();
     static std::string getCurrentFile();
+    static size_t getFirstTile();
     // Data is going to be manipulated so might as well be public
     static Data::Save::Data data;
+    static Tool::Base* selectedTool;
   private:
     Window();
     ~Window();

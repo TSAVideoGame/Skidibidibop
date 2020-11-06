@@ -42,6 +42,7 @@ void Editor::Tool::Manager::update(MouseState ms)
       {
         if (t->isHovered(inputs.mouseX, inputs.mouseY))
         {
+          Window::selectedTool = nullptr;
           selectedTab->isSelected = false;
           selectedTab = t;
           selectedTab->isSelected = true;

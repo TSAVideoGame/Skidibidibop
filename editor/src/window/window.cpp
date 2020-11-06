@@ -13,6 +13,7 @@ SDLW::Texture* Editor::Window::currentFileTex;
 Data::Save::Data Editor::Window::data = Data::Save::load("res/default.sbbd");
 SDLW::Texture* Editor::Window::spritesheet;
 size_t Editor::Window::firstTile; // Top-left most tile
+Editor::Tool::Base* Editor::Window::selectedTool = nullptr;
 
 void Editor::Window::init()
 {
@@ -109,11 +110,50 @@ void Editor::Window::input()
 
 void Editor::Window::update()
 {
+  static unsigned int tempFirstTile = firstTile, tempViewX = firstTile % data.map.size.x, tempViewY = firstTile / data.map.size.y;
   if (inputs.mouseDown)
   {
     if (!inputs.oldMouseDown) // Click
     {
       toolManager->update(MouseState::CLICK);
+    }
+    // Drag
+    if (selectedTool != nullptr)
+    {
+      toolManager->update(MouseState::DRAG);
+    }
+    // This camera movement is all broken
+    else
+    {
+      int maxDrag = 29; // This will help in solving overflow messes
+
+      int y = -((inputs.mouseY - inputs.clickMouseY) / Constants::Grid.size);
+      int x = ((inputs.mouseX - inputs.clickMouseX) / Constants::Grid.size);
+
+      // Make y within bounds
+      if (tempFirstTile / data.map.size.x < maxDrag && static_cast<int>(tempFirstTile / data.map.size.x) + y < 0)
+        y = -(tempFirstTile / data.map.size.x);
+      else if (tempFirstTile / data.map.size.x + y >= data.map.size.y)
+        y = (data.map.size.y - 1) - (tempFirstTile / data.map.size.x);
+
+      // Make x within bounds
+      if (tempFirstTile % data.map.size.x < maxDrag && static_cast<int>(tempFirstTile % data.map.size.x) + x < 0)
+        x = -(tempFirstTile % data.map.size.x);
+      else if (tempFirstTile % data.map.size.x + x >= data.map.size.x)
+        x = (data.map.size.x - 1) - (tempFirstTile % data.map.size.x);
+
+      // Change firstTile
+      firstTile = tempFirstTile + data.map.size.x * y + x;
+    }
+  }
+
+  if (!inputs.mouseDown && inputs.oldMouseDown)
+  {
+    if (selectedTool == nullptr)
+    {
+      tempFirstTile = firstTile;
+      tempViewX = firstTile % data.map.size.x;
+      tempViewY = firstTile / data.map.size.y;
     }
   }
 }
@@ -136,13 +176,13 @@ void Editor::Window::drawTiles()
   unsigned int windowXTiles = Constants::Window.width / Constants::Grid.size;
   unsigned int maxXTiles = data.map.size.x - (firstTile % data.map.size.x) < windowXTiles ? data.map.size.x - (firstTile % data.map.size.x) : windowXTiles;
   unsigned int windowYTiles = (Constants::Window.height - Constants::Window.toolBarHeight) / Constants::Grid.size;
-  unsigned int maxYTiles = data.map.size.y - (firstTile / data.map.size.y) < windowYTiles ? data.map.size.y - (firstTile / data.map.size.y) : windowYTiles;
+  unsigned int maxYTiles = data.map.size.y - (firstTile / data.map.size.x) < windowYTiles ? data.map.size.y - (firstTile / data.map.size.x) : windowYTiles;
 
   for (unsigned int row = 0; row < maxYTiles; ++row)
   {
     for (unsigned int col = 0; col < maxXTiles; ++col)
     {
-      sRect.x = data.map.tiles[firstTile + (row * maxXTiles) + col].id;
+      sRect.x = data.map.tiles[firstTile + (row * data.map.size.x) + col].id * 32;
       renderer->copy(spritesheet, &sRect, &dRect);
       dRect.x += Constants::Grid.size;
     }
@@ -194,3 +234,4 @@ void Editor::Window::setCurrentFile(const std::string& newFile)
 bool Editor::Window::isRunning() { return running; }
 Editor::Inputs Editor::Window::getInputs() { return inputs; }
 std::string Editor::Window::getCurrentFile() { return currentFile; };
+size_t Editor::Window::getFirstTile() { return firstTile; };

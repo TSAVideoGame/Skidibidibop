@@ -75,4 +75,5 @@ Editor::Tool::Tabs::Tile::Tile(SDLW::Renderer* renderer, const std::string& text
 {
   tools.push_back(new Tool::Tile::Col(renderer, 0, Constants::Window.height - Constants::Window.toolBarHeight));
   tools.push_back(new Tool::Tile::Row(renderer, 0, Constants::Window.height - Constants::Window.toolBarHeight + Base::HEIGHT * 1));
+  tools.push_back(new Tool::Tile::Edit::Main(renderer, 0, Constants::Window.height - Constants::Window.toolBarHeight + Base::HEIGHT * 2));
 }
