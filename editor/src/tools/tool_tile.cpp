@@ -375,6 +375,10 @@ void Editor::Tool::Tile::Edit::Main::update(MouseState ms)
 
 void Editor::Tool::Tile::Edit::Main::draw()
 {
+  if (Window::selectedTool == this)
+    SDL_SetTextureColorMod(texture->getSDL(), 200, 200, 200);
+  else
+    SDL_SetTextureColorMod(texture->getSDL(), 255, 255, 255);
   Base::draw();
 
   if (selectedTile != nullptr)
