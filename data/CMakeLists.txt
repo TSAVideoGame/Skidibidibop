@@ -1,20 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
 
-# Make executable tools
-project(parser)
-
-add_executable(parser
-  ${CMAKE_CURRENT_LIST_DIR}/src/data_parser.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/parser.cpp
-)
-
-target_include_directories(parser PUBLIC
-  ${CMAKE_CURRENT_LIST_DIR}/src
-  ${CMAKE_CURRENT_LIST_DIR}/include
-)
-
-set_target_properties(parser PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
-
 # Make the shared library
 project(sbbdata VERSION 0.0.0)
 
@@ -35,3 +20,21 @@ set_target_properties(sbbdata PROPERTIES
   SOVERSION ${PROJECT_VERSION}
   PUBLIC_HEADER ${CMAKE_CURRENT_LIST_DIR}/include/data.h
 )
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Make executable tools
+project(parser)
+
+add_executable(parser
+  ${CMAKE_CURRENT_LIST_DIR}/src/data_parser.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/parser.cpp
+)
+
+target_include_directories(parser PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/src
+  ${CMAKE_CURRENT_LIST_DIR}/include
+)
+
+set_target_properties(parser PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
+

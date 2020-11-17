@@ -19,7 +19,7 @@ namespace Data
   class Parser
   {
   public:
-    static int Parse(const std::string& fpath); // Parses text data into map data
+    static int parse(const std::string& fpath); // Parses text data into map data
   private:
     Parser() {} // Class cannot be instantiated
     // Tokenizer / Lexical Analysis

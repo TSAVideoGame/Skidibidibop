@@ -23,6 +23,11 @@ namespace Data
     struct Data
     {
       Types::Map map;
+      Types::Player player;
+      Types::Inventory inventory;
+      Types::Story story;
+      Types::Bopdex bopdex;
+      Types::Achievement achievement;
     };
 
     Data load(const std::string& fpath);

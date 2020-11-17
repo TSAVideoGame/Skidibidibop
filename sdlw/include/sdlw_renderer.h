@@ -15,7 +15,7 @@ namespace SDLW
     ~Renderer();
 
     void present();
-    void setDrawColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    void set_draw_color(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
     void clear();
     void copy(Texture*, SDL_Rect* srcRect, SDL_Rect* destRect);
 

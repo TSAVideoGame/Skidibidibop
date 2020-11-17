@@ -1,8 +1,8 @@
 #ifndef TSA_GAME_DATA
 #define TSA_GAME_DATA
 
-#include "../src/data_parser.h"
-#include "../src/data_save.h"
-#include "../src/data_types.h"
+#include "data_parser.h"
+#include "data_save.h"
+#include "data_types.h"
 
 #endif

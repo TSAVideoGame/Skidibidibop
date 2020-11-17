@@ -19,7 +19,7 @@ void SDLW::Renderer::present()
   SDL_RenderPresent(renderer);
 }
 
-void SDLW::Renderer::setDrawColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+void SDLW::Renderer::set_draw_color(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
   SDL_SetRenderDrawColor(renderer, r, g, b, a);
 }

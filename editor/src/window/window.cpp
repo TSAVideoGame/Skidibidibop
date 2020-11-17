@@ -147,6 +147,7 @@ void Editor::Window::update()
     }
   }
 
+  // Release
   if (!inputs.mouseDown && inputs.oldMouseDown)
   {
     if (selectedTool == nullptr)
@@ -154,6 +155,17 @@ void Editor::Window::update()
       tempFirstTile = firstTile;
       tempViewX = firstTile % data.map.size.x;
       tempViewY = firstTile / data.map.size.y;
+    }
+  }
+
+  // Scroll
+  if (std::abs(inputs.mouseWheelY) > 0)
+  {
+    if (inputs.mouseWheelY > 0) // Decrease zoom
+    {
+    }
+    else // Increase zoom
+    {
     }
   }
 }

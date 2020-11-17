@@ -7,7 +7,7 @@
 
 /*
  * ========================================
- * Data::Parser::Parse
+ * Data::Parser::parse
  *
  * Parses text data and outputs a binary file the game can use
  * The memory handling isn't the cleanest, but it works
@@ -20,7 +20,7 @@
  * ========================================
  */
 
-int Data::Parser::Parse(const std::string& fpath)
+int Data::Parser::parse(const std::string& fpath)
 {
   std::ifstream textFile;
   textFile.open(fpath);
@@ -28,7 +28,7 @@ int Data::Parser::Parse(const std::string& fpath)
   // File needs to exist
   if (!textFile.is_open())
   {
-    std::cout << "ERROR::Data::Parser::Parse::FILE_NOT_FOUND " << fpath << std::endl; // Should probably make a logger class
+    std::cout << "ERROR::Data::Parser::parse::FILE_NOT_FOUND " << fpath << std::endl; // Should probably make a logger class
     return -1;
   }
 
@@ -136,7 +136,6 @@ int Data::Parser::Parse(const std::string& fpath)
 
 Data::Parser::Token* Data::Parser::makeTokenData(const std::string& data)
 {
-  //std::cout << "Current data is: " << data << " Length: " << data.length() << std::endl;
   Token* t = new Token();
 
   if (data.compare(""))

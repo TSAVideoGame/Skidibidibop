@@ -12,7 +12,6 @@ add_library(sdlw SHARED
 target_include_directories(sdlw PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/src
   ${CMAKE_CURRENT_LIST_DIR}/include
-  ${CMAKE_CURRENT_LIST_DIR}/../data/include
   /usr/include/SDL2
 )
 

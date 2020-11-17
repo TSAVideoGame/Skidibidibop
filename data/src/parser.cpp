@@ -15,7 +15,7 @@ int main(int argc, char* args[])
     return -1;
   }
 
-  Data::Parser::Parse(args[1]);
+  Data::Parser::parse(args[1]);
 
   return 0;
 }

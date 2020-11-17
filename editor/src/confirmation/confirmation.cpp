@@ -1,4 +1,5 @@
 #include "confirmation.h"
+#include "window.h"
 
 Editor::Confirmation::Base::Base() :
   inputs({false, false, 0, 0, 0, 0, 0, 0, 0})
