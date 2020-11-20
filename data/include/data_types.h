@@ -65,7 +65,8 @@ namespace Data
         unsigned int id;
         Collision collision;
         unsigned int state;
-        unsigned int flags;
+        unsigned int flag;
+        unsigned int enemy_id; // The enemy on the tile
       };
 
       // A section is a part of the map which gets loaded, a house is a different section from the main world
@@ -129,6 +130,19 @@ namespace Data
 
       void save(std::ofstream&);
       void load(std::ifstream&);
+
+
+      struct Item
+      {
+        unsigned int id;
+        unsigned int slot;
+      };
+
+      unsigned int num_weapons;
+      std::vector<bool> unlocked_weapons;
+
+      unsigned int inventory_size;
+      std::vector<Item> inventory;
     };
 
     /*
@@ -145,6 +159,9 @@ namespace Data
 
       void save(std::ofstream&);
       void load(std::ifstream&);
+
+      unsigned int num_quests;
+      std::vector<bool> completed_quests;
     };
 
     /*
@@ -161,6 +178,17 @@ namespace Data
 
       void save(std::ofstream&);
       void load(std::ifstream&);
+
+      struct Entry
+      {
+        bool viewed;
+        bool defeated;
+        unsigned int num_viewed;
+        unsigned int num_defeated;
+      };
+
+      unsigned int num_entries;
+      std::vector<Entry> entries;
     };
 
     /*
@@ -179,6 +207,9 @@ namespace Data
 
       void save(std::ofstream&);
       void load(std::ifstream&);
+
+      unsigned int num_achievements;
+      std::vector<bool> completed_achievements;
     };
   };
 };
