@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 3.10)
 project(sbbdata VERSION 0.0.0)
 
 add_library(sbbdata SHARED
-  ${CMAKE_CURRENT_LIST_DIR}/src/data_parser.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/data_save.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/data_types.cpp
 )
@@ -38,3 +37,23 @@ target_include_directories(parser PUBLIC
 
 set_target_properties(parser PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
 
+
+project(builder)
+
+add_executable(builder
+  ${CMAKE_CURRENT_LIST_DIR}/src/data_default_builder.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/default_builder.cpp
+)
+
+target_include_directories(builder PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/src
+  ${CMAKE_CURRENT_LIST_DIR}/include
+)
+
+target_link_directories(builder PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/lib
+)
+
+target_link_libraries(builder sbbdata)
+
+set_target_properties(builder PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)

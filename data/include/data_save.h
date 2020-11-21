@@ -31,7 +31,7 @@ namespace Data
     };
 
     Data load(const std::string& fpath);
-    void save(Data&);
+    void save(const std::string& fpath, Data&);
   };
 };
 

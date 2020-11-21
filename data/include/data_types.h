@@ -4,6 +4,13 @@
 #include <fstream>
 #include <vector>
 
+/*
+ * NOTE:
+ * All the save methods should be const but I don't want
+ * to deal with const qualifying all the casts right now
+ * so they won't be const as of now
+ */
+
 namespace Data
 {
   /*
@@ -46,6 +53,7 @@ namespace Data
     class Map : public Base
     {
     public:
+      Map();
       Map(std::ifstream&);
 
       void save(std::ofstream&);
@@ -90,6 +98,7 @@ namespace Data
     class Player : public Base
     {
     public:
+      Player();
       Player(std::ifstream&);
 
       void save(std::ofstream&);
@@ -126,6 +135,7 @@ namespace Data
     class Inventory : public Base
     {
     public:
+      Inventory();
       Inventory(std::ifstream&);
 
       void save(std::ofstream&);
@@ -155,6 +165,7 @@ namespace Data
     class Story : public Base
     {
     public:
+      Story();
       Story(std::ifstream&);
 
       void save(std::ofstream&);
@@ -174,6 +185,7 @@ namespace Data
     class Bopdex : public Base
     {
     public:
+      Bopdex();
       Bopdex(std::ifstream&);
 
       void save(std::ofstream&);
@@ -203,6 +215,7 @@ namespace Data
     class Achievement : public Base
     {
     public:
+      Achievement();
       Achievement(std::ifstream&);
 
       void save(std::ofstream&);

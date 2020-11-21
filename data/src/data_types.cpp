@@ -26,6 +26,11 @@ Data::Types::Base::~Base()
  * Data::Types::Map
  * ==========================================
  */
+Data::Types::Map::Map() : Base(Type::MAP)
+{
+  
+}
+
 Data::Types::Map::Map(std::ifstream& file) : Base(Type::MAP)
 {
   load(file);
@@ -102,6 +107,11 @@ void Data::Types::Map::load(std::ifstream& file)
  * Data::Types::Player
  * ==========================================
  */
+Data::Types::Player::Player() : Base(Type::PLAYER)
+{
+
+}
+
 Data::Types::Player::Player(std::ifstream& file) : Base(Type::MAP)
 {
   load(file);
@@ -142,6 +152,11 @@ void Data::Types::Player::load(std::ifstream& file)
  * Data::Types::Inventory
  * ==========================================
  */
+Data::Types::Inventory::Inventory() : Base(Type::INVENTORY)
+{
+
+}
+
 Data::Types::Inventory::Inventory(std::ifstream& file) : Base(Type::MAP)
 {
   load(file);
@@ -194,6 +209,11 @@ void Data::Types::Inventory::load(std::ifstream& file)
  * Data::Types::Story
  * ==========================================
  */
+Data::Types::Story::Story() : Base(Type::STORY)
+{
+
+}
+
 Data::Types::Story::Story(std::ifstream& file) : Base(Type::MAP)
 {
   load(file);
@@ -225,6 +245,11 @@ void Data::Types::Story::load(std::ifstream& file)
  * Data::Types::Bopdex
  * ==========================================
  */
+Data::Types::Bopdex::Bopdex() : Base(Type::BOPDEX)
+{
+
+}
+
 Data::Types::Bopdex::Bopdex(std::ifstream& file) : Base(Type::MAP)
 {
   load(file);
@@ -265,6 +290,11 @@ void Data::Types::Bopdex::load(std::ifstream& file)
  * Data::Types::Achievement
  * ==========================================
  */
+Data::Types::Achievement::Achievement() : Base(Type::ACHIEVEMENT)
+{
+
+}
+
 Data::Types::Achievement::Achievement(std::ifstream& file) : Base(Type::MAP)
 {
   load(file);
