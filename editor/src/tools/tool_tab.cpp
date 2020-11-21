@@ -43,7 +43,7 @@ void Editor::Tool::Tab::draw()
 {
   // Draw self
   SDL_Rect dRect = {x, y, 64, 32};
-  renderer->setDrawColor(color.r, color.g, color.b, 255);
+  renderer->set_draw_color(color.r, color.g, color.b, 255);
   SDL_RenderFillRect(renderer->getSDL(), &dRect);
   SDL_QueryTexture(texture->getSDL(), NULL, NULL, &dRect.w, &dRect.h);
   dRect.x += (64 - dRect.w) / 2;

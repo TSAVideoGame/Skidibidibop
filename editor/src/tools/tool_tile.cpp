@@ -51,28 +51,28 @@ void Editor::Tool::Tile::Col::update(MouseState ms)
       {
         Window::selectedTool = nullptr;
 
-        if (Window::data.map.size.x < 999999)
+        if (Window::data.map.sections[0].size.x < 999999)
         {
           // Increase column and add new tiles
           // Visual might be posted sometime, idk...
-          ++Window::data.map.size.x;
-          Window::data.map.tiles.reserve(Window::data.map.size.x * Window::data.map.size.y);
+          ++Window::data.map.sections[0].size.x;
+          Window::data.map.sections[0].tiles.reserve(Window::data.map.sections[0].size.x * Window::data.map.sections[0].size.y);
 
           // Make the new size
-          for (unsigned int i = 0; i < Window::data.map.size.y; ++i)
-            Window::data.map.tiles.push_back(Data::Types::Map::Tile());
+          for (unsigned int i = 0; i < Window::data.map.sections[0].size.y; ++i)
+            Window::data.map.sections[0].tiles.push_back(Data::Types::Map::Tile());
 
           // Move the elements
-          std::vector<Data::Types::Map::Tile>::iterator i = Window::data.map.tiles.end(), begin = Window::data.map.tiles.begin();
-          i -= Window::data.map.size.y + (Window::data.map.size.x - 1);
+          std::vector<Data::Types::Map::Tile>::iterator i = Window::data.map.sections[0].tiles.end(), begin = Window::data.map.sections[0].tiles.begin();
+          i -= Window::data.map.sections[0].size.y + (Window::data.map.sections[0].size.x - 1);
           while (i > begin)
           {
-            std::copy(i, i + (Window::data.map.size.x - 1), i + (i - begin) / (Window::data.map.size.x - 1));
-            i -= (Window::data.map.size.x - 1);
+            std::copy(i, i + (Window::data.map.sections[0].size.x - 1), i + (i - begin) / (Window::data.map.sections[0].size.x - 1));
+            i -= (Window::data.map.sections[0].size.x - 1);
           }
 
           // Actually add the new elements
-          for (std::vector<Data::Types::Map::Tile>::iterator j = (begin + Window::data.map.size.x - 1); j < Window::data.map.tiles.end(); j += Window::data.map.size.x)
+          for (std::vector<Data::Types::Map::Tile>::iterator j = (begin + Window::data.map.sections[0].size.x - 1); j < Window::data.map.sections[0].tiles.end(); j += Window::data.map.sections[0].size.x)
           {
             *j = Data::Types::Map::Tile();
           }
@@ -87,7 +87,7 @@ void Editor::Tool::Tile::Col::update(MouseState ms)
       {
         Window::selectedTool = nullptr;
 
-        if (Window::data.map.size.x > 1 && Window::getFirstTile() % Window::data.map.size.x != Window::data.map.size.x - 1) // Map size has to be greater than 1, sorry
+        if (Window::data.map.sections[0].size.x > 1 && Window::getFirstTile() % Window::data.map.sections[0].size.x != Window::data.map.sections[0].size.x - 1) // Map size has to be greater than 1, sorry
         {
           Confirmation::Bool confirm("Are you sure (The entire column will get deleted)");
           while (confirm.getData()->result == nullptr)
@@ -98,16 +98,16 @@ void Editor::Tool::Tile::Col::update(MouseState ms)
           }
           if (*reinterpret_cast<bool*>(confirm.getData()->result))
           {
-            std::vector<Data::Types::Map::Tile>::iterator i = Window::data.map.tiles.begin() + Window::data.map.size.x;
+            std::vector<Data::Types::Map::Tile>::iterator i = Window::data.map.sections[0].tiles.begin() + Window::data.map.sections[0].size.x;
             unsigned int decAmount = 1;
-            while (i < Window::data.map.tiles.end())
+            while (i < Window::data.map.sections[0].tiles.end())
             {
-              std::copy(i, i + (Window::data.map.size.x - 1), i - decAmount++);
-              i += Window::data.map.size.x;
+              std::copy(i, i + (Window::data.map.sections[0].size.x - 1), i - decAmount++);
+              i += Window::data.map.sections[0].size.x;
             }
-            Window::data.map.tiles.erase(Window::data.map.tiles.end() - Window::data.map.size.y, Window::data.map.tiles.end());
+            Window::data.map.sections[0].tiles.erase(Window::data.map.sections[0].tiles.end() - Window::data.map.sections[0].size.y, Window::data.map.sections[0].tiles.end());
 
-            --Window::data.map.size.x;
+            --Window::data.map.sections[0].size.x;
           }
         }
       }
@@ -133,7 +133,7 @@ void Editor::Tool::Tile::Col::draw()
   int digits = 6;
   for (int i = digits, x = 0; i > 0; --i, ++x)
   {
-    int digit = static_cast<int>(Window::data.map.size.x / std::pow(10, i - 1)) % 10;
+    int digit = static_cast<int>(Window::data.map.sections[0].size.x / std::pow(10, i - 1)) % 10;
     SDL_Rect dRect = {x + WIDTH + 16 * x, y, 0, 0};
     SDL_QueryTexture(numberTexs[digit]->getSDL(), 0, 0, &dRect.w, &dRect.h);
     dRect.y += (HEIGHT - dRect.h) / 2;
@@ -154,7 +154,7 @@ void Editor::Tool::Tile::Col::draw()
     {x + WIDTH + 16 * digits + HEIGHT - 8 + HEIGHT,            y          + 8},
     {x + WIDTH + 16 * digits + HEIGHT + 8,                     y          + 8}
   };
-  renderer->setDrawColor(255, 255, 255, 255);
+  renderer->set_draw_color(255, 255, 255, 255);
   SDL_RenderDrawLines(renderer->getSDL(), upPoints, 4);
   SDL_RenderDrawLines(renderer->getSDL(), downPoints, 4);
 }
@@ -202,17 +202,17 @@ void Editor::Tool::Tile::Row::update(MouseState ms)
       {
         Window::selectedTool = nullptr;
 
-        if (Window::data.map.size.y < 999999)
+        if (Window::data.map.sections[0].size.y < 999999)
         {
           // Increase row and add tiles
           // This is way easier than the columns
           // Simply just append column amount of tiles to the vector
-          ++Window::data.map.size.y;
-          Window::data.map.tiles.reserve(Window::data.map.size.x + Window::data.map.size.y);
+          ++Window::data.map.sections[0].size.y;
+          Window::data.map.sections[0].tiles.reserve(Window::data.map.sections[0].size.x + Window::data.map.sections[0].size.y);
 
-          for (unsigned int i = 0; i < Window::data.map.size.x; ++i)
+          for (unsigned int i = 0; i < Window::data.map.sections[0].size.x; ++i)
           {
-            Window::data.map.tiles.push_back(Data::Types::Map::Tile());
+            Window::data.map.sections[0].tiles.push_back(Data::Types::Map::Tile());
           }
         }
       }
@@ -225,7 +225,7 @@ void Editor::Tool::Tile::Row::update(MouseState ms)
       {
         Window::selectedTool = nullptr;
 
-        if (Window::data.map.size.y > 1 && Window::getFirstTile() % Window::data.map.size.y != Window::data.map.size.y - 1) // Map size has to be greater than 1, sorry
+        if (Window::data.map.sections[0].size.y > 1 && Window::getFirstTile() % Window::data.map.sections[0].size.y != Window::data.map.sections[0].size.y - 1) // Map size has to be greater than 1, sorry
         {
           Confirmation::Bool confirm("Are you sure (The entire row will get deleted)");
           while (confirm.getData()->result == nullptr)
@@ -236,8 +236,8 @@ void Editor::Tool::Tile::Row::update(MouseState ms)
           }
           if (*reinterpret_cast<bool*>(confirm.getData()->result))
           {
-            --Window::data.map.size.y;
-            Window::data.map.tiles.erase(Window::data.map.tiles.end() - Window::data.map.size.x, Window::data.map.tiles.end());
+            --Window::data.map.sections[0].size.y;
+            Window::data.map.sections[0].tiles.erase(Window::data.map.sections[0].tiles.end() - Window::data.map.sections[0].size.x, Window::data.map.sections[0].tiles.end());
           }
         }
       }
@@ -263,7 +263,7 @@ void Editor::Tool::Tile::Row::draw()
   int digits = 6;
   for (int i = digits, x = 0; i > 0; --i, ++x)
   {
-    int digit = static_cast<int>(Window::data.map.size.y / std::pow(10, i - 1)) % 10;
+    int digit = static_cast<int>(Window::data.map.sections[0].size.y / std::pow(10, i - 1)) % 10;
     SDL_Rect dRect = {x + WIDTH + 16 * x, y, 0, 0};
     SDL_QueryTexture(numberTexs[digit]->getSDL(), 0, 0, &dRect.w, &dRect.h);
     dRect.y += (HEIGHT - dRect.h) / 2;
@@ -284,7 +284,7 @@ void Editor::Tool::Tile::Row::draw()
     {x + WIDTH + 16 * digits + HEIGHT - 8 + HEIGHT,            y          + 8},
     {x + WIDTH + 16 * digits + HEIGHT + 8,                     y          + 8}
   };
-  renderer->setDrawColor(255, 255, 255, 255);
+  renderer->set_draw_color(255, 255, 255, 255);
   SDL_RenderDrawLines(renderer->getSDL(), upPoints, 4);
   SDL_RenderDrawLines(renderer->getSDL(), downPoints, 4);
 }
@@ -339,8 +339,8 @@ void Editor::Tool::Tile::Edit::Main::update(MouseState ms)
           int gridX = Window::getInputs().mouseX / Constants::Grid.size;
           int gridY = Window::getInputs().mouseY / Constants::Grid.size;
 
-          unsigned int sizeX = Window::data.map.size.x;
-          unsigned int sizeY = Window::data.map.size.y;
+          unsigned int sizeX = Window::data.map.sections[0].size.x;
+          unsigned int sizeY = Window::data.map.sections[0].size.y;
           size_t firstTile = Window::getFirstTile();
 
           unsigned int windowXTiles = Constants::Window.width / Constants::Grid.size;
@@ -349,7 +349,7 @@ void Editor::Tool::Tile::Edit::Main::update(MouseState ms)
           unsigned int maxYTiles = sizeY - (firstTile / sizeY) < windowYTiles ? sizeY - (firstTile / sizeY) : windowYTiles;
           if (gridX <= maxXTiles && gridY <= maxYTiles)
           {
-            selectedTile = &Window::data.map.tiles[firstTile + gridX + (sizeX * (firstTile + gridY))];
+            selectedTile = &Window::data.map.sections[0].tiles[firstTile + gridX + (sizeX * (firstTile + gridY))];
             selectedTileRect = {gridX * Constants::Grid.size, gridY * Constants::Grid.size, Constants::Grid.size, Constants::Grid.size};
           }
         }
@@ -384,7 +384,7 @@ void Editor::Tool::Tile::Edit::Main::draw()
   if (selectedTile != nullptr)
   {
     // Draw the hover
-    renderer->setDrawColor(255, 255, 255, 128);
+    renderer->set_draw_color(255, 255, 255, 128);
     SDL_RenderFillRect(renderer->getSDL(), &selectedTileRect);
 
     // Draw the tools
@@ -405,7 +405,7 @@ void Editor::Tool::Tile::Edit::Main::draw()
       int gridX = Window::getInputs().mouseX / Constants::Grid.size * Constants::Grid.size;
       int gridY = Window::getInputs().mouseY / Constants::Grid.size * Constants::Grid.size;
       SDL_Rect dRect = {gridX, gridY, Constants::Grid.size, Constants::Grid.size};
-      renderer->setDrawColor(255, 255, 255, 128);
+      renderer->set_draw_color(255, 255, 255, 128);
       SDL_RenderFillRect(renderer->getSDL(), &dRect);
     }
   }
@@ -514,7 +514,7 @@ void Editor::Tool::Tile::Edit::ID::draw()
     {x + WIDTH + 16 * digits + HEIGHT - 8 + HEIGHT,            y          + 8},
     {x + WIDTH + 16 * digits + HEIGHT + 8,                     y          + 8}
   };
-  renderer->setDrawColor(255, 255, 255, 255);
+  renderer->set_draw_color(255, 255, 255, 255);
   SDL_RenderDrawLines(renderer->getSDL(), upPoints, 4);
   SDL_RenderDrawLines(renderer->getSDL(), downPoints, 4);
 }

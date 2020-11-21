@@ -60,7 +60,7 @@ void Editor::Confirmation::Bool::input()
     }
   }
 
-  SDL_GetMouseState(&inputs.mouseX, &inputs.mouseY);
+SDL_GetMouseState(&inputs.mouseX, &inputs.mouseY);
 }
 
 // The boxes
@@ -86,7 +86,7 @@ void Editor::Confirmation::Bool::update()
 
 void Editor::Confirmation::Bool::draw()
 {
-  renderer->setDrawColor(255, 255, 255, 255);
+  renderer->set_draw_color(255, 255, 255, 255);
   renderer->clear();
 
   // Draw blurb
@@ -95,10 +95,10 @@ void Editor::Confirmation::Bool::draw()
   renderer->copy(blurbTex, 0, &dRect);
 
   // Draw yes/no buttons
-  renderer->setDrawColor(40, 160, 30, 255);
+  renderer->set_draw_color(40, 160, 30, 255);
   SDL_RenderFillRect(renderer->getSDL(), &yesBox);
 
-  renderer->setDrawColor(245, 45, 45, 255);
+  renderer->set_draw_color(245, 45, 45, 255);
   SDL_RenderFillRect(renderer->getSDL(), &noBox);
 
   renderer->present();

@@ -110,7 +110,7 @@ void Editor::Window::input()
 
 void Editor::Window::update()
 {
-  static unsigned int tempFirstTile = firstTile, tempViewX = firstTile % data.map.size.x, tempViewY = firstTile / data.map.size.y;
+  static unsigned int tempFirstTile = firstTile, tempViewX = firstTile % data.map.sections[0].size.x, tempViewY = firstTile / data.map.sections[0].size.y;
   if (inputs.mouseDown)
   {
     if (!inputs.oldMouseDown) // Click
@@ -131,19 +131,19 @@ void Editor::Window::update()
       int x = ((inputs.mouseX - inputs.clickMouseX) / Constants::Grid.size);
 
       // Make y within bounds
-      if (tempFirstTile / data.map.size.x < maxDrag && static_cast<int>(tempFirstTile / data.map.size.x) + y < 0)
-        y = -(tempFirstTile / data.map.size.x);
-      else if (tempFirstTile / data.map.size.x + y >= data.map.size.y)
-        y = (data.map.size.y - 1) - (tempFirstTile / data.map.size.x);
+      if (tempFirstTile / data.map.sections[0].size.x < maxDrag && static_cast<int>(tempFirstTile / data.map.sections[0].size.x) + y < 0)
+        y = -(tempFirstTile / data.map.sections[0].size.x);
+      else if (tempFirstTile / data.map.sections[0].size.x + y >= data.map.sections[0].size.y)
+        y = (data.map.sections[0].size.y - 1) - (tempFirstTile / data.map.sections[0].size.x);
 
       // Make x within bounds
-      if (tempFirstTile % data.map.size.x < maxDrag && static_cast<int>(tempFirstTile % data.map.size.x) + x < 0)
-        x = -(tempFirstTile % data.map.size.x);
-      else if (tempFirstTile % data.map.size.x + x >= data.map.size.x)
-        x = (data.map.size.x - 1) - (tempFirstTile % data.map.size.x);
+      if (tempFirstTile % data.map.sections[0].size.x < maxDrag && static_cast<int>(tempFirstTile % data.map.sections[0].size.x) + x < 0)
+        x = -(tempFirstTile % data.map.sections[0].size.x);
+      else if (tempFirstTile % data.map.sections[0].size.x + x >= data.map.sections[0].size.x)
+        x = (data.map.sections[0].size.x - 1) - (tempFirstTile % data.map.sections[0].size.x);
 
       // Change firstTile
-      firstTile = tempFirstTile + data.map.size.x * y + x;
+      firstTile = tempFirstTile + data.map.sections[0].size.x * y + x;
     }
   }
 
@@ -153,8 +153,8 @@ void Editor::Window::update()
     if (selectedTool == nullptr)
     {
       tempFirstTile = firstTile;
-      tempViewX = firstTile % data.map.size.x;
-      tempViewY = firstTile / data.map.size.y;
+      tempViewX = firstTile % data.map.sections[0].size.x;
+      tempViewY = firstTile / data.map.sections[0].size.y;
     }
   }
 
@@ -186,15 +186,15 @@ void Editor::Window::drawTiles()
   SDL_Rect dRect = {0, 0, Constants::Grid.size, Constants::Grid.size};
   SDL_Rect sRect = {0, 0, 32, 32};
   unsigned int windowXTiles = Constants::Window.width / Constants::Grid.size;
-  unsigned int maxXTiles = data.map.size.x - (firstTile % data.map.size.x) < windowXTiles ? data.map.size.x - (firstTile % data.map.size.x) : windowXTiles;
+  unsigned int maxXTiles = data.map.sections[0].size.x - (firstTile % data.map.sections[0].size.x) < windowXTiles ? data.map.sections[0].size.x - (firstTile % data.map.sections[0].size.x) : windowXTiles;
   unsigned int windowYTiles = (Constants::Window.height - Constants::Window.toolBarHeight) / Constants::Grid.size;
-  unsigned int maxYTiles = data.map.size.y - (firstTile / data.map.size.x) < windowYTiles ? data.map.size.y - (firstTile / data.map.size.x) : windowYTiles;
+  unsigned int maxYTiles = data.map.sections[0].size.y - (firstTile / data.map.sections[0].size.x) < windowYTiles ? data.map.sections[0].size.y - (firstTile / data.map.sections[0].size.x) : windowYTiles;
 
   for (unsigned int row = 0; row < maxYTiles; ++row)
   {
     for (unsigned int col = 0; col < maxXTiles; ++col)
     {
-      sRect.x = data.map.tiles[firstTile + (row * data.map.size.x) + col].id * 32;
+      sRect.x = data.map.sections[0].tiles[firstTile + (row * data.map.sections[0].size.x) + col].id * 32;
       renderer->copy(spritesheet, &sRect, &dRect);
       dRect.x += Constants::Grid.size;
     }
@@ -206,7 +206,7 @@ void Editor::Window::drawTiles()
 
 void Editor::Window::draw()
 {
-  renderer->setDrawColor(10, 56, 69, 255);
+  renderer->set_draw_color(10, 56, 69, 255);
   renderer->clear();
 
   // Draw map stuff
@@ -216,7 +216,7 @@ void Editor::Window::draw()
   // Draw tool stuff
   // Draw the toolbar
   SDL_Color c = toolManager->getColor();
-  renderer->setDrawColor(c.r, c.g, c.b, 255);
+  renderer->set_draw_color(c.r, c.g, c.b, 255);
   SDL_Rect toolbar = {0, Constants::Window.height - Constants::Window.toolBarHeight, Constants::Window.width, Constants::Window.toolBarHeight};
   SDL_RenderFillRect(renderer->getSDL(), &toolbar);
   toolManager->draw();

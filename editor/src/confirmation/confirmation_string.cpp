@@ -82,7 +82,7 @@ void Editor::Confirmation::String::update()
 
 void Editor::Confirmation::String::draw()
 {
-  renderer->setDrawColor(255, 255, 255, 255);
+  renderer->set_draw_color(255, 255, 255, 255);
   renderer->clear();
 
   // Draw blurb
