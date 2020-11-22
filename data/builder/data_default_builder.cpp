@@ -34,7 +34,7 @@ void Data::DefaultBuilder::build()
 
   for (size_t i = 0; i < data.map.sections[0].size.x * data.map.sections[0].size.y; ++i)
   {
-    data.map.sections[0].tiles.push_back(Types::Map::Tile());
+    data.map.sections[0].tiles.push_back({0, {false, false, false, false}, 0, 0, 0});
   }
 
   Save::save("default.sbbd", data);

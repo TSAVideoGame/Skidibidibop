@@ -28,7 +28,7 @@ Data::Types::Base::~Base()
  */
 Data::Types::Map::Map() : Base(Type::MAP)
 {
-  
+  num_sections = 0;  
 }
 
 Data::Types::Map::Map(std::ifstream& file) : Base(Type::MAP)
@@ -109,7 +109,14 @@ void Data::Types::Map::load(std::ifstream& file)
  */
 Data::Types::Player::Player() : Base(Type::PLAYER)
 {
-
+  gender = false;
+  health = 0;
+  weapons = {0, 0, 0};
+  level = 0;
+  current_map = 0;
+  position = {0, 0};
+  direction = 0;
+  status = 0;
 }
 
 Data::Types::Player::Player(std::ifstream& file) : Base(Type::MAP)
@@ -154,7 +161,8 @@ void Data::Types::Player::load(std::ifstream& file)
  */
 Data::Types::Inventory::Inventory() : Base(Type::INVENTORY)
 {
-
+  num_weapons = 0;
+  inventory_size = 0;
 }
 
 Data::Types::Inventory::Inventory(std::ifstream& file) : Base(Type::MAP)
@@ -211,7 +219,7 @@ void Data::Types::Inventory::load(std::ifstream& file)
  */
 Data::Types::Story::Story() : Base(Type::STORY)
 {
-
+  num_quests = 0;
 }
 
 Data::Types::Story::Story(std::ifstream& file) : Base(Type::MAP)
@@ -247,7 +255,7 @@ void Data::Types::Story::load(std::ifstream& file)
  */
 Data::Types::Bopdex::Bopdex() : Base(Type::BOPDEX)
 {
-
+  num_entries = 0;
 }
 
 Data::Types::Bopdex::Bopdex(std::ifstream& file) : Base(Type::MAP)
@@ -292,7 +300,7 @@ void Data::Types::Bopdex::load(std::ifstream& file)
  */
 Data::Types::Achievement::Achievement() : Base(Type::ACHIEVEMENT)
 {
-
+  num_achievements = 0;
 }
 
 Data::Types::Achievement::Achievement(std::ifstream& file) : Base(Type::MAP)
