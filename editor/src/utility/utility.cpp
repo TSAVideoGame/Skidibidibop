@@ -1,11 +1,8 @@
 #include "utility.h"
 #include <SDL2/SDL_ttf.h>
 
-#include <iostream>
-
 SDLW::Texture* Editor::Utility::create_text_center(SDLW::Renderer* renderer, const std::string& text, SDL_Rect& destRect, int w, int h, SDL_Color color)
 {
-  std::cout << text << std::endl;
   TTF_Font* font = TTF_OpenFont("res/fonts/open-sans/OpenSans-Regular.ttf", 16);
   SDL_Surface* txt_surface = TTF_RenderText_Blended(font, text.c_str(), color);
   SDLW::Texture* texture = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->get_SDL(), txt_surface));

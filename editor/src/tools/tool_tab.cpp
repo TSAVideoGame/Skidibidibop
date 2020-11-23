@@ -13,9 +13,9 @@ Editor::Tool::Tab::Tab(SDLW::Renderer* renderer_p, const std::string& text_p, in
   y = y_p;
   color = color_p;
   renderer = renderer_p;
+  dest_rect = {x_p, y_p, 64, 32};
   texture = Utility::create_text_center(renderer, text, dest_rect, 64, 32, {255, 255, 255});
   isSelected = false;
-  dest_rect = {x_p, y_p, 64, 32};
 }
 
 Editor::Tool::Tab::~Tab()
@@ -41,7 +41,7 @@ void Editor::Tool::Tab::draw()
   renderer->set_draw_color(color.r, color.g, color.b, 255);
   SDL_Rect fill_rect = {x, y, 64, 32};
   SDL_RenderFillRect(renderer->get_SDL(), &fill_rect);
-  renderer->copy(texture, 0, &dest_rect); // Causing seg fault
+  renderer->copy(texture, 0, &dest_rect);
 
   if (isSelected)
   {

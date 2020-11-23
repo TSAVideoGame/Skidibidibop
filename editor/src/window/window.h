@@ -30,7 +30,9 @@ namespace Editor
     static bool is_running();
     static Inputs get_inputs();
     static std::string get_current_file();
-    static size_t getFirstTile();
+    static size_t get_first_tile();
+    static unsigned int get_current_section();
+    static unsigned int get_current_zoom();
     // Data is going to be manipulated so might as well be public
     static Data::Save::Data data;
     static Tool::Base* selected_tool;

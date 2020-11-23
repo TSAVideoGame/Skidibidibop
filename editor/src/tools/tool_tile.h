@@ -11,26 +11,24 @@ namespace Editor
   {
     namespace Tile
     {
-      class Col : public Base
+      class Col : public Numeric
       {
       public:
         Col(SDLW::Renderer*, int x, int y);
         ~Col();
 
         void update(MouseState);
-        void draw();
       private:
         SDLW::Texture* numberTexs[10];
       };
 
-      class Row : public Base
+      class Row : public Numeric
       {
       public:
         Row(SDLW::Renderer*, int x, int y);
         ~Row();
 
         void update(MouseState);
-        void draw();
       private:
         SDLW::Texture* numberTexs[10];
       };

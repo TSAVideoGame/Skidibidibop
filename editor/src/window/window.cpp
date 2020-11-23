@@ -261,4 +261,6 @@ void Editor::Window::set_current_file(const std::string& newFile)
 bool Editor::Window::is_running() { return running; }
 Editor::Inputs Editor::Window::get_inputs() { return inputs; }
 std::string Editor::Window::get_current_file() { return current_file; };
-size_t Editor::Window::getFirstTile() { return firstTile; };
+size_t Editor::Window::get_first_tile() { return firstTile; };
+unsigned int Editor::Window::get_current_section() { return current_section; }
+unsigned int Editor::Window::get_current_zoom() { return current_zoom; }

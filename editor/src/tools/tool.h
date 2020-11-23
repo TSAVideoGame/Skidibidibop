@@ -32,6 +32,22 @@ namespace Editor
       SDLW::Texture* texture;
     };
 
+    class Numeric : public Base
+    {
+    public:
+      Numeric(SDLW::Renderer*, const std::string&, int x, int y, unsigned int min, unsigned int max, unsigned int* variable);
+      virtual ~Numeric();
+
+      virtual void update(MouseState) = 0;
+      virtual void draw();
+    protected:
+      unsigned int min, max;
+      unsigned int* variable;
+      bool hover_increment();
+      bool hover_decrement();
+      SDLW::Texture* number_textures[10];
+    };
+
   };
 };
 

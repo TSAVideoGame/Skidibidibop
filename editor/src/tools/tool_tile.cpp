@@ -6,6 +6,7 @@
 #include <cmath>
 #include <algorithm>
 
+
 // Terrible code coming up ahead for these two tools
 
 /*
@@ -14,26 +15,20 @@
  * ========================================
  */
 
-Editor::Tool::Tile::Col::Col(SDLW::Renderer* renderer, int x, int y) : Editor::Tool::Base(renderer, "Col", x , y)
+Editor::Tool::Tile::Col::Col(SDLW::Renderer* renderer, int x, int y) : Editor::Tool::Numeric(renderer, "Col", x , y, 1, 999999, &Window::data.map.sections[Window::get_current_section()].size.x)
 {
-  for (int i = 0; i < 10; ++i)
-  {
-    TTF_Font* font = TTF_OpenFont("res/fonts/open-sans/OpenSans-Regular.ttf", 16);
-    SDL_Surface* txtSurface = TTF_RenderText_Blended(font, std::to_string(i).c_str(), {255, 255, 255});
-    numberTexs[i] = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->get_SDL(), txtSurface));
-    SDL_FreeSurface(txtSurface);
-    TTF_CloseFont(font);
-  }
+
 }
 
 Editor::Tool::Tile::Col::~Col()
 {
-  for (int i = 0; i < 10; ++i)
-    delete numberTexs[i];
+
 }
 
 void Editor::Tool::Tile::Col::update(MouseState ms)
 {
+  variable = &Window::data.map.sections[Window::get_current_section()].size.x; 
+
   switch (ms)
   {
     case MouseState::HOVER:
@@ -42,37 +37,36 @@ void Editor::Tool::Tile::Col::update(MouseState ms)
     }
     case MouseState::CLICK:
     {
-      int digits = 6;
+      // The section to edit
+      Data::Types::Map::Section* section = &Window::data.map.sections[Window::get_current_section()];
+
       // Up button
-      if (Window::get_inputs().mouseX >= x + WIDTH + 16 * digits &&
-          Window::get_inputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT &&
-          Window::get_inputs().mouseY >= y &&
-          Window::get_inputs().mouseY < y + HEIGHT)
+      if (hover_increment())
       {
         Window::selected_tool = nullptr;
 
-        if (Window::data.map.sections[0].size.x < 999999)
+        if (section->size.x < max)
         {
           // Increase column and add new tiles
           // Visual might be posted sometime, idk...
-          ++Window::data.map.sections[0].size.x;
-          Window::data.map.sections[0].tiles.reserve(Window::data.map.sections[0].size.x * Window::data.map.sections[0].size.y);
+          ++section->size.x;
+          section->tiles.reserve(section->size.x * section->size.y);
 
           // Make the new size
-          for (unsigned int i = 0; i < Window::data.map.sections[0].size.y; ++i)
-            Window::data.map.sections[0].tiles.push_back(Data::Types::Map::Tile());
+          for (unsigned int i = 0; i < section->size.y; ++i)
+            section->tiles.push_back(Data::Types::Map::Tile());
 
           // Move the elements
-          std::vector<Data::Types::Map::Tile>::iterator i = Window::data.map.sections[0].tiles.end(), begin = Window::data.map.sections[0].tiles.begin();
-          i -= Window::data.map.sections[0].size.y + (Window::data.map.sections[0].size.x - 1);
+          std::vector<Data::Types::Map::Tile>::iterator i = section->tiles.end(), begin = section->tiles.begin();
+          i -= section->size.y + (section->size.x - 1);
           while (i > begin)
           {
-            std::copy(i, i + (Window::data.map.sections[0].size.x - 1), i + (i - begin) / (Window::data.map.sections[0].size.x - 1));
-            i -= (Window::data.map.sections[0].size.x - 1);
+            std::copy(i, i + (section->size.x - 1), i + (i - begin) / (section->size.x - 1));
+            i -= (section->size.x - 1);
           }
 
           // Actually add the new elements
-          for (std::vector<Data::Types::Map::Tile>::iterator j = (begin + Window::data.map.sections[0].size.x - 1); j < Window::data.map.sections[0].tiles.end(); j += Window::data.map.sections[0].size.x)
+          for (std::vector<Data::Types::Map::Tile>::iterator j = begin + section->size.x - 1; j < section->tiles.end(); j += section->size.x)
           {
             *j = Data::Types::Map::Tile();
           }
@@ -80,14 +74,11 @@ void Editor::Tool::Tile::Col::update(MouseState ms)
       }
 
       // Down button
-      if (Window::get_inputs().mouseX >= x + WIDTH + 16 * digits + HEIGHT &&
-          Window::get_inputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT * 2 &&
-          Window::get_inputs().mouseY >= y &&
-          Window::get_inputs().mouseY < y + HEIGHT)
+      if (hover_decrement())
       {
         Window::selected_tool = nullptr;
 
-        if (Window::data.map.sections[0].size.x > 1 && Window::getFirstTile() % Window::data.map.sections[0].size.x != Window::data.map.sections[0].size.x - 1) // Map size has to be greater than 1, sorry
+        if (section->size.x > min && Window::get_first_tile() % section->size.x != section->size.x - 1)
         {
           Confirmation::Bool confirm("Are you sure (The entire column will get deleted)");
           while (confirm.getData()->result == nullptr)
@@ -98,16 +89,16 @@ void Editor::Tool::Tile::Col::update(MouseState ms)
           }
           if (*reinterpret_cast<bool*>(confirm.getData()->result))
           {
-            std::vector<Data::Types::Map::Tile>::iterator i = Window::data.map.sections[0].tiles.begin() + Window::data.map.sections[0].size.x;
+            std::vector<Data::Types::Map::Tile>::iterator i = section->tiles.begin() + section->size.x;
             unsigned int decAmount = 1;
-            while (i < Window::data.map.sections[0].tiles.end())
+            while (i < section->tiles.end())
             {
-              std::copy(i, i + (Window::data.map.sections[0].size.x - 1), i - decAmount++);
-              i += Window::data.map.sections[0].size.x;
+              std::copy(i, i + (section->size.x - 1), i - decAmount++);
+              i += section->size.x;
             }
-            Window::data.map.sections[0].tiles.erase(Window::data.map.sections[0].tiles.end() - Window::data.map.sections[0].size.y, Window::data.map.sections[0].tiles.end());
+            section->tiles.erase(section->tiles.end() - section->size.y, section->tiles.end());
 
-            --Window::data.map.sections[0].size.x;
+            --section->size.x;
           }
         }
       }
@@ -125,66 +116,26 @@ void Editor::Tool::Tile::Col::update(MouseState ms)
   }
 }
 
-void Editor::Tool::Tile::Col::draw()
-{
-  Base::draw();
-
-  // Draw the current number of columns
-  int digits = 6;
-  for (int i = digits, x = 0; i > 0; --i, ++x)
-  {
-    int digit = static_cast<int>(Window::data.map.sections[0].size.x / std::pow(10, i - 1)) % 10;
-    SDL_Rect dRect = {x + WIDTH + 16 * x, y, 0, 0};
-    SDL_QueryTexture(numberTexs[digit]->get_SDL(), 0, 0, &dRect.w, &dRect.h);
-    dRect.y += (HEIGHT - dRect.h) / 2;
-    renderer->copy(numberTexs[digit], 0, &dRect);
-  }
-
-  // Draw the increase / decrease boxes
-  // Points
-  SDL_Point upPoints[4] = {
-    {x + WIDTH + 16 * digits + 8,              y + HEIGHT - 8},
-    {x + WIDTH + 16 * digits + 8 + (HEIGHT - 16) / 2, y   + 8},
-    {x + WIDTH + 16 * digits - 8 + HEIGHT,     y + HEIGHT - 8},
-    {x + WIDTH + 16 * digits + 8,              y + HEIGHT - 8}
-  };
-  SDL_Point downPoints[4] = {
-    {x + WIDTH + 16 * digits + HEIGHT + 8,                     y          + 8},
-    {x + WIDTH + 16 * digits + HEIGHT + 8 + (HEIGHT - 16) / 2, y + HEIGHT - 8},
-    {x + WIDTH + 16 * digits + HEIGHT - 8 + HEIGHT,            y          + 8},
-    {x + WIDTH + 16 * digits + HEIGHT + 8,                     y          + 8}
-  };
-  renderer->set_draw_color(255, 255, 255, 255);
-  SDL_RenderDrawLines(renderer->get_SDL(), upPoints, 4);
-  SDL_RenderDrawLines(renderer->get_SDL(), downPoints, 4);
-}
-
 /*
  * ========================================
  * Row(s) Tool
  * ========================================
  */
 
-Editor::Tool::Tile::Row::Row(SDLW::Renderer* renderer, int x, int y) : Editor::Tool::Base(renderer, "Row", x , y)
+Editor::Tool::Tile::Row::Row(SDLW::Renderer* renderer, int x, int y) : Editor::Tool::Numeric(renderer, "Row", x , y, 1, 999999, &Window::data.map.sections[Window::get_current_section()].size.y)
 {
-  for (int i = 0; i < 10; ++i)
-  {
-    TTF_Font* font = TTF_OpenFont("res/fonts/open-sans/OpenSans-Regular.ttf", 16);
-    SDL_Surface* txtSurface = TTF_RenderText_Blended(font, std::to_string(i).c_str(), {255, 255, 255});
-    numberTexs[i] = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->get_SDL(), txtSurface));
-    SDL_FreeSurface(txtSurface);
-    TTF_CloseFont(font);
-  }
+
 }
 
 Editor::Tool::Tile::Row::~Row()
 {
-  for (int i = 0; i < 10; ++i)
-    delete numberTexs[i];
+
 }
 
 void Editor::Tool::Tile::Row::update(MouseState ms)
 {
+  variable = &Window::data.map.sections[Window::get_current_section()].size.y;
+
   switch (ms)
   {
     case MouseState::HOVER:
@@ -193,39 +144,33 @@ void Editor::Tool::Tile::Row::update(MouseState ms)
     }
     case MouseState::CLICK:
     {
-      int digits = 6;
+      Data::Types::Map::Section* section = &Window::data.map.sections[Window::get_current_section()];
       // Up button
-      if (Window::get_inputs().mouseX >= x + WIDTH + 16 * digits &&
-          Window::get_inputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT &&
-          Window::get_inputs().mouseY >= y &&
-          Window::get_inputs().mouseY < y + HEIGHT)
+      if (hover_increment())
       {
         Window::selected_tool = nullptr;
 
-        if (Window::data.map.sections[0].size.y < 999999)
+        if (section->size.y < max)
         {
           // Increase row and add tiles
           // This is way easier than the columns
           // Simply just append column amount of tiles to the vector
-          ++Window::data.map.sections[0].size.y;
-          Window::data.map.sections[0].tiles.reserve(Window::data.map.sections[0].size.x + Window::data.map.sections[0].size.y);
+          ++section->size.y;
+          section->tiles.reserve(section->size.x + section->size.y);
 
-          for (unsigned int i = 0; i < Window::data.map.sections[0].size.x; ++i)
+          for (unsigned int i = 0; i < section->size.x; ++i)
           {
-            Window::data.map.sections[0].tiles.push_back(Data::Types::Map::Tile());
+            section->tiles.push_back(Data::Types::Map::Tile());
           }
         }
       }
 
       // Down button
-      if (Window::get_inputs().mouseX >= x + WIDTH + 16 * digits + HEIGHT &&
-          Window::get_inputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT * 2 &&
-          Window::get_inputs().mouseY >= y &&
-          Window::get_inputs().mouseY < y + HEIGHT)
+      if (hover_decrement())
       {
         Window::selected_tool = nullptr;
 
-        if (Window::data.map.sections[0].size.y > 1 && Window::getFirstTile() % Window::data.map.sections[0].size.y != Window::data.map.sections[0].size.y - 1) // Map size has to be greater than 1, sorry
+        if (section->size.y > 1 && Window::get_first_tile() % section->size.y != section->size.y - 1)
         {
           Confirmation::Bool confirm("Are you sure (The entire row will get deleted)");
           while (confirm.getData()->result == nullptr)
@@ -236,8 +181,8 @@ void Editor::Tool::Tile::Row::update(MouseState ms)
           }
           if (*reinterpret_cast<bool*>(confirm.getData()->result))
           {
-            --Window::data.map.sections[0].size.y;
-            Window::data.map.sections[0].tiles.erase(Window::data.map.sections[0].tiles.end() - Window::data.map.sections[0].size.x, Window::data.map.sections[0].tiles.end());
+            --section->size.y;
+            section->tiles.erase(section->tiles.end() - section->size.x, section->tiles.end());
           }
         }
       }
@@ -253,40 +198,6 @@ void Editor::Tool::Tile::Row::update(MouseState ms)
       break;
     }
   }
-}
-
-void Editor::Tool::Tile::Row::draw()
-{
-  Base::draw();
-
-  // Draw the current number of columns
-  int digits = 6;
-  for (int i = digits, x = 0; i > 0; --i, ++x)
-  {
-    int digit = static_cast<int>(Window::data.map.sections[0].size.y / std::pow(10, i - 1)) % 10;
-    SDL_Rect dRect = {x + WIDTH + 16 * x, y, 0, 0};
-    SDL_QueryTexture(numberTexs[digit]->get_SDL(), 0, 0, &dRect.w, &dRect.h);
-    dRect.y += (HEIGHT - dRect.h) / 2;
-    renderer->copy(numberTexs[digit], 0, &dRect);
-  }
-
-  // Draw the increase / decrease boxes
-  // Points
-  SDL_Point upPoints[4] = {
-    {x + WIDTH + 16 * digits + 8,              y + HEIGHT - 8},
-    {x + WIDTH + 16 * digits + 8 + (HEIGHT - 16) / 2, y   + 8},
-    {x + WIDTH + 16 * digits - 8 + HEIGHT,     y + HEIGHT - 8},
-    {x + WIDTH + 16 * digits + 8,              y + HEIGHT - 8}
-  };
-  SDL_Point downPoints[4] = {
-    {x + WIDTH + 16 * digits + HEIGHT + 8,                     y          + 8},
-    {x + WIDTH + 16 * digits + HEIGHT + 8 + (HEIGHT - 16) / 2, y + HEIGHT - 8},
-    {x + WIDTH + 16 * digits + HEIGHT - 8 + HEIGHT,            y          + 8},
-    {x + WIDTH + 16 * digits + HEIGHT + 8,                     y          + 8}
-  };
-  renderer->set_draw_color(255, 255, 255, 255);
-  SDL_RenderDrawLines(renderer->get_SDL(), upPoints, 4);
-  SDL_RenderDrawLines(renderer->get_SDL(), downPoints, 4);
 }
 
 /*
@@ -341,7 +252,7 @@ void Editor::Tool::Tile::Edit::Main::update(MouseState ms)
 
           unsigned int sizeX = Window::data.map.sections[0].size.x;
           unsigned int sizeY = Window::data.map.sections[0].size.y;
-          size_t firstTile = Window::getFirstTile();
+          size_t firstTile = Window::get_first_tile();
 
           unsigned int windowXTiles = Constants::Window.width / Constants::Grid.size;
           unsigned int maxXTiles = sizeX - (firstTile % sizeX) < windowXTiles ? sizeX - (firstTile % sizeX) : windowXTiles;
