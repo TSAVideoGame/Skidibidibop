@@ -5,8 +5,6 @@ project(editor)
 add_executable(editor
   ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
 
-  ${CMAKE_CURRENT_LIST_DIR}/src/window/window.cpp
-
   ${CMAKE_CURRENT_LIST_DIR}/src/confirmation/confirmation.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/confirmation/confirmation_bool.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/confirmation/confirmation_string.cpp
@@ -16,6 +14,10 @@ add_executable(editor
   ${CMAKE_CURRENT_LIST_DIR}/src/tools/tool_manager.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/tools/tool_tab.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/tools/tool_tile.cpp
+
+  ${CMAKE_CURRENT_LIST_DIR}/src/utility/utility.cpp
+
+  ${CMAKE_CURRENT_LIST_DIR}/src/window/window.cpp
 )
 
 # Ignore the /usr/include/SDL2 part, my VIM is messed up :(
@@ -23,6 +25,7 @@ target_include_directories(editor PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/src
   ${CMAKE_CURRENT_LIST_DIR}/src/confirmation
   ${CMAKE_CURRENT_LIST_DIR}/src/tools
+  ${CMAKE_CURRENT_LIST_DIR}/src/utility
   ${CMAKE_CURRENT_LIST_DIR}/src/window
   ${CMAKE_CURRENT_LIST_DIR}/../data/include
   ${CMAKE_CURRENT_LIST_DIR}/../sdlw/include

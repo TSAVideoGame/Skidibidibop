@@ -15,7 +15,7 @@ namespace Editor
 
     constexpr struct
     {
-      int size = 32;
+      int size = 64;
     } Grid;
   };
 };

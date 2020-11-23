@@ -14,7 +14,7 @@ namespace SDLW
     Texture(const char*, Renderer*);
     ~Texture();
 
-    SDL_Texture* getSDL();
+    SDL_Texture* get_SDL();
   private:
     SDL_Texture* texture;
   };

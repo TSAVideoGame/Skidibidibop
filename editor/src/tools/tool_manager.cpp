@@ -5,8 +5,8 @@ Editor::Tool::Manager::Manager(SDLW::Renderer* renderer)
 {
   tabs.reserve(4);
 
-  int y = Constants::Window.height - Constants::Window.toolBarHeight - Constants::Grid.size;
-  int width = Constants::Grid.size * 2;
+  int y = Constants::Window.height - Constants::Window.toolBarHeight - Constants::Grid.size / 2;
+  int width = Constants::Grid.size;
 
   tabs.push_back(new Tabs::Main(renderer, "Main",   0,                                     y, { 20,  20,  20}));
   tabs.push_back(new Tabs::Tile(renderer, "Tiles",  Constants::Window.width - (width * 1), y, { 30, 140,  10}));
@@ -27,7 +27,7 @@ Editor::Tool::Manager::~Manager()
 
 void Editor::Tool::Manager::update(MouseState ms)
 {
-  Inputs inputs = Window::getInputs();
+  Inputs inputs = Window::get_inputs();
   // Update self
   switch (ms)
   {
@@ -42,7 +42,7 @@ void Editor::Tool::Manager::update(MouseState ms)
       {
         if (t->isHovered(inputs.mouseX, inputs.mouseY))
         {
-          Window::selectedTool = nullptr;
+          Window::selected_tool = nullptr;
           selectedTab->isSelected = false;
           selectedTab = t;
           selectedTab->isSelected = true;

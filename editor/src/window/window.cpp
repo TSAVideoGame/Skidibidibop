@@ -3,17 +3,19 @@
 #include <ctime>
 #include <SDL2/SDL_ttf.h>
 
-bool Editor::Window::running;
+bool Editor::Window::running = true;
 SDLW::Window* Editor::Window::window;
 SDLW::Renderer* Editor::Window::renderer;
 Editor::Inputs Editor::Window::inputs;
-Editor::Tool::Manager* Editor::Window::toolManager;
-std::string Editor::Window::currentFile;
-SDLW::Texture* Editor::Window::currentFileTex;
+Editor::Tool::Manager* Editor::Window::tool_manager;
+std::string Editor::Window::current_file;
+SDLW::Texture* Editor::Window::current_file_tex;
+unsigned int Editor::Window::current_section = 0;
+unsigned int Editor::Window::current_zoom = 1;
 Data::Save::Data Editor::Window::data = Data::Save::load("res/default.sbbd");
 SDLW::Texture* Editor::Window::spritesheet;
 size_t Editor::Window::firstTile; // Top-left most tile
-Editor::Tool::Base* Editor::Window::selectedTool = nullptr;
+Editor::Tool::Base* Editor::Window::selected_tool = nullptr;
 
 void Editor::Window::init()
 {
@@ -23,8 +25,7 @@ void Editor::Window::init()
   window = new SDLW::Window("SBB Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Constants::Window.width, Constants::Window.height, 0);
   renderer = new SDLW::Renderer(window);
   inputs = {false, false, 0, 0, 0, 0, 0, 0, 0};
-  running = true;
-  toolManager = new Tool::Manager(renderer);
+  tool_manager = new Tool::Manager(renderer);
   spritesheet = new SDLW::Texture("res/spritesheet.png", renderer);
 
   // The default file name is SBBD_time.sbbd
@@ -33,11 +34,11 @@ void Editor::Window::init()
   time(&rawtime);
   std::tm* timeinfo = localtime(&rawtime);
   strftime(timeNameBuffer, sizeof(timeNameBuffer), "%Y_%m_%d_%T", timeinfo);
-  currentFile = "SBBD_";
-  currentFile.append(timeNameBuffer);
-  currentFile += ".sbbd";
-  currentFileTex = nullptr;
-  setCurrentFile(currentFile);
+  current_file = "SBBD_";
+  current_file.append(timeNameBuffer);
+  current_file += ".sbbd";
+  current_file_tex = nullptr;
+  set_current_file(current_file);
 
   firstTile = 0;
 }
@@ -45,8 +46,8 @@ void Editor::Window::init()
 void Editor::Window::close()
 {
   delete spritesheet;
-  delete currentFileTex;
-  delete toolManager;
+  delete current_file_tex;
+  delete tool_manager;
   delete renderer;
   delete window;
 
@@ -102,6 +103,14 @@ void Editor::Window::input()
         inputs.mouseWheelY = e.wheel.y;
         break;
       }
+      case SDL_WINDOWEVENT:
+      {
+        if (SDL_GetWindowID(window->get_SDL()) != e.window.windowID)
+        {
+          inputs.mouseDown = false;
+        }
+        break;
+      }
     }
   }
 
@@ -110,17 +119,17 @@ void Editor::Window::input()
 
 void Editor::Window::update()
 {
-  static unsigned int tempFirstTile = firstTile, tempViewX = firstTile % data.map.sections[0].size.x, tempViewY = firstTile / data.map.sections[0].size.y;
+  static unsigned int tempFirstTile = firstTile, tempViewX = firstTile % data.map.sections[current_section].size.x, tempViewY = firstTile / data.map.sections[current_section].size.y;
   if (inputs.mouseDown)
   {
     if (!inputs.oldMouseDown) // Click
     {
-      toolManager->update(MouseState::CLICK);
+      tool_manager->update(MouseState::CLICK);
     }
     // Drag
-    if (selectedTool != nullptr)
+    if (selected_tool != nullptr)
     {
-      toolManager->update(MouseState::DRAG);
+      tool_manager->update(MouseState::DRAG);
     }
     // This camera movement is all broken
     else
@@ -131,30 +140,30 @@ void Editor::Window::update()
       int x = ((inputs.mouseX - inputs.clickMouseX) / Constants::Grid.size);
 
       // Make y within bounds
-      if (tempFirstTile / data.map.sections[0].size.x < maxDrag && static_cast<int>(tempFirstTile / data.map.sections[0].size.x) + y < 0)
-        y = -(tempFirstTile / data.map.sections[0].size.x);
-      else if (tempFirstTile / data.map.sections[0].size.x + y >= data.map.sections[0].size.y)
-        y = (data.map.sections[0].size.y - 1) - (tempFirstTile / data.map.sections[0].size.x);
+      if (tempFirstTile / data.map.sections[current_section].size.x < maxDrag && static_cast<int>(tempFirstTile / data.map.sections[current_section].size.x) + y < 0)
+        y = -(tempFirstTile / data.map.sections[current_section].size.x);
+      else if (tempFirstTile / data.map.sections[current_section].size.x + y >= data.map.sections[current_section].size.y)
+        y = (data.map.sections[current_section].size.y - 1) - (tempFirstTile / data.map.sections[current_section].size.x);
 
       // Make x within bounds
-      if (tempFirstTile % data.map.sections[0].size.x < maxDrag && static_cast<int>(tempFirstTile % data.map.sections[0].size.x) + x < 0)
-        x = -(tempFirstTile % data.map.sections[0].size.x);
-      else if (tempFirstTile % data.map.sections[0].size.x + x >= data.map.sections[0].size.x)
-        x = (data.map.sections[0].size.x - 1) - (tempFirstTile % data.map.sections[0].size.x);
+      if (tempFirstTile % data.map.sections[current_section].size.x < maxDrag && static_cast<int>(tempFirstTile % data.map.sections[current_section].size.x) + x < 0)
+        x = -(tempFirstTile % data.map.sections[current_section].size.x);
+      else if (tempFirstTile % data.map.sections[current_section].size.x + x >= data.map.sections[current_section].size.x)
+        x = (data.map.sections[current_section].size.x - 1) - (tempFirstTile % data.map.sections[current_section].size.x);
 
       // Change firstTile
-      firstTile = tempFirstTile + data.map.sections[0].size.x * y + x;
+      firstTile = tempFirstTile + data.map.sections[current_section].size.x * y + x;
     }
   }
 
   // Release
   if (!inputs.mouseDown && inputs.oldMouseDown)
   {
-    if (selectedTool == nullptr)
+    if (selected_tool == nullptr)
     {
       tempFirstTile = firstTile;
-      tempViewX = firstTile % data.map.sections[0].size.x;
-      tempViewY = firstTile / data.map.sections[0].size.y;
+      tempViewX = firstTile % data.map.sections[current_section].size.x;
+      tempViewY = firstTile / data.map.sections[current_section].size.y;
     }
   }
 
@@ -163,44 +172,50 @@ void Editor::Window::update()
   {
     if (inputs.mouseWheelY > 0) // Decrease zoom
     {
+      if (current_zoom > 0)
+        --current_zoom;
     }
     else // Increase zoom
     {
+      if (current_zoom < 4)
+        ++current_zoom;
     }
   }
 }
 
 static void drawGrid(SDL_Renderer* renderer)
 {
+  int size = 32;
   SDL_SetRenderDrawColor(renderer, 36, 82, 94, 255);
   // Draw vertical lines
-  for (int i = 1; i < Editor::Constants::Window.width / Editor::Constants::Grid.size; i++)
-    SDL_RenderDrawLine(renderer, i * Editor::Constants::Grid.size, 0, i * Editor::Constants::Grid.size, Editor::Constants::Window.height);
+  for (int i = 1; i < Editor::Constants::Window.width / size; i++)
+    SDL_RenderDrawLine(renderer, i * size, 0, i * size, Editor::Constants::Window.height);
   // Draw horizontal lines
-  for (int i = 1; i < Editor::Constants::Window.height / Editor::Constants::Grid.size; i++)
-    SDL_RenderDrawLine(renderer, 0, i * Editor::Constants::Grid.size, Editor::Constants::Window.width, i * Editor::Constants::Grid.size);
+  for (int i = 1; i < Editor::Constants::Window.height / size; i++)
+    SDL_RenderDrawLine(renderer, 0, i * size, Editor::Constants::Window.width, i * size);
 }
 
-void Editor::Window::drawTiles()
+void Editor::Window::draw_tiles()
 {
-  SDL_Rect dRect = {0, 0, Constants::Grid.size, Constants::Grid.size};
+  int size = Constants::Grid.size / std::pow(2, current_zoom);
+  SDL_Rect dRect = {0, 0, size, size};
   SDL_Rect sRect = {0, 0, 32, 32};
-  unsigned int windowXTiles = Constants::Window.width / Constants::Grid.size;
-  unsigned int maxXTiles = data.map.sections[0].size.x - (firstTile % data.map.sections[0].size.x) < windowXTiles ? data.map.sections[0].size.x - (firstTile % data.map.sections[0].size.x) : windowXTiles;
-  unsigned int windowYTiles = (Constants::Window.height - Constants::Window.toolBarHeight) / Constants::Grid.size;
-  unsigned int maxYTiles = data.map.sections[0].size.y - (firstTile / data.map.sections[0].size.x) < windowYTiles ? data.map.sections[0].size.y - (firstTile / data.map.sections[0].size.x) : windowYTiles;
+  unsigned int windowXTiles = Constants::Window.width / size;
+  unsigned int maxXTiles = data.map.sections[current_section].size.x - (firstTile % data.map.sections[current_section].size.x) < windowXTiles ? data.map.sections[current_section].size.x - (firstTile % data.map.sections[current_section].size.x) : windowXTiles;
+  unsigned int windowYTiles = (Constants::Window.height - Constants::Window.toolBarHeight) / size;
+  unsigned int maxYTiles = data.map.sections[current_section].size.y - (firstTile / data.map.sections[current_section].size.x) < windowYTiles ? data.map.sections[current_section].size.y - (firstTile / data.map.sections[current_section].size.x) : windowYTiles;
 
   for (unsigned int row = 0; row < maxYTiles; ++row)
   {
     for (unsigned int col = 0; col < maxXTiles; ++col)
     {
-      sRect.x = data.map.sections[0].tiles[firstTile + (row * data.map.sections[0].size.x) + col].id * 32;
+      sRect.x = data.map.sections[current_section].tiles[firstTile + (row * data.map.sections[current_section].size.x) + col].id * 32;
       renderer->copy(spritesheet, &sRect, &dRect);
-      dRect.x += Constants::Grid.size;
+      dRect.x += size;
     }
 
     dRect.x = 0;
-    dRect.y += Constants::Grid.size;
+    dRect.y += size;
   }
 }
 
@@ -210,40 +225,40 @@ void Editor::Window::draw()
   renderer->clear();
 
   // Draw map stuff
-  drawGrid(renderer->getSDL());
-  drawTiles();
+  drawGrid(renderer->get_SDL());
+  draw_tiles();
 
   // Draw tool stuff
   // Draw the toolbar
-  SDL_Color c = toolManager->getColor();
+  SDL_Color c = tool_manager->getColor();
   renderer->set_draw_color(c.r, c.g, c.b, 255);
   SDL_Rect toolbar = {0, Constants::Window.height - Constants::Window.toolBarHeight, Constants::Window.width, Constants::Window.toolBarHeight};
-  SDL_RenderFillRect(renderer->getSDL(), &toolbar);
-  toolManager->draw();
+  SDL_RenderFillRect(renderer->get_SDL(), &toolbar);
+  tool_manager->draw();
 
   // Draw the current file
   SDL_Rect dRect = {4, Constants::Window.height - 24, 0, 0};
-  SDL_QueryTexture(currentFileTex->getSDL(), 0, 0, &dRect.w, &dRect.h);
-  renderer->copy(currentFileTex, 0, &dRect);
+  SDL_QueryTexture(current_file_tex->get_SDL(), 0, 0, &dRect.w, &dRect.h);
+  renderer->copy(current_file_tex, 0, &dRect);
 
   renderer->present();
 }
 
-void Editor::Window::setCurrentFile(const std::string& newFile)
+void Editor::Window::set_current_file(const std::string& newFile)
 {
-  currentFile = newFile;
+  current_file = newFile;
   std::string displayText = "File: " + newFile;
   
   TTF_Font* font = TTF_OpenFont("res/fonts/open-sans/OpenSans-Regular.ttf", 16);
   SDL_Surface* txtSurface = TTF_RenderText_Blended(font, displayText.c_str(), {255, 255, 255});
-  if (currentFileTex != nullptr)
-    delete currentFileTex;
-  currentFileTex = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->getSDL(), txtSurface));
+  if (current_file_tex != nullptr)
+    delete current_file_tex;
+  current_file_tex = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->get_SDL(), txtSurface));
   SDL_FreeSurface(txtSurface);
   TTF_CloseFont(font);
 }
 
-bool Editor::Window::isRunning() { return running; }
-Editor::Inputs Editor::Window::getInputs() { return inputs; }
-std::string Editor::Window::getCurrentFile() { return currentFile; };
+bool Editor::Window::is_running() { return running; }
+Editor::Inputs Editor::Window::get_inputs() { return inputs; }
+std::string Editor::Window::get_current_file() { return current_file; };
 size_t Editor::Window::getFirstTile() { return firstTile; };

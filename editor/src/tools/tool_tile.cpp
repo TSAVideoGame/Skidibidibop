@@ -20,7 +20,7 @@ Editor::Tool::Tile::Col::Col(SDLW::Renderer* renderer, int x, int y) : Editor::T
   {
     TTF_Font* font = TTF_OpenFont("res/fonts/open-sans/OpenSans-Regular.ttf", 16);
     SDL_Surface* txtSurface = TTF_RenderText_Blended(font, std::to_string(i).c_str(), {255, 255, 255});
-    numberTexs[i] = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->getSDL(), txtSurface));
+    numberTexs[i] = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->get_SDL(), txtSurface));
     SDL_FreeSurface(txtSurface);
     TTF_CloseFont(font);
   }
@@ -44,12 +44,12 @@ void Editor::Tool::Tile::Col::update(MouseState ms)
     {
       int digits = 6;
       // Up button
-      if (Window::getInputs().mouseX >= x + WIDTH + 16 * digits &&
-          Window::getInputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT &&
-          Window::getInputs().mouseY >= y &&
-          Window::getInputs().mouseY < y + HEIGHT)
+      if (Window::get_inputs().mouseX >= x + WIDTH + 16 * digits &&
+          Window::get_inputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT &&
+          Window::get_inputs().mouseY >= y &&
+          Window::get_inputs().mouseY < y + HEIGHT)
       {
-        Window::selectedTool = nullptr;
+        Window::selected_tool = nullptr;
 
         if (Window::data.map.sections[0].size.x < 999999)
         {
@@ -80,12 +80,12 @@ void Editor::Tool::Tile::Col::update(MouseState ms)
       }
 
       // Down button
-      if (Window::getInputs().mouseX >= x + WIDTH + 16 * digits + HEIGHT &&
-          Window::getInputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT * 2 &&
-          Window::getInputs().mouseY >= y &&
-          Window::getInputs().mouseY < y + HEIGHT)
+      if (Window::get_inputs().mouseX >= x + WIDTH + 16 * digits + HEIGHT &&
+          Window::get_inputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT * 2 &&
+          Window::get_inputs().mouseY >= y &&
+          Window::get_inputs().mouseY < y + HEIGHT)
       {
-        Window::selectedTool = nullptr;
+        Window::selected_tool = nullptr;
 
         if (Window::data.map.sections[0].size.x > 1 && Window::getFirstTile() % Window::data.map.sections[0].size.x != Window::data.map.sections[0].size.x - 1) // Map size has to be greater than 1, sorry
         {
@@ -135,7 +135,7 @@ void Editor::Tool::Tile::Col::draw()
   {
     int digit = static_cast<int>(Window::data.map.sections[0].size.x / std::pow(10, i - 1)) % 10;
     SDL_Rect dRect = {x + WIDTH + 16 * x, y, 0, 0};
-    SDL_QueryTexture(numberTexs[digit]->getSDL(), 0, 0, &dRect.w, &dRect.h);
+    SDL_QueryTexture(numberTexs[digit]->get_SDL(), 0, 0, &dRect.w, &dRect.h);
     dRect.y += (HEIGHT - dRect.h) / 2;
     renderer->copy(numberTexs[digit], 0, &dRect);
   }
@@ -155,8 +155,8 @@ void Editor::Tool::Tile::Col::draw()
     {x + WIDTH + 16 * digits + HEIGHT + 8,                     y          + 8}
   };
   renderer->set_draw_color(255, 255, 255, 255);
-  SDL_RenderDrawLines(renderer->getSDL(), upPoints, 4);
-  SDL_RenderDrawLines(renderer->getSDL(), downPoints, 4);
+  SDL_RenderDrawLines(renderer->get_SDL(), upPoints, 4);
+  SDL_RenderDrawLines(renderer->get_SDL(), downPoints, 4);
 }
 
 /*
@@ -171,7 +171,7 @@ Editor::Tool::Tile::Row::Row(SDLW::Renderer* renderer, int x, int y) : Editor::T
   {
     TTF_Font* font = TTF_OpenFont("res/fonts/open-sans/OpenSans-Regular.ttf", 16);
     SDL_Surface* txtSurface = TTF_RenderText_Blended(font, std::to_string(i).c_str(), {255, 255, 255});
-    numberTexs[i] = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->getSDL(), txtSurface));
+    numberTexs[i] = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->get_SDL(), txtSurface));
     SDL_FreeSurface(txtSurface);
     TTF_CloseFont(font);
   }
@@ -195,12 +195,12 @@ void Editor::Tool::Tile::Row::update(MouseState ms)
     {
       int digits = 6;
       // Up button
-      if (Window::getInputs().mouseX >= x + WIDTH + 16 * digits &&
-          Window::getInputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT &&
-          Window::getInputs().mouseY >= y &&
-          Window::getInputs().mouseY < y + HEIGHT)
+      if (Window::get_inputs().mouseX >= x + WIDTH + 16 * digits &&
+          Window::get_inputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT &&
+          Window::get_inputs().mouseY >= y &&
+          Window::get_inputs().mouseY < y + HEIGHT)
       {
-        Window::selectedTool = nullptr;
+        Window::selected_tool = nullptr;
 
         if (Window::data.map.sections[0].size.y < 999999)
         {
@@ -218,12 +218,12 @@ void Editor::Tool::Tile::Row::update(MouseState ms)
       }
 
       // Down button
-      if (Window::getInputs().mouseX >= x + WIDTH + 16 * digits + HEIGHT &&
-          Window::getInputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT * 2 &&
-          Window::getInputs().mouseY >= y &&
-          Window::getInputs().mouseY < y + HEIGHT)
+      if (Window::get_inputs().mouseX >= x + WIDTH + 16 * digits + HEIGHT &&
+          Window::get_inputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT * 2 &&
+          Window::get_inputs().mouseY >= y &&
+          Window::get_inputs().mouseY < y + HEIGHT)
       {
-        Window::selectedTool = nullptr;
+        Window::selected_tool = nullptr;
 
         if (Window::data.map.sections[0].size.y > 1 && Window::getFirstTile() % Window::data.map.sections[0].size.y != Window::data.map.sections[0].size.y - 1) // Map size has to be greater than 1, sorry
         {
@@ -265,7 +265,7 @@ void Editor::Tool::Tile::Row::draw()
   {
     int digit = static_cast<int>(Window::data.map.sections[0].size.y / std::pow(10, i - 1)) % 10;
     SDL_Rect dRect = {x + WIDTH + 16 * x, y, 0, 0};
-    SDL_QueryTexture(numberTexs[digit]->getSDL(), 0, 0, &dRect.w, &dRect.h);
+    SDL_QueryTexture(numberTexs[digit]->get_SDL(), 0, 0, &dRect.w, &dRect.h);
     dRect.y += (HEIGHT - dRect.h) / 2;
     renderer->copy(numberTexs[digit], 0, &dRect);
   }
@@ -285,8 +285,8 @@ void Editor::Tool::Tile::Row::draw()
     {x + WIDTH + 16 * digits + HEIGHT + 8,                     y          + 8}
   };
   renderer->set_draw_color(255, 255, 255, 255);
-  SDL_RenderDrawLines(renderer->getSDL(), upPoints, 4);
-  SDL_RenderDrawLines(renderer->getSDL(), downPoints, 4);
+  SDL_RenderDrawLines(renderer->get_SDL(), upPoints, 4);
+  SDL_RenderDrawLines(renderer->get_SDL(), downPoints, 4);
 }
 
 /*
@@ -322,22 +322,22 @@ void Editor::Tool::Tile::Edit::Main::update(MouseState ms)
     }
     case MouseState::CLICK:
     {
-      int mx = Window::getInputs().mouseX, my = Window::getInputs().mouseY;
+      int mx = Window::get_inputs().mouseX, my = Window::get_inputs().mouseY;
       // Select tool
       if (mx >= x && mx <= x + 64 && my >= y && my <= y + 32)
       {
-        if (Window::selectedTool != this)
-          Window::selectedTool = this;
+        if (Window::selected_tool != this)
+          Window::selected_tool = this;
         else
-          Window::selectedTool = nullptr;
+          Window::selected_tool = nullptr;
       }
-      if (Window::selectedTool == this)
+      if (Window::selected_tool == this)
       {
         // Select a tile
         if (my < Constants::Window.height - Constants::Window.toolBarHeight)
         {
-          int gridX = Window::getInputs().mouseX / Constants::Grid.size;
-          int gridY = Window::getInputs().mouseY / Constants::Grid.size;
+          int gridX = Window::get_inputs().mouseX / Constants::Grid.size;
+          int gridY = Window::get_inputs().mouseY / Constants::Grid.size;
 
           unsigned int sizeX = Window::data.map.sections[0].size.x;
           unsigned int sizeY = Window::data.map.sections[0].size.y;
@@ -366,7 +366,7 @@ void Editor::Tool::Tile::Edit::Main::update(MouseState ms)
     }
   }
 
-  if (Window::selectedTool != this)
+  if (Window::selected_tool != this)
     selectedTile = nullptr;
   else
     for (Base* t : tools)
@@ -375,38 +375,38 @@ void Editor::Tool::Tile::Edit::Main::update(MouseState ms)
 
 void Editor::Tool::Tile::Edit::Main::draw()
 {
-  if (Window::selectedTool == this)
-    SDL_SetTextureColorMod(texture->getSDL(), 200, 200, 200);
+  if (Window::selected_tool == this)
+    SDL_SetTextureColorMod(texture->get_SDL(), 200, 200, 200);
   else
-    SDL_SetTextureColorMod(texture->getSDL(), 255, 255, 255);
+    SDL_SetTextureColorMod(texture->get_SDL(), 255, 255, 255);
   Base::draw();
 
   if (selectedTile != nullptr)
   {
     // Draw the hover
     renderer->set_draw_color(255, 255, 255, 128);
-    SDL_RenderFillRect(renderer->getSDL(), &selectedTileRect);
+    SDL_RenderFillRect(renderer->get_SDL(), &selectedTileRect);
 
     // Draw the tools
     for (Base* t : tools)
       t->draw();
   }
 
-  if (Window::selectedTool == this)
+  if (Window::selected_tool == this)
   {
     // Determine snap hover
-    if (Window::getInputs().mouseY < Constants::Window.height - Constants::Window.toolBarHeight) // Above tool area
+    if (Window::get_inputs().mouseY < Constants::Window.height - Constants::Window.toolBarHeight) // Above tool area
     {
       // Make sure not selecting on a tab
-      if (Window::getInputs().mouseY > Constants::Window.height - Constants::Window.toolBarHeight - Constants::Grid.size)
-        if (!(Window::getInputs().mouseX > Constants::Grid.size * 2 && Window::getInputs().mouseX < Constants::Window.width - Constants::Grid.size * 6))
+      if (Window::get_inputs().mouseY > Constants::Window.height - Constants::Window.toolBarHeight - Constants::Grid.size)
+        if (!(Window::get_inputs().mouseX > Constants::Grid.size * 2 && Window::get_inputs().mouseX < Constants::Window.width - Constants::Grid.size * 6))
           return;
 
-      int gridX = Window::getInputs().mouseX / Constants::Grid.size * Constants::Grid.size;
-      int gridY = Window::getInputs().mouseY / Constants::Grid.size * Constants::Grid.size;
+      int gridX = Window::get_inputs().mouseX / Constants::Grid.size * Constants::Grid.size;
+      int gridY = Window::get_inputs().mouseY / Constants::Grid.size * Constants::Grid.size;
       SDL_Rect dRect = {gridX, gridY, Constants::Grid.size, Constants::Grid.size};
       renderer->set_draw_color(255, 255, 255, 128);
-      SDL_RenderFillRect(renderer->getSDL(), &dRect);
+      SDL_RenderFillRect(renderer->get_SDL(), &dRect);
     }
   }
 }
@@ -423,7 +423,7 @@ Editor::Tool::Tile::Edit::ID::ID(SDLW::Renderer* renderer, int x, int y) : Edito
   {
     TTF_Font* font = TTF_OpenFont("res/fonts/open-sans/OpenSans-Regular.ttf", 16);
     SDL_Surface* txtSurface = TTF_RenderText_Blended(font, std::to_string(i).c_str(), {255, 255, 255});
-    numberTexs[i] = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->getSDL(), txtSurface));
+    numberTexs[i] = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->get_SDL(), txtSurface));
     SDL_FreeSurface(txtSurface);
     TTF_CloseFont(font);
   }
@@ -449,26 +449,26 @@ void Editor::Tool::Tile::Edit::ID::update(MouseState ms)
     {
       int digits = 6;
       // Up button
-      if (Window::getInputs().mouseX >= x + WIDTH + 16 * digits &&
-          Window::getInputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT &&
-          Window::getInputs().mouseY >= y &&
-          Window::getInputs().mouseY < y + HEIGHT)
+      if (Window::get_inputs().mouseX >= x + WIDTH + 16 * digits &&
+          Window::get_inputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT &&
+          Window::get_inputs().mouseY >= y &&
+          Window::get_inputs().mouseY < y + HEIGHT)
       {
-        if (dynamic_cast<Main*>(Window::selectedTool)->selectedTile->id < 999999)
+        if (dynamic_cast<Main*>(Window::selected_tool)->selectedTile->id < 999999)
         {
-          ++dynamic_cast<Main*>(Window::selectedTool)->selectedTile->id;
+          ++dynamic_cast<Main*>(Window::selected_tool)->selectedTile->id;
         }
       }
 
       // Down button
-      if (Window::getInputs().mouseX >= x + WIDTH + 16 * digits + HEIGHT &&
-          Window::getInputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT * 2 &&
-          Window::getInputs().mouseY >= y &&
-          Window::getInputs().mouseY < y + HEIGHT)
+      if (Window::get_inputs().mouseX >= x + WIDTH + 16 * digits + HEIGHT &&
+          Window::get_inputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT * 2 &&
+          Window::get_inputs().mouseY >= y &&
+          Window::get_inputs().mouseY < y + HEIGHT)
       {
-        if (dynamic_cast<Main*>(Window::selectedTool)->selectedTile->id > 0) // Map size has to be greater than 1, sorry
+        if (dynamic_cast<Main*>(Window::selected_tool)->selectedTile->id > 0) // Map size has to be greater than 1, sorry
         {
-          --dynamic_cast<Main*>(Window::selectedTool)->selectedTile->id;
+          --dynamic_cast<Main*>(Window::selected_tool)->selectedTile->id;
         }
       }
 
@@ -493,9 +493,9 @@ void Editor::Tool::Tile::Edit::ID::draw()
   int digits = 6;
   for (int i = digits, x = 0; i > 0; --i, ++x)
   {
-    int digit = static_cast<int>(dynamic_cast<Main*>(Window::selectedTool)->selectedTile->id / std::pow(10, i - 1)) % 10;
+    int digit = static_cast<int>(dynamic_cast<Main*>(Window::selected_tool)->selectedTile->id / std::pow(10, i - 1)) % 10;
     SDL_Rect dRect = {Base::x + x + WIDTH + 16 * x, y, 0, 0};
-    SDL_QueryTexture(numberTexs[digit]->getSDL(), 0, 0, &dRect.w, &dRect.h);
+    SDL_QueryTexture(numberTexs[digit]->get_SDL(), 0, 0, &dRect.w, &dRect.h);
     dRect.y += (HEIGHT - dRect.h) / 2;
     renderer->copy(numberTexs[digit], 0, &dRect);
   }
@@ -515,8 +515,8 @@ void Editor::Tool::Tile::Edit::ID::draw()
     {x + WIDTH + 16 * digits + HEIGHT + 8,                     y          + 8}
   };
   renderer->set_draw_color(255, 255, 255, 255);
-  SDL_RenderDrawLines(renderer->getSDL(), upPoints, 4);
-  SDL_RenderDrawLines(renderer->getSDL(), downPoints, 4);
+  SDL_RenderDrawLines(renderer->get_SDL(), upPoints, 4);
+  SDL_RenderDrawLines(renderer->get_SDL(), downPoints, 4);
 }
 
 /*

@@ -19,7 +19,7 @@ namespace SDLW
     void clear();
     void copy(Texture*, SDL_Rect* srcRect, SDL_Rect* destRect);
 
-    SDL_Renderer* getSDL();
+    SDL_Renderer* get_SDL();
   private:
     SDL_Renderer* renderer;
   };

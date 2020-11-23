@@ -16,7 +16,7 @@ Editor::Tool::Main::Save::Save(SDLW::Renderer* renderer, int x, int y) : Editor:
 
 void Editor::Tool::Main::Save::update(MouseState ms)
 {
-  Inputs inputs = Window::getInputs();
+  Inputs inputs = Window::get_inputs();
   switch (ms)
   {
     case MouseState::HOVER:
@@ -61,7 +61,7 @@ Editor::Tool::Main::Load::Load(SDLW::Renderer* renderer, int x, int y) : Editor:
 
 void Editor::Tool::Main::Load::update(MouseState ms)
 {
-  Inputs inputs = Window::getInputs();
+  Inputs inputs = Window::get_inputs();
   switch (ms)
   {
     case MouseState::HOVER:

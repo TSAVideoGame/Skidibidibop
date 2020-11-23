@@ -15,7 +15,7 @@ namespace Editor
     class Base
     {
     public:
-      static const int WIDTH = 2 * Constants::Grid.size, HEIGHT = Constants::Grid.size;
+      static const int WIDTH = 64, HEIGHT = 32;
 
       Base(SDLW::Renderer*, const std::string&, int x, int y);
       virtual ~Base();

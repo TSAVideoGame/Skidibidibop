@@ -11,7 +11,7 @@ namespace SDLW
     Window(const char* title, int x, int y, int w, int h, int flags);
     ~Window();
 
-    SDL_Window* getSDL();
+    SDL_Window* get_SDL();
   private:
     SDL_Window* window;
   };

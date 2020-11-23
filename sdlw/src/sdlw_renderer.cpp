@@ -3,7 +3,7 @@
 
 SDLW::Renderer::Renderer(Window* window)
 {
-  renderer = SDL_CreateRenderer(window->getSDL(), -1, 0);
+  renderer = SDL_CreateRenderer(window->get_SDL(), -1, 0);
   SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
   clear();
   present();
@@ -31,10 +31,10 @@ void SDLW::Renderer::clear()
 
 void SDLW::Renderer::copy(Texture* texture, SDL_Rect* srcRect, SDL_Rect* destRect)
 {
-  SDL_RenderCopy(renderer, texture->getSDL(), srcRect, destRect);
+  SDL_RenderCopy(renderer, texture->get_SDL(), srcRect, destRect);
 }
 
-SDL_Renderer* SDLW::Renderer::getSDL()
+SDL_Renderer* SDLW::Renderer::get_SDL()
 {
   return renderer;
 }

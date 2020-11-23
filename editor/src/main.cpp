@@ -5,7 +5,7 @@ int main(int argc, char* args[])
 {
   Editor::Window::init();
 
-  while (Editor::Window::isRunning())
+  while (Editor::Window::is_running())
   {
     Editor::Window::input();
     Editor::Window::draw();

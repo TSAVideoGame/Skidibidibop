@@ -4,22 +4,18 @@
 #include <SDL2/SDL_ttf.h>
 #include "constants.h"
 #include "window.h"
+#include "utility.h"
 
-Editor::Tool::Tab::Tab(SDLW::Renderer* renderer, const std::string& text, int x, int y, SDL_Color color)
+Editor::Tool::Tab::Tab(SDLW::Renderer* renderer_p, const std::string& text_p, int x_p, int y_p, SDL_Color color_p)
 {
-  this->text = text;
-  this->x = x;
-  this->y = y;
-  this->color = color;
-  this->renderer = renderer;
-
+  text = text_p;
+  x = x_p;
+  y = y_p;
+  color = color_p;
+  renderer = renderer_p;
+  texture = Utility::create_text_center(renderer, text, dest_rect, 64, 32, {255, 255, 255});
   isSelected = false;
-
-  TTF_Font* font = TTF_OpenFont("res/fonts/open-sans/OpenSans-Regular.ttf", 16);
-  SDL_Surface* txtSurface = TTF_RenderText_Blended(font, text.c_str(), {255, 255, 255});
-  texture = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->getSDL(), txtSurface));
-  SDL_FreeSurface(txtSurface);
-  TTF_CloseFont(font);
+  dest_rect = {x_p, y_p, 64, 32};
 }
 
 Editor::Tool::Tab::~Tab()
@@ -42,13 +38,10 @@ void Editor::Tool::Tab::update(MouseState ms)
 void Editor::Tool::Tab::draw()
 {
   // Draw self
-  SDL_Rect dRect = {x, y, 64, 32};
   renderer->set_draw_color(color.r, color.g, color.b, 255);
-  SDL_RenderFillRect(renderer->getSDL(), &dRect);
-  SDL_QueryTexture(texture->getSDL(), NULL, NULL, &dRect.w, &dRect.h);
-  dRect.x += (64 - dRect.w) / 2;
-  dRect.y += (32 - dRect.h) / 2;
-  renderer->copy(texture, 0, &dRect);
+  SDL_Rect fill_rect = {x, y, 64, 32};
+  SDL_RenderFillRect(renderer->get_SDL(), &fill_rect);
+  renderer->copy(texture, 0, &dest_rect); // Causing seg fault
 
   if (isSelected)
   {

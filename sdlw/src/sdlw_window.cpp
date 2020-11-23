@@ -10,7 +10,7 @@ SDLW::Window::~Window()
   SDL_DestroyWindow(window);
 }
 
-SDL_Window* SDLW::Window::getSDL()
+SDL_Window* SDLW::Window::get_SDL()
 {
   return window;
 }

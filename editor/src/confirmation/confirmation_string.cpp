@@ -10,7 +10,7 @@ Editor::Confirmation::String::String(const std::string& blurb) : Base()
 
   TTF_Font* font = TTF_OpenFont("res/fonts/open-sans/OpenSans-Regular.ttf", 16);
   SDL_Surface* txtSurface = TTF_RenderText_Blended_Wrapped(font, blurb.c_str(), {0, 0, 0, 0}, 480 - 128);
-  blurbTex = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->getSDL(), txtSurface));
+  blurbTex = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->get_SDL(), txtSurface));
   SDL_FreeSurface(txtSurface);
   TTF_CloseFont(font);
 
@@ -74,7 +74,7 @@ void Editor::Confirmation::String::update()
   {
     TTF_Font* font = TTF_OpenFont("res/fonts/open-sans/OpenSans-Regular.ttf", 16);
     SDL_Surface* txtSurface = TTF_RenderText_Blended_Wrapped(font, inputText.c_str(), {0, 0, 0, 0}, 480 - 128);
-    inputTextTex = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->getSDL(), txtSurface));
+    inputTextTex = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->get_SDL(), txtSurface));
     SDL_FreeSurface(txtSurface);
     TTF_CloseFont(font);
   }
@@ -87,12 +87,12 @@ void Editor::Confirmation::String::draw()
 
   // Draw blurb
   SDL_Rect dRect = {64, 64, 0, 0};
-  SDL_QueryTexture(blurbTex->getSDL(), 0, 0, &dRect.w, &dRect.h);
+  SDL_QueryTexture(blurbTex->get_SDL(), 0, 0, &dRect.w, &dRect.h);
   renderer->copy(blurbTex, 0, &dRect);
 
   // Draw blurb
   dRect = {64, 128, 0, 0};
-  SDL_QueryTexture(inputTextTex->getSDL(), 0, 0, &dRect.w, &dRect.h);
+  SDL_QueryTexture(inputTextTex->get_SDL(), 0, 0, &dRect.w, &dRect.h);
   renderer->copy(inputTextTex, 0, &dRect);
 
   renderer->present();

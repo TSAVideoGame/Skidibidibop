@@ -10,7 +10,7 @@ Editor::Confirmation::Bool::Bool(const std::string& blurb) : Base()
 
   TTF_Font* font = TTF_OpenFont("res/fonts/open-sans/OpenSans-Regular.ttf", 16);
   SDL_Surface* txtSurface = TTF_RenderText_Blended_Wrapped(font, blurb.c_str(), {0, 0, 0, 0}, 480 - 128);
-  blurbTex = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->getSDL(), txtSurface));
+  blurbTex = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->get_SDL(), txtSurface));
   SDL_FreeSurface(txtSurface);
   TTF_CloseFont(font);
 }
@@ -64,8 +64,8 @@ SDL_GetMouseState(&inputs.mouseX, &inputs.mouseY);
 }
 
 // The boxes
-static SDL_Rect yesBox {64, 360 - 64 - Editor::Constants::Grid.size * 2, Editor::Constants::Grid.size * 2 * 2, Editor::Constants::Grid.size * 2};
-static SDL_Rect noBox {480 - 64 - Editor::Constants::Grid.size * 2 * 2, yesBox.y, yesBox.w, yesBox.h};
+static SDL_Rect yesBox {64, 360 - 64 - 64, 64 * 2, 64};
+static SDL_Rect noBox {480 - 64 - 64 * 2, yesBox.y, yesBox.w, yesBox.h};
 
 void Editor::Confirmation::Bool::update()
 {
@@ -91,15 +91,15 @@ void Editor::Confirmation::Bool::draw()
 
   // Draw blurb
   SDL_Rect dRect = {64, 64, 0, 0};
-  SDL_QueryTexture(blurbTex->getSDL(), 0, 0, &dRect.w, &dRect.h);
+  SDL_QueryTexture(blurbTex->get_SDL(), 0, 0, &dRect.w, &dRect.h);
   renderer->copy(blurbTex, 0, &dRect);
 
   // Draw yes/no buttons
   renderer->set_draw_color(40, 160, 30, 255);
-  SDL_RenderFillRect(renderer->getSDL(), &yesBox);
+  SDL_RenderFillRect(renderer->get_SDL(), &yesBox);
 
   renderer->set_draw_color(245, 45, 45, 255);
-  SDL_RenderFillRect(renderer->getSDL(), &noBox);
+  SDL_RenderFillRect(renderer->get_SDL(), &noBox);
 
   renderer->present();
 }

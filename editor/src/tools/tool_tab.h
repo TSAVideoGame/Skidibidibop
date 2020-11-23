@@ -25,6 +25,7 @@ namespace Editor
       bool isSelected;
     protected:
       int x, y;
+      SDL_Rect dest_rect;
       SDL_Color color;
       std::string text;
       SDLW::Texture* texture;
