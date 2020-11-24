@@ -18,8 +18,6 @@ namespace Editor
         ~Col();
 
         void update(MouseState);
-      private:
-        SDLW::Texture* numberTexs[10];
       };
 
       class Row : public Numeric
@@ -29,8 +27,6 @@ namespace Editor
         ~Row();
 
         void update(MouseState);
-      private:
-        SDLW::Texture* numberTexs[10];
       };
 
       namespace Edit
@@ -45,62 +41,74 @@ namespace Editor
           void update(MouseState);
           void draw();
 
-          Data::Types::Map::Tile* selectedTile = nullptr;
+          Data::Types::Map::Tile* selected_tile = nullptr;
         private:
           std::vector<Base*> tools;
-          SDL_Rect selectedTileRect;
+          size_t selected_tile_num;
         };
 
-        class ID : public Base
+        class ID : public Numeric
         {
         public:
-          ID(SDLW::Renderer*, int x, int y);
+          ID(SDLW::Renderer*, int x, int y, int min, int max, unsigned int* variable);
           ~ID();
 
           void update(MouseState);
-          void draw();
-        private:
-          SDLW::Texture* numberTexs[10];
         };
 
-        class TopCollision : public Base
+        // TODO: Make a collision namespace for these
+        class TopCollision : public Checkbox
         {
         public:
-          TopCollision(SDLW::Renderer*, int x, int y);
+          TopCollision(SDLW::Renderer*, int x, int y, bool* variable);
           ~TopCollision();
 
           void update(MouseState);
-          void draw();
         };
 
-        class RightCollision : public Base
+        class RightCollision : public Checkbox
         {
         public:
-          RightCollision(SDLW::Renderer*, int x, int y);
+          RightCollision(SDLW::Renderer*, int x, int y, bool* variable);
           ~RightCollision();
 
           void update(MouseState);
-          void draw();
         };
 
-        class BottomCollision : public Base
+        class BottomCollision : public Checkbox
         {
         public:
-          BottomCollision(SDLW::Renderer*, int x, int y);
+          BottomCollision(SDLW::Renderer*, int x, int y, bool* variable);
           ~BottomCollision();
 
           void update(MouseState);
-          void draw();
         };
 
-        class LeftCollision : public Base
+        class LeftCollision : public Checkbox
         {
         public:
-          LeftCollision(SDLW::Renderer*, int x, int y);
+          LeftCollision(SDLW::Renderer*, int x, int y, bool* variable);
           ~LeftCollision();
 
           void update(MouseState);
-          void draw();
+        };
+
+        class Flag : public Numeric
+        {
+        public:
+          Flag(SDLW::Renderer*, int x, int y, int min, int max, unsigned int* variable);
+          ~Flag();
+
+          void update(MouseState);
+        };
+
+        class Monster : public Numeric
+        {
+        public:
+          Monster(SDLW::Renderer*, int x, int y, int min, int max, unsigned int* variable);
+          ~Monster();
+
+          void update(MouseState);
         };
       };
     };

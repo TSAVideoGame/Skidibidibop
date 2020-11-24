@@ -38,7 +38,6 @@ namespace Editor
       Numeric(SDLW::Renderer*, const std::string&, int x, int y, unsigned int min, unsigned int max, unsigned int* variable);
       virtual ~Numeric();
 
-      virtual void update(MouseState) = 0;
       virtual void draw();
     protected:
       unsigned int min, max;
@@ -48,6 +47,17 @@ namespace Editor
       SDLW::Texture* number_textures[10];
     };
 
+    class Checkbox : public Base
+    {
+    public:
+      Checkbox(SDLW::Renderer*, const std::string&, int x, int y, bool* variable);
+      virtual ~Checkbox();
+
+      virtual void draw();
+    protected:
+      bool* variable;
+      bool hover();
+    };
   };
 };
 

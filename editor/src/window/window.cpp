@@ -10,6 +10,7 @@ Editor::Inputs Editor::Window::inputs;
 Editor::Tool::Manager* Editor::Window::tool_manager;
 std::string Editor::Window::current_file;
 SDLW::Texture* Editor::Window::current_file_tex;
+std::string Editor::Window::queue_file;
 unsigned int Editor::Window::current_section = 0;
 unsigned int Editor::Window::current_zoom = 1;
 Data::Save::Data Editor::Window::data = Data::Save::load("res/default.sbbd");
@@ -25,7 +26,6 @@ void Editor::Window::init()
   window = new SDLW::Window("SBB Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Constants::Window.width, Constants::Window.height, 0);
   renderer = new SDLW::Renderer(window);
   inputs = {false, false, 0, 0, 0, 0, 0, 0, 0};
-  tool_manager = new Tool::Manager(renderer);
   spritesheet = new SDLW::Texture("res/spritesheet.png", renderer);
 
   // The default file name is SBBD_time.sbbd
@@ -38,9 +38,14 @@ void Editor::Window::init()
   current_file.append(timeNameBuffer);
   current_file += ".sbbd";
   current_file_tex = nullptr;
-  set_current_file(current_file);
+
+  create_current_file_texture();
+
+  queue_file = current_file;
 
   firstTile = 0;
+
+  tool_manager = new Tool::Manager(renderer);
 }
 
 void Editor::Window::close()
@@ -119,6 +124,11 @@ void Editor::Window::input()
 
 void Editor::Window::update()
 {
+  if (queue_file != current_file)
+  {
+    update_current_file();
+  }
+
   static unsigned int tempFirstTile = firstTile, tempViewX = firstTile % data.map.sections[current_section].size.x, tempViewY = firstTile / data.map.sections[current_section].size.y;
   if (inputs.mouseDown)
   {
@@ -244,10 +254,9 @@ void Editor::Window::draw()
   renderer->present();
 }
 
-void Editor::Window::set_current_file(const std::string& newFile)
+void Editor::Window::create_current_file_texture()
 {
-  current_file = newFile;
-  std::string displayText = "File: " + newFile;
+  std::string displayText = "File: " + current_file;
   
   TTF_Font* font = TTF_OpenFont("res/fonts/open-sans/OpenSans-Regular.ttf", 16);
   SDL_Surface* txtSurface = TTF_RenderText_Blended(font, displayText.c_str(), {255, 255, 255});
@@ -256,6 +265,28 @@ void Editor::Window::set_current_file(const std::string& newFile)
   current_file_tex = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->get_SDL(), txtSurface));
   SDL_FreeSurface(txtSurface);
   TTF_CloseFont(font);
+}
+
+void Editor::Window::update_current_file()
+{
+  current_file = queue_file;
+
+  create_current_file_texture();
+
+  // Simple assignment isn't working, I'm going to manually edit all of these values
+  Data::Save::Data new_data = Data::Save::load(current_file);
+
+  data.map = new_data.map;
+  data.player = new_data.player;
+  data.inventory = new_data.inventory;
+  data.story = new_data.story;
+  data.bopdex = new_data.bopdex;
+  data.achievement = new_data.achievement;
+}
+
+void Editor::Window::set_current_file(const std::string& new_file)
+{
+  queue_file = new_file;
 }
 
 bool Editor::Window::is_running() { return running; }

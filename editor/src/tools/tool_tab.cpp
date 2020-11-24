@@ -20,6 +20,8 @@ Editor::Tool::Tab::Tab(SDLW::Renderer* renderer_p, const std::string& text_p, in
 
 Editor::Tool::Tab::~Tab()
 {
+  delete texture;
+
   for (Base* t : tools)
     delete t;
 

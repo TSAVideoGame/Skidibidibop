@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <vector>
+#include <cstdint>
 
 /*
  * NOTE:
@@ -61,20 +62,20 @@ namespace Data
 
       struct Size
       {
-        unsigned int x, y;
+        std::uint16_t x, y;
       };
 
       struct Tile
       {
         struct Collision
         {
-          bool top, bottom, left, right;
+          bool top, right, bottom, left;
         };
-        unsigned int id;
+        std::uint16_t id;
         Collision collision;
-        unsigned int state;
-        unsigned int flag;
-        unsigned int enemy_id; // The enemy on the tile
+        std::uint16_t state;
+        std::uint16_t flag;
+        std::uint16_t enemy_id; // The enemy on the tile
       };
 
       // A section is a part of the map which gets loaded, a house is a different section from the main world
@@ -84,7 +85,7 @@ namespace Data
         std::vector<Tile> tiles;
       };
 
-      unsigned int num_sections;
+      std::uint16_t num_sections;
       std::vector<Section> sections;
     };
 
@@ -106,23 +107,23 @@ namespace Data
 
       struct Weapons
       {
-        unsigned int slot_a, slot_b;
-        unsigned char slot_current;
+        std::uint16_t slot_a, slot_b;
+        std::uint8_t slot_current;
       };
 
       struct Position
       {
-        unsigned int x, y;
+        std::uint16_t x, y;
       };
 
       bool gender;
-      unsigned int health;
+      std::uint16_t health;
       Weapons weapons;
-      unsigned int level;
-      unsigned int current_map;
+      std::uint8_t level;
+      std::uint16_t current_map;
       Position position;
-      unsigned char direction;
-      unsigned int status;
+      std::uint8_t direction;
+      std::uint16_t status;
     };
 
     /*
@@ -144,14 +145,14 @@ namespace Data
 
       struct Item
       {
-        unsigned int id;
-        unsigned int slot;
+        std::uint16_t id;
+        std::uint16_t slot;
       };
 
-      unsigned int num_weapons;
+      std::uint16_t num_weapons;
       std::vector<bool> unlocked_weapons;
 
-      unsigned int inventory_size;
+      std::uint16_t inventory_size;
       std::vector<Item> inventory;
     };
 
@@ -171,7 +172,7 @@ namespace Data
       void save(std::ofstream&);
       void load(std::ifstream&);
 
-      unsigned int num_quests;
+      std::uint16_t num_quests;
       std::vector<bool> completed_quests;
     };
 
@@ -195,11 +196,11 @@ namespace Data
       {
         bool viewed;
         bool defeated;
-        unsigned int num_viewed;
-        unsigned int num_defeated;
+        std::uint16_t num_viewed;
+        std::uint16_t num_defeated;
       };
 
-      unsigned int num_entries;
+      std::uint16_t num_entries;
       std::vector<Entry> entries;
     };
 
@@ -221,7 +222,7 @@ namespace Data
       void save(std::ofstream&);
       void load(std::ifstream&);
 
-      unsigned int num_achievements;
+      std::uint16_t num_achievements;
       std::vector<bool> completed_achievements;
     };
   };

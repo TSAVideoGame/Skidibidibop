@@ -20,7 +20,7 @@ Editor::Tool::Base::Base(SDLW::Renderer* renderer_p, const std::string& text_p, 
 
 Editor::Tool::Base::~Base()
 {
-
+  delete texture;
 }
 
 void Editor::Tool::Base::draw()
@@ -61,12 +61,12 @@ void Editor::Tool::Numeric::draw()
 {
   Base::draw();
 
-  // Draw the current number of columns
+  // Draw the digits
   int digits = 6;
-  for (int i = digits, x = 0; i > 0; --i, ++x)
+  for (int i = digits, j = 0; i > 0; --i, ++j)
   {
     int digit = static_cast<int>(*variable / std::pow(10, i - 1)) % 10;
-    SDL_Rect dest_rect = {x + WIDTH + 16 * x, y, 0, 0};
+    SDL_Rect dest_rect = {x + WIDTH + 16 * j, y, 0, 0};
     SDL_QueryTexture(number_textures[digit]->get_SDL(), 0, 0, &dest_rect.w, &dest_rect.h);
     dest_rect.y += (HEIGHT - dest_rect.h) / 2;
     renderer->copy(number_textures[digit], 0, &dest_rect);
@@ -107,4 +107,46 @@ bool Editor::Tool::Numeric::hover_decrement()
           Window::get_inputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT * 2 &&
           Window::get_inputs().mouseY >= y &&
           Window::get_inputs().mouseY < y + HEIGHT);
+}
+
+/*
+ * ========================================
+ * Checkbox tool
+ *
+ * It do be looking like a radio button though
+ * ========================================
+ */
+Editor::Tool::Checkbox::Checkbox(SDLW::Renderer* renderer_p, const std::string& text_p, int x_p, int y_p, bool* variable_p) : Base(renderer_p, text_p, x_p, y_p)
+{
+  variable = variable_p;
+}
+
+Editor::Tool::Checkbox::~Checkbox()
+{
+
+}
+
+void Editor::Tool::Checkbox::draw()
+{
+  Base::draw();
+
+  // Draw box
+  renderer->set_draw_color(255, 255, 255, 255);
+  SDL_Rect border = {x + WIDTH + 4, y + 4, HEIGHT - 4, HEIGHT - 4};
+  SDL_RenderDrawRect(renderer->get_SDL(), &border);
+  
+  // Draw fill
+  if (*variable)
+  {
+    SDL_Rect fill = {x + WIDTH + 4 + 8, y + 4 + 8, HEIGHT - 20, HEIGHT - 20};
+    SDL_RenderFillRect(renderer->get_SDL(), &fill);
+  }
+}
+
+bool Editor::Tool::Checkbox::hover()
+{
+  return (Window::get_inputs().mouseX >= x + WIDTH + 4 &&
+          Window::get_inputs().mouseX < x + WIDTH + 4 + (HEIGHT - 4) &&
+          Window::get_inputs().mouseY >= y + 4 &&
+          Window::get_inputs().mouseY < y + 4 + HEIGHT - 4);
 }

@@ -34,6 +34,10 @@ void Editor::Tool::Main::Save::update(MouseState ms)
           confirm.update();
           confirm.draw();
         }
+        if (*reinterpret_cast<bool*>(confirm.getData()->result))
+        {
+          Data::Save::save(Window::get_current_file(), Window::data);
+        }
       }
       break;
     }
@@ -72,17 +76,25 @@ void Editor::Tool::Main::Load::update(MouseState ms)
     {
       if (inputs.mouseX >= x && inputs.mouseX < x + WIDTH && inputs.mouseY >= y && inputs.mouseY < y + HEIGHT)
       {
-        Confirmation::String confirm("Type something");
+        Confirmation::String confirm("Enter the name of the file (including the '.sbbd')");
         while (confirm.getData()->result == nullptr)
         {
           confirm.input();
           confirm.update();
           confirm.draw();
         }
-        char text[confirm.getData()->size];
+        size_t length = confirm.getData()->size;
+
+        if (length < 6) // '.sbbd' + '\0'
+          break;
+
+        char text[length];
         strcpy(text, reinterpret_cast<const char*>(confirm.getData()->result));
-        // Text now has the file name
-        // TODO: Make sure file can be found, then load it up
+        // Just checks file extension, nothing fancy here
+        if (text[length - 6] == '.' && text[length - 5] == 's' && text[length - 4] == 'b' && text[length - 3] == 'b' && text[length - 2] == 'd')
+        {
+          Window::set_current_file(text);
+        }
       }
       break;
     }

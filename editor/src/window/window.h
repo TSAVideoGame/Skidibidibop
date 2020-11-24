@@ -42,6 +42,8 @@ namespace Editor
 
     static void draw_tiles();
     static size_t firstTile; // Top-left most tile
+    static void update_current_file();
+    static void create_current_file_texture();
 
     static bool running;
     static SDLW::Window* window;
@@ -49,6 +51,7 @@ namespace Editor
     static Inputs inputs;
     static Tool::Manager* tool_manager;
     static std::string current_file;
+    static std::string queue_file;
     static unsigned int current_section;
     static unsigned int current_zoom;
     static SDLW::Texture* current_file_tex;

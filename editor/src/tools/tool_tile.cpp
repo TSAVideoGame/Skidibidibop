@@ -210,11 +210,13 @@ Editor::Tool::Tile::Edit::Main::Main(SDLW::Renderer* renderer, int x, int y) : E
 {
   tools.reserve(5);
   int initialY = Constants::Window.height - Constants::Window.toolBarHeight;
-  tools.push_back(new ID             (renderer, x + WIDTH + 16 * (6) + HEIGHT * 2, initialY + HEIGHT * 0));
-  tools.push_back(new TopCollision   (renderer, x + WIDTH + 16 * (6) + HEIGHT * 2, initialY + HEIGHT * 1));
-  tools.push_back(new RightCollision (renderer, x + WIDTH + 16 * (6) + HEIGHT * 2, initialY + HEIGHT * 2));
-  tools.push_back(new BottomCollision(renderer, x + WIDTH + 16 * (6) + HEIGHT * 2, initialY + HEIGHT * 3));
-  tools.push_back(new LeftCollision  (renderer, x + WIDTH + 16 * (6) + HEIGHT * 2, initialY + HEIGHT * 4));
+  tools.push_back(new ID             (renderer, x + WIDTH * 1 + 16 * ( 6) + HEIGHT * 2, initialY + HEIGHT * 0, 0, 999999, nullptr));
+  tools.push_back(new TopCollision   (renderer, x + WIDTH * 1 + 16 * ( 6) + HEIGHT * 2, initialY + HEIGHT * 1, nullptr));
+  tools.push_back(new RightCollision (renderer, x + WIDTH * 1 + 16 * ( 6) + HEIGHT * 2, initialY + HEIGHT * 2, nullptr));
+  tools.push_back(new BottomCollision(renderer, x + WIDTH * 1 + 16 * ( 6) + HEIGHT * 2, initialY + HEIGHT * 3, nullptr));
+  tools.push_back(new LeftCollision  (renderer, x + WIDTH * 1 + 16 * ( 6) + HEIGHT * 2, initialY + HEIGHT * 4, nullptr));
+  tools.push_back(new Flag           (renderer, x + WIDTH * 2 + 16 * (12) + HEIGHT * 4, initialY + HEIGHT * 0, 0, 999999, nullptr));
+  tools.push_back(new Monster        (renderer, x + WIDTH * 3 + 16 * (18) + HEIGHT * 6, initialY + HEIGHT * 0, 0, 999999, nullptr));
 }
 
 Editor::Tool::Tile::Edit::Main::~Main()
@@ -245,23 +247,26 @@ void Editor::Tool::Tile::Edit::Main::update(MouseState ms)
       if (Window::selected_tool == this)
       {
         // Select a tile
-        if (my < Constants::Window.height - Constants::Window.toolBarHeight)
+        if (my < Constants::Window.height - Constants::Window.toolBarHeight - 32) // - 32 for the tabs
         {
-          int gridX = Window::get_inputs().mouseX / Constants::Grid.size;
-          int gridY = Window::get_inputs().mouseY / Constants::Grid.size;
+          Data::Types::Map::Section* section = &Window::data.map.sections[Window::get_current_section()];
+          int grid_size = Constants::Grid.size / std::pow(2, Window::get_current_zoom());
 
-          unsigned int sizeX = Window::data.map.sections[0].size.x;
-          unsigned int sizeY = Window::data.map.sections[0].size.y;
-          size_t firstTile = Window::get_first_tile();
+          int grid_x = Window::get_inputs().mouseX / grid_size;
+          int grid_y = Window::get_inputs().mouseY / grid_size;
 
-          unsigned int windowXTiles = Constants::Window.width / Constants::Grid.size;
-          unsigned int maxXTiles = sizeX - (firstTile % sizeX) < windowXTiles ? sizeX - (firstTile % sizeX) : windowXTiles;
-          unsigned int windowYTiles = (Constants::Window.height - Constants::Window.toolBarHeight) / Constants::Grid.size;
-          unsigned int maxYTiles = sizeY - (firstTile / sizeY) < windowYTiles ? sizeY - (firstTile / sizeY) : windowYTiles;
-          if (gridX <= maxXTiles && gridY <= maxYTiles)
+          unsigned int map_x = section->size.x;
+          unsigned int map_y = section->size.y;
+          size_t first_tile = Window::get_first_tile();
+
+          unsigned int window_tiles_x = Constants::Window.width / Constants::Grid.size;
+          unsigned int max_tiles_x = map_x - (first_tile % map_x) < window_tiles_x ? map_x - (first_tile % map_x) : window_tiles_x;
+          unsigned int window_tiles_y = (Constants::Window.height - Constants::Window.toolBarHeight) / Constants::Grid.size;
+          unsigned int max_tiles_y = map_y - (first_tile / map_y) < window_tiles_y ? map_y - (first_tile / map_y) : window_tiles_y;
+          if (grid_x <= max_tiles_x - 1 && grid_y <= max_tiles_y + 1) // idk cheif, pure mystery
           {
-            selectedTile = &Window::data.map.sections[0].tiles[firstTile + gridX + (sizeX * (firstTile + gridY))];
-            selectedTileRect = {gridX * Constants::Grid.size, gridY * Constants::Grid.size, Constants::Grid.size, Constants::Grid.size};
+            selected_tile = &section->tiles[first_tile + grid_x + (map_x * (grid_y - first_tile / map_x))];
+            selected_tile_num = first_tile + grid_x + (map_x * (grid_y - first_tile / map_x));
           }
         }
       }
@@ -278,7 +283,7 @@ void Editor::Tool::Tile::Edit::Main::update(MouseState ms)
   }
 
   if (Window::selected_tool != this)
-    selectedTile = nullptr;
+    selected_tile = nullptr; // selected_tile_num is only used when selected_tile != nullptr, no need to change its value
   else
     for (Base* t : tools)
       t->update(ms);
@@ -292,11 +297,21 @@ void Editor::Tool::Tile::Edit::Main::draw()
     SDL_SetTextureColorMod(texture->get_SDL(), 255, 255, 255);
   Base::draw();
 
-  if (selectedTile != nullptr)
+  int grid_size = Constants::Grid.size / std::pow(2, Window::get_current_zoom());
+  int grid_x = Window::get_inputs().mouseX / grid_size * grid_size;
+  int grid_y = Window::get_inputs().mouseY / grid_size * grid_size;
+
+  if (selected_tile != nullptr)
   {
+    size_t first_tile = Window::get_first_tile();
+    unsigned int map_x = Window::data.map.sections[Window::get_current_section()].size.x;
+    unsigned int map_y = Window::data.map.sections[Window::get_current_section()].size.y;
     // Draw the hover
     renderer->set_draw_color(255, 255, 255, 128);
-    SDL_RenderFillRect(renderer->get_SDL(), &selectedTileRect);
+    SDL_Rect selected_tile_rect = {0, 0, grid_size, grid_size};
+    selected_tile_rect.x = (selected_tile_num % map_x - first_tile % map_x) * grid_size;
+    selected_tile_rect.y = (selected_tile_num / map_y - first_tile / map_y) * grid_size;
+    SDL_RenderFillRect(renderer->get_SDL(), &selected_tile_rect);
 
     // Draw the tools
     for (Base* t : tools)
@@ -306,16 +321,14 @@ void Editor::Tool::Tile::Edit::Main::draw()
   if (Window::selected_tool == this)
   {
     // Determine snap hover
-    if (Window::get_inputs().mouseY < Constants::Window.height - Constants::Window.toolBarHeight) // Above tool area
+    if (Window::get_inputs().mouseY < Constants::Window.height - Constants::Window.toolBarHeight - 32) // Above tool area (include tab)
     {
       // Make sure not selecting on a tab
       if (Window::get_inputs().mouseY > Constants::Window.height - Constants::Window.toolBarHeight - Constants::Grid.size)
         if (!(Window::get_inputs().mouseX > Constants::Grid.size * 2 && Window::get_inputs().mouseX < Constants::Window.width - Constants::Grid.size * 6))
           return;
 
-      int gridX = Window::get_inputs().mouseX / Constants::Grid.size * Constants::Grid.size;
-      int gridY = Window::get_inputs().mouseY / Constants::Grid.size * Constants::Grid.size;
-      SDL_Rect dRect = {gridX, gridY, Constants::Grid.size, Constants::Grid.size};
+      SDL_Rect dRect = {grid_x, grid_y, grid_size, grid_size};
       renderer->set_draw_color(255, 255, 255, 128);
       SDL_RenderFillRect(renderer->get_SDL(), &dRect);
     }
@@ -327,29 +340,20 @@ void Editor::Tool::Tile::Edit::Main::draw()
  * Edit::ID Tool
  * ========================================
  */
-
-Editor::Tool::Tile::Edit::ID::ID(SDLW::Renderer* renderer, int x, int y) : Editor::Tool::Base(renderer, "ID", x , y)
+Editor::Tool::Tile::Edit::ID::ID(SDLW::Renderer* renderer_p, int x_p, int y_p, int min_p, int max_p, unsigned int* variable_p) : Editor::Tool::Numeric(renderer_p, "ID", x_p, y_p, min_p, max_p, variable_p)
 {
-  for (int i = 0; i < 10; ++i)
-  {
-    TTF_Font* font = TTF_OpenFont("res/fonts/open-sans/OpenSans-Regular.ttf", 16);
-    SDL_Surface* txtSurface = TTF_RenderText_Blended(font, std::to_string(i).c_str(), {255, 255, 255});
-    numberTexs[i] = new SDLW::Texture(SDL_CreateTextureFromSurface(renderer->get_SDL(), txtSurface));
-    SDL_FreeSurface(txtSurface);
-    TTF_CloseFont(font);
-  }
+
 }
 
 Editor::Tool::Tile::Edit::ID::~ID()
 {
-  for (int i = 0; i < 10; ++i)
-  {
-    delete numberTexs[i];
-  }
+
 }
 
 void Editor::Tool::Tile::Edit::ID::update(MouseState ms)
 {
+  variable = &dynamic_cast<Main*>(Window::selected_tool)->selected_tile->id;
+
   switch (ms)
   {
     case MouseState::HOVER:
@@ -358,28 +362,21 @@ void Editor::Tool::Tile::Edit::ID::update(MouseState ms)
     }
     case MouseState::CLICK:
     {
-      int digits = 6;
       // Up button
-      if (Window::get_inputs().mouseX >= x + WIDTH + 16 * digits &&
-          Window::get_inputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT &&
-          Window::get_inputs().mouseY >= y &&
-          Window::get_inputs().mouseY < y + HEIGHT)
+      if (hover_increment())
       {
-        if (dynamic_cast<Main*>(Window::selected_tool)->selectedTile->id < 999999)
+        if (*variable < max)
         {
-          ++dynamic_cast<Main*>(Window::selected_tool)->selectedTile->id;
+          ++*variable;
         }
       }
 
       // Down button
-      if (Window::get_inputs().mouseX >= x + WIDTH + 16 * digits + HEIGHT &&
-          Window::get_inputs().mouseX <= x + WIDTH + 16 * digits + HEIGHT * 2 &&
-          Window::get_inputs().mouseY >= y &&
-          Window::get_inputs().mouseY < y + HEIGHT)
+      if (hover_decrement())
       {
-        if (dynamic_cast<Main*>(Window::selected_tool)->selectedTile->id > 0) // Map size has to be greater than 1, sorry
+        if (*variable > min)
         {
-          --dynamic_cast<Main*>(Window::selected_tool)->selectedTile->id;
+          --*variable;
         }
       }
 
@@ -396,39 +393,6 @@ void Editor::Tool::Tile::Edit::ID::update(MouseState ms)
   }
 }
 
-void Editor::Tool::Tile::Edit::ID::draw()
-{
-  Base::draw();
-
-  // Draw the current number of columns
-  int digits = 6;
-  for (int i = digits, x = 0; i > 0; --i, ++x)
-  {
-    int digit = static_cast<int>(dynamic_cast<Main*>(Window::selected_tool)->selectedTile->id / std::pow(10, i - 1)) % 10;
-    SDL_Rect dRect = {Base::x + x + WIDTH + 16 * x, y, 0, 0};
-    SDL_QueryTexture(numberTexs[digit]->get_SDL(), 0, 0, &dRect.w, &dRect.h);
-    dRect.y += (HEIGHT - dRect.h) / 2;
-    renderer->copy(numberTexs[digit], 0, &dRect);
-  }
-
-  // Draw the increase / decrease boxes
-  // Points
-  SDL_Point upPoints[4] = {
-    {x + WIDTH + 16 * digits + 8,              y + HEIGHT - 8},
-    {x + WIDTH + 16 * digits + 8 + (HEIGHT - 16) / 2, y   + 8},
-    {x + WIDTH + 16 * digits - 8 + HEIGHT,     y + HEIGHT - 8},
-    {x + WIDTH + 16 * digits + 8,              y + HEIGHT - 8}
-  };
-  SDL_Point downPoints[4] = {
-    {x + WIDTH + 16 * digits + HEIGHT + 8,                     y          + 8},
-    {x + WIDTH + 16 * digits + HEIGHT + 8 + (HEIGHT - 16) / 2, y + HEIGHT - 8},
-    {x + WIDTH + 16 * digits + HEIGHT - 8 + HEIGHT,            y          + 8},
-    {x + WIDTH + 16 * digits + HEIGHT + 8,                     y          + 8}
-  };
-  renderer->set_draw_color(255, 255, 255, 255);
-  SDL_RenderDrawLines(renderer->get_SDL(), upPoints, 4);
-  SDL_RenderDrawLines(renderer->get_SDL(), downPoints, 4);
-}
 
 /*
  * ========================================
@@ -436,16 +400,20 @@ void Editor::Tool::Tile::Edit::ID::draw()
  * ========================================
  */
 
-Editor::Tool::Tile::Edit::TopCollision::TopCollision(SDLW::Renderer* renderer, int x, int y) : Editor::Tool::Base(renderer, "Col-T", x , y)
+Editor::Tool::Tile::Edit::TopCollision::TopCollision(SDLW::Renderer* renderer_p, int x_p, int y_p, bool* variable_p) : Editor::Tool::Checkbox(renderer_p, "Col-T", x_p, y_p, variable_p)
 {
+
 }
 
 Editor::Tool::Tile::Edit::TopCollision::~TopCollision()
 {
+
 }
 
 void Editor::Tool::Tile::Edit::TopCollision::update(MouseState ms)
 {
+  variable = &dynamic_cast<Main*>(Window::selected_tool)->selected_tile->collision.top;
+
   switch (ms)
   {
     case MouseState::HOVER:
@@ -454,6 +422,9 @@ void Editor::Tool::Tile::Edit::TopCollision::update(MouseState ms)
     }
     case MouseState::CLICK:
     {
+      if (hover())
+        *variable = !*variable;
+
       break;
     }
     case MouseState::DRAG:
@@ -465,11 +436,6 @@ void Editor::Tool::Tile::Edit::TopCollision::update(MouseState ms)
       break;
     }
   }
-}
-
-void Editor::Tool::Tile::Edit::TopCollision::draw()
-{
-  Base::draw();
 }
 
 /*
@@ -478,8 +444,9 @@ void Editor::Tool::Tile::Edit::TopCollision::draw()
  * ========================================
  */
 
-Editor::Tool::Tile::Edit::RightCollision::RightCollision(SDLW::Renderer* renderer, int x, int y) : Editor::Tool::Base(renderer, "Col-R", x , y)
+Editor::Tool::Tile::Edit::RightCollision::RightCollision(SDLW::Renderer* renderer_p, int x_p, int y_p, bool* variable) : Editor::Tool::Checkbox(renderer_p, "Col-R", x_p, y_p, variable)
 {
+
 }
 
 Editor::Tool::Tile::Edit::RightCollision::~RightCollision()
@@ -488,6 +455,8 @@ Editor::Tool::Tile::Edit::RightCollision::~RightCollision()
 
 void Editor::Tool::Tile::Edit::RightCollision::update(MouseState ms)
 {
+  variable = &dynamic_cast<Main*>(Window::selected_tool)->selected_tile->collision.right;
+
   switch (ms)
   {
     case MouseState::HOVER:
@@ -496,6 +465,9 @@ void Editor::Tool::Tile::Edit::RightCollision::update(MouseState ms)
     }
     case MouseState::CLICK:
     {
+      if (hover())
+        *variable = !*variable;
+
       break;
     }
     case MouseState::DRAG:
@@ -509,18 +481,13 @@ void Editor::Tool::Tile::Edit::RightCollision::update(MouseState ms)
   }
 }
 
-void Editor::Tool::Tile::Edit::RightCollision::draw()
-{
-  Base::draw();
-}
-
 /*
  * ========================================
  * Edit::BottomCollision Tool
  * ========================================
  */
 
-Editor::Tool::Tile::Edit::BottomCollision::BottomCollision(SDLW::Renderer* renderer, int x, int y) : Editor::Tool::Base(renderer, "Col-B", x , y)
+Editor::Tool::Tile::Edit::BottomCollision::BottomCollision(SDLW::Renderer* renderer_p, int x_p, int y_p, bool* variable_p) : Editor::Tool::Checkbox(renderer_p, "Col-B", x_p , y_p, variable_p)
 {
 }
 
@@ -530,6 +497,8 @@ Editor::Tool::Tile::Edit::BottomCollision::~BottomCollision()
 
 void Editor::Tool::Tile::Edit::BottomCollision::update(MouseState ms)
 {
+  variable = &dynamic_cast<Main*>(Window::selected_tool)->selected_tile->collision.bottom;
+
   switch (ms)
   {
     case MouseState::HOVER:
@@ -538,6 +507,9 @@ void Editor::Tool::Tile::Edit::BottomCollision::update(MouseState ms)
     }
     case MouseState::CLICK:
     {
+      if (hover())
+        *variable = !*variable;
+
       break;
     }
     case MouseState::DRAG:
@@ -551,18 +523,13 @@ void Editor::Tool::Tile::Edit::BottomCollision::update(MouseState ms)
   }
 }
 
-void Editor::Tool::Tile::Edit::BottomCollision::draw()
-{
-  Base::draw();
-}
-
 /*
  * ========================================
  * Edit::LeftCollision Tool
  * ========================================
  */
 
-Editor::Tool::Tile::Edit::LeftCollision::LeftCollision(SDLW::Renderer* renderer, int x, int y) : Editor::Tool::Base(renderer, "Col-L", x , y)
+Editor::Tool::Tile::Edit::LeftCollision::LeftCollision(SDLW::Renderer* renderer_p, int x_p, int y_p, bool* variable_p) : Editor::Tool::Checkbox(renderer_p, "Col-L", x_p, y_p, variable_p)
 {
 }
 
@@ -572,6 +539,8 @@ Editor::Tool::Tile::Edit::LeftCollision::~LeftCollision()
 
 void Editor::Tool::Tile::Edit::LeftCollision::update(MouseState ms)
 {
+  variable = &dynamic_cast<Main*>(Window::selected_tool)->selected_tile->collision.left;
+
   switch (ms)
   {
     case MouseState::HOVER:
@@ -580,6 +549,9 @@ void Editor::Tool::Tile::Edit::LeftCollision::update(MouseState ms)
     }
     case MouseState::CLICK:
     {
+      if (hover())
+        *variable = !*variable;
+
       break;
     }
     case MouseState::DRAG:
@@ -593,8 +565,118 @@ void Editor::Tool::Tile::Edit::LeftCollision::update(MouseState ms)
   }
 }
 
-void Editor::Tool::Tile::Edit::LeftCollision::draw()
+/*
+ * ========================================
+ * Edit::Flag Tool
+ * ========================================
+ */
+Editor::Tool::Tile::Edit::Flag::Flag(SDLW::Renderer* renderer_p, int x_p, int y_p, int min_p, int max_p, unsigned int* variable_p) : Editor::Tool::Numeric(renderer_p, "Flag", x_p, y_p, min_p, max_p, variable_p)
 {
-  Base::draw();
+
 }
 
+Editor::Tool::Tile::Edit::Flag::~Flag()
+{
+
+}
+
+void Editor::Tool::Tile::Edit::Flag::update(MouseState ms)
+{
+  variable = &dynamic_cast<Main*>(Window::selected_tool)->selected_tile->flag;
+
+  switch (ms)
+  {
+    case MouseState::HOVER:
+    {
+       break;
+    }
+    case MouseState::CLICK:
+    {
+      // Up button
+      if (hover_increment())
+      {
+        if (*variable < max)
+        {
+          ++*variable;
+        }
+      }
+
+      // Down button
+      if (hover_decrement())
+      {
+        if (*variable > min)
+        {
+          --*variable;
+        }
+      }
+
+      break;
+    }
+    case MouseState::DRAG:
+    {
+      break;
+    }
+    case MouseState::RELEASE:
+    {
+      break;
+    }
+  }
+}
+
+/*
+ * ========================================
+ * Edit::Monster Tool
+ * ========================================
+ */
+Editor::Tool::Tile::Edit::Monster::Monster(SDLW::Renderer* renderer_p, int x_p, int y_p, int min_p, int max_p, unsigned int* variable_p) : Editor::Tool::Numeric(renderer_p, "Monst.", x_p, y_p, min_p, max_p, variable_p)
+{
+
+}
+
+Editor::Tool::Tile::Edit::Monster::~Monster()
+{
+
+}
+
+void Editor::Tool::Tile::Edit::Monster::update(MouseState ms)
+{
+  variable = &dynamic_cast<Main*>(Window::selected_tool)->selected_tile->enemy_id;
+
+  switch (ms)
+  {
+    case MouseState::HOVER:
+    {
+       break;
+    }
+    case MouseState::CLICK:
+    {
+      // Up button
+      if (hover_increment())
+      {
+        if (*variable < max)
+        {
+          ++*variable;
+        }
+      }
+
+      // Down button
+      if (hover_decrement())
+      {
+        if (*variable > min)
+        {
+          --*variable;
+        }
+      }
+
+      break;
+    }
+    case MouseState::DRAG:
+    {
+      break;
+    }
+    case MouseState::RELEASE:
+    {
+      break;
+    }
+  }
+}
