@@ -50,7 +50,7 @@ namespace Editor
         class ID : public Numeric
         {
         public:
-          ID(SDLW::Renderer*, int x, int y, int min, int max, unsigned int* variable);
+          ID(SDLW::Renderer*, int x, int y, int min, int max, std::uint16_t* variable);
           ~ID();
 
           void update(MouseState);
@@ -96,7 +96,7 @@ namespace Editor
         class Flag : public Numeric
         {
         public:
-          Flag(SDLW::Renderer*, int x, int y, int min, int max, unsigned int* variable);
+          Flag(SDLW::Renderer*, int x, int y, int min, int max, std::uint16_t* variable);
           ~Flag();
 
           void update(MouseState);
@@ -105,7 +105,7 @@ namespace Editor
         class Monster : public Numeric
         {
         public:
-          Monster(SDLW::Renderer*, int x, int y, int min, int max, unsigned int* variable);
+          Monster(SDLW::Renderer*, int x, int y, int min, int max, std::uint16_t* variable);
           ~Monster();
 
           void update(MouseState);

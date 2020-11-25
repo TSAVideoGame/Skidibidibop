@@ -53,7 +53,7 @@ static bool check_file(std::ifstream& file)
 {
   if (file.eof())
   {
-    throw std::runtime_error("Data::BAD_FILE: reached EOF early");
+    throw std::runtime_error("Data::BAD_FILE: reached EOF early | tellg() is " + std::to_string(static_cast<int>(file.tellg())));
     return false;
   }
 
@@ -115,10 +115,19 @@ void Data::Types::Map::save(std::ofstream& file)
       for (std::vector<Tile>::iterator t = (*s).tiles.begin(); t < (*s).tiles.end(); ++t)
       {
         file.write(reinterpret_cast<char*>(&(*t).id), sizeof((*t).id));
-        file.write(reinterpret_cast<char*>(&(*t).collision.top), sizeof((*t).collision.top));
-        file.write(reinterpret_cast<char*>(&(*t).collision.right), sizeof((*t).collision.right));
-        file.write(reinterpret_cast<char*>(&(*t).collision.bottom), sizeof((*t).collision.bottom));
-        file.write(reinterpret_cast<char*>(&(*t).collision.left), sizeof((*t).collision.left));
+        // Save collision as a byte
+        std::uint8_t collision = 0;
+        if ((*t).collision.top)
+          collision |= 1 << 0;
+        if ((*t).collision.right)
+          collision |= 1 << 1;
+        if ((*t).collision.bottom)
+          collision |= 1 << 2;
+        if ((*t).collision.left)
+          collision |= 1 << 3;
+
+        file.write(reinterpret_cast<char*>(&collision), sizeof(collision));
+
         file.write(reinterpret_cast<char*>(&(*t).state), sizeof((*t).state));
         file.write(reinterpret_cast<char*>(&(*t).flag), sizeof(*t).flag);
         file.write(reinterpret_cast<char*>(&(*t).enemy_id), sizeof((*t).enemy_id));
@@ -134,6 +143,7 @@ void Data::Types::Map::load(std::ifstream& file)
   file.read(reinterpret_cast<char*>(&num_sections), sizeof(num_sections));
 
   std::cout << "Loading " << num_sections << " sections" << std::endl;
+  std::cout << "tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 
   // Reserve size for sections
   sections.reserve(num_sections);
@@ -145,6 +155,7 @@ void Data::Types::Map::load(std::ifstream& file)
     // Load the amount of tiles
     file.read(reinterpret_cast<char*>(&s.size.x), sizeof(s.size.x));
     file.read(reinterpret_cast<char*>(&s.size.y), sizeof(s.size.y));
+    std::cout << "tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 
     // Reserve size for tiles
     s.tiles.reserve(s.size.x * s.size.y);
@@ -156,10 +167,15 @@ void Data::Types::Map::load(std::ifstream& file)
     {
       Tile t;
       file.read(reinterpret_cast<char*>(&t.id), sizeof(t.id));
-      file.read(reinterpret_cast<char*>(&t.collision.top), sizeof(t.collision.top));
-      file.read(reinterpret_cast<char*>(&t.collision.right), sizeof(t.collision.right));
-      file.read(reinterpret_cast<char*>(&t.collision.bottom), sizeof(t.collision.bottom));
-      file.read(reinterpret_cast<char*>(&t.collision.left), sizeof(t.collision.left));
+
+      std::uint8_t collision = 0;
+      file.read(reinterpret_cast<char*>(&collision), sizeof(collision));
+
+      t.collision.top = (collision >> 0) & 1;
+      t.collision.right = (collision >> 1) & 1;
+      t.collision.bottom = (collision >> 2) & 1;
+      t.collision.left = (collision >> 3) & 1;
+
       file.read(reinterpret_cast<char*>(&t.state), sizeof(t.state));
       file.read(reinterpret_cast<char*>(&t.flag), sizeof(t.flag));
       file.read(reinterpret_cast<char*>(&t.enemy_id), sizeof(t.enemy_id));
@@ -178,13 +194,13 @@ void Data::Types::Map::load(std::ifstream& file)
 Data::Types::Player::Player() : Base(Type::PLAYER)
 {
   gender = true;
-  health = 2;
+  health = 0;
   weapons = {0, 0, 0};
   level = 0;
   current_map = 0;
   position = {0, 0};
-  direction = 2;
-  status = 2;
+  direction = 0;
+  status = 0;
 }
 
 Data::Types::Player::Player(std::ifstream& file) : Base(Type::PLAYER)
@@ -211,6 +227,7 @@ void Data::Types::Player::save(std::ofstream& file)
 void Data::Types::Player::load(std::ifstream& file)
 {
   check_file(file);
+  std::cout << "tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 
   file.read(reinterpret_cast<char*>(&gender), sizeof(gender));
   file.read(reinterpret_cast<char*>(&health), sizeof(health));
@@ -223,6 +240,8 @@ void Data::Types::Player::load(std::ifstream& file)
   file.read(reinterpret_cast<char*>(&position.y), sizeof(position.y));
   file.read(reinterpret_cast<char*>(&direction), sizeof(direction));
   file.read(reinterpret_cast<char*>(&status), sizeof(status));
+
+  std::cout << "(After player loaded) tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 }
 
 /*
@@ -261,6 +280,7 @@ void Data::Types::Inventory::save(std::ofstream& file)
 
   for (std::vector<Item>::iterator i = inventory.begin(); i < inventory.end(); ++i)
   {
+    std::cout << "Saving item" << std::endl;
     file.write(reinterpret_cast<char*>(&(*i).id), sizeof((*i).id));
     file.write(reinterpret_cast<char*>(&(*i).slot), sizeof((*i).slot));
   }
@@ -275,19 +295,22 @@ void Data::Types::Inventory::load(std::ifstream& file)
   std::cout << "Loading " << num_weapons << " weapons" << std::endl;
 
   unlocked_weapons = read_bools(file, num_weapons);
+  std::cout << "(After inventory:weapons) tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 
-  file.read(reinterpret_cast<char*>(&inventory_size), sizeof(inventory));
+  file.read(reinterpret_cast<char*>(&inventory_size), sizeof(inventory_size));
   inventory.reserve(inventory_size);
 
   std::cout << "Loading " << inventory_size << " items" << std::endl;
 
   for (size_t i = 0; i < inventory_size; ++i)
   {
+    std::cout << "Loading item" << std::endl;
     Item item;
     file.read(reinterpret_cast<char*>(&item.id), sizeof(item.id));
     file.read(reinterpret_cast<char*>(&item.slot), sizeof(item.slot));
     inventory.push_back(item);
   }
+  std::cout << "(After invetory:items) tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 }
 
 /*
@@ -326,6 +349,7 @@ void Data::Types::Story::load(std::ifstream& file)
   std::cout << "Loading " << num_quests << " quests" << std::endl;
 
   completed_quests = read_bools(file, num_quests);
+  std::cout << "(After story) tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 }
 
 /*
@@ -379,6 +403,7 @@ void Data::Types::Bopdex::load(std::ifstream& file)
     file.read(reinterpret_cast<char*>(&entry.num_defeated), sizeof(entry.num_defeated));
     entries.push_back(entry);
   }
+  std::cout << "(After bopdex) tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 }
 
 /*

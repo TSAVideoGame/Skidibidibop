@@ -35,7 +35,7 @@ void Editor::Tool::Base::draw()
  * This has numbers and up/down arrows
  * ========================================
  */
-Editor::Tool::Numeric::Numeric(SDLW::Renderer* renderer_p, const std::string& text_p, int x_p, int y_p, unsigned int min_p, unsigned int max_p, unsigned int* variable_p) : Base(renderer_p, text_p, x_p, y_p)
+Editor::Tool::Numeric::Numeric(SDLW::Renderer* renderer_p, const std::string& text_p, int x_p, int y_p, unsigned int min_p, unsigned int max_p, std::uint16_t* variable_p) : Base(renderer_p, text_p, x_p, y_p)
 {
   min = min_p;
   max = max_p;

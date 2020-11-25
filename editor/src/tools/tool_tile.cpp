@@ -340,7 +340,7 @@ void Editor::Tool::Tile::Edit::Main::draw()
  * Edit::ID Tool
  * ========================================
  */
-Editor::Tool::Tile::Edit::ID::ID(SDLW::Renderer* renderer_p, int x_p, int y_p, int min_p, int max_p, unsigned int* variable_p) : Editor::Tool::Numeric(renderer_p, "ID", x_p, y_p, min_p, max_p, variable_p)
+Editor::Tool::Tile::Edit::ID::ID(SDLW::Renderer* renderer_p, int x_p, int y_p, int min_p, int max_p, std::uint16_t* variable_p) : Editor::Tool::Numeric(renderer_p, "ID", x_p, y_p, min_p, max_p, variable_p)
 {
 
 }
@@ -570,7 +570,7 @@ void Editor::Tool::Tile::Edit::LeftCollision::update(MouseState ms)
  * Edit::Flag Tool
  * ========================================
  */
-Editor::Tool::Tile::Edit::Flag::Flag(SDLW::Renderer* renderer_p, int x_p, int y_p, int min_p, int max_p, unsigned int* variable_p) : Editor::Tool::Numeric(renderer_p, "Flag", x_p, y_p, min_p, max_p, variable_p)
+Editor::Tool::Tile::Edit::Flag::Flag(SDLW::Renderer* renderer_p, int x_p, int y_p, int min_p, int max_p, std::uint16_t* variable_p) : Editor::Tool::Numeric(renderer_p, "Flag", x_p, y_p, min_p, max_p, variable_p)
 {
 
 }
@@ -628,7 +628,7 @@ void Editor::Tool::Tile::Edit::Flag::update(MouseState ms)
  * Edit::Monster Tool
  * ========================================
  */
-Editor::Tool::Tile::Edit::Monster::Monster(SDLW::Renderer* renderer_p, int x_p, int y_p, int min_p, int max_p, unsigned int* variable_p) : Editor::Tool::Numeric(renderer_p, "Monst.", x_p, y_p, min_p, max_p, variable_p)
+Editor::Tool::Tile::Edit::Monster::Monster(SDLW::Renderer* renderer_p, int x_p, int y_p, int min_p, int max_p, std::uint16_t* variable_p) : Editor::Tool::Numeric(renderer_p, "Monst.", x_p, y_p, min_p, max_p, variable_p)
 {
 
 }
