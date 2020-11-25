@@ -228,8 +228,17 @@ void Editor::Window::draw_tiles()
   {
     for (unsigned int col = 0; col < maxXTiles; ++col)
     {
+      // Draw tile (id)
       sRect.x = data.map.sections[current_section].tiles[firstTile + (row * data.map.sections[current_section].size.x) + col].id * 32;
+      sRect.y = 0;
       renderer->copy(spritesheet, &sRect, &dRect);
+
+      // Draw tile objects (state)
+      sRect.x = data.map.sections[current_section].tiles[firstTile + (row * data.map.sections[current_section].size.x) + col].state * 32;
+      sRect.y = 32;
+      renderer->copy(spritesheet, &sRect, &dRect);
+
+      // Increment dRect
       dRect.x += size;
     }
 
