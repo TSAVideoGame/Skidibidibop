@@ -1,8 +1,6 @@
 #include "data_types.h"
 #include <cmath>
 
-// There are 5 mystery bytes after a tile, that's probably causing the headaches
-
 /*
  * Room for improvement
  *
@@ -53,7 +51,7 @@ static bool check_file(std::ifstream& file)
 {
   if (file.eof())
   {
-    throw std::runtime_error("Data::BAD_FILE: reached EOF early | tellg() is " + std::to_string(static_cast<int>(file.tellg())));
+    throw std::runtime_error("Data::BAD_FILE: reached EOF early");
     return false;
   }
 
@@ -91,14 +89,11 @@ Data::Types::Map::Map(std::ifstream& file) : Base(Type::MAP)
   load(file);
 }
 
-#include <iostream>
 void Data::Types::Map::save(std::ofstream& file)
 {
   // Write the number of sections
   num_sections = sections.size();
   file.write(reinterpret_cast<char*>(&num_sections), sizeof(num_sections));
-
-  std::cout << "Saving " << num_sections << " sections" << std::endl;
 
   // Write all the sections
   if (num_sections > 0)
@@ -108,8 +103,6 @@ void Data::Types::Map::save(std::ofstream& file)
       // Write the section size
       file.write(reinterpret_cast<char*>(&(*s).size.x), sizeof((*s).size.x));
       file.write(reinterpret_cast<char*>(&(*s).size.y), sizeof((*s).size.y));
-
-      std::cout << "Saving " << (*s).size.x * (*s).size.y << " tiles" << std::endl;
 
       // Write the tile data
       for (std::vector<Tile>::iterator t = (*s).tiles.begin(); t < (*s).tiles.end(); ++t)
@@ -142,9 +135,6 @@ void Data::Types::Map::load(std::ifstream& file)
   // Load the amount of sections
   file.read(reinterpret_cast<char*>(&num_sections), sizeof(num_sections));
 
-  std::cout << "Loading " << num_sections << " sections" << std::endl;
-  std::cout << "tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
-
   // Reserve size for sections
   sections.reserve(num_sections);
 
@@ -155,12 +145,9 @@ void Data::Types::Map::load(std::ifstream& file)
     // Load the amount of tiles
     file.read(reinterpret_cast<char*>(&s.size.x), sizeof(s.size.x));
     file.read(reinterpret_cast<char*>(&s.size.y), sizeof(s.size.y));
-    std::cout << "tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 
     // Reserve size for tiles
     s.tiles.reserve(s.size.x * s.size.y);
-
-    std::cout << "Loading " << s.size.x * s.size.y << " tiles" << std::endl;
 
     // Load up the tiles
     for (size_t ti = 0; ti < s.size.x * s.size.y; ++ti)
@@ -227,7 +214,6 @@ void Data::Types::Player::save(std::ofstream& file)
 void Data::Types::Player::load(std::ifstream& file)
 {
   check_file(file);
-  std::cout << "tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 
   file.read(reinterpret_cast<char*>(&gender), sizeof(gender));
   file.read(reinterpret_cast<char*>(&health), sizeof(health));
@@ -240,8 +226,6 @@ void Data::Types::Player::load(std::ifstream& file)
   file.read(reinterpret_cast<char*>(&position.y), sizeof(position.y));
   file.read(reinterpret_cast<char*>(&direction), sizeof(direction));
   file.read(reinterpret_cast<char*>(&status), sizeof(status));
-
-  std::cout << "(After player loaded) tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 }
 
 /*
@@ -266,8 +250,6 @@ void Data::Types::Inventory::save(std::ofstream& file)
   num_weapons = unlocked_weapons.size();
   file.write(reinterpret_cast<char*>(&num_weapons), sizeof(num_weapons));
 
-  std::cout << "Saving " << num_weapons << " weapons" << std::endl;
-
   if (num_weapons > 0) // Only save it if there is stuff to save
   {
     write_bools(file, unlocked_weapons, num_weapons);
@@ -276,11 +258,8 @@ void Data::Types::Inventory::save(std::ofstream& file)
   inventory_size = inventory.size();
   file.write(reinterpret_cast<char*>(&inventory_size), sizeof(inventory_size));
 
-  std::cout << "Saving " << inventory_size << " items" << std::endl;
-
   for (std::vector<Item>::iterator i = inventory.begin(); i < inventory.end(); ++i)
   {
-    std::cout << "Saving item" << std::endl;
     file.write(reinterpret_cast<char*>(&(*i).id), sizeof((*i).id));
     file.write(reinterpret_cast<char*>(&(*i).slot), sizeof((*i).slot));
   }
@@ -292,25 +271,18 @@ void Data::Types::Inventory::load(std::ifstream& file)
 
   file.read(reinterpret_cast<char*>(&num_weapons), sizeof(num_weapons));
 
-  std::cout << "Loading " << num_weapons << " weapons" << std::endl;
-
   unlocked_weapons = read_bools(file, num_weapons);
-  std::cout << "(After inventory:weapons) tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 
   file.read(reinterpret_cast<char*>(&inventory_size), sizeof(inventory_size));
   inventory.reserve(inventory_size);
 
-  std::cout << "Loading " << inventory_size << " items" << std::endl;
-
   for (size_t i = 0; i < inventory_size; ++i)
   {
-    std::cout << "Loading item" << std::endl;
     Item item;
     file.read(reinterpret_cast<char*>(&item.id), sizeof(item.id));
     file.read(reinterpret_cast<char*>(&item.slot), sizeof(item.slot));
     inventory.push_back(item);
   }
-  std::cout << "(After invetory:items) tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 }
 
 /*
@@ -335,8 +307,6 @@ void Data::Types::Story::save(std::ofstream& file)
   num_quests = completed_quests.size();
   file.write(reinterpret_cast<char*>(&num_quests), sizeof(num_quests));
 
-  std::cout << "Saving " << num_quests << " quests" << std::endl;
-
   write_bools(file, completed_quests, num_quests);
 }
 
@@ -346,10 +316,7 @@ void Data::Types::Story::load(std::ifstream& file)
 
   file.read(reinterpret_cast<char*>(&num_quests), sizeof(num_quests));
 
-  std::cout << "Loading " << num_quests << " quests" << std::endl;
-
   completed_quests = read_bools(file, num_quests);
-  std::cout << "(After story) tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 }
 
 /*
@@ -374,8 +341,6 @@ void Data::Types::Bopdex::save(std::ofstream& file)
   num_entries = entries.size();
   file.write(reinterpret_cast<char*>(&num_entries), sizeof(num_entries));
 
-  std::cout << "Saving " << num_entries << " entires" << std::endl;
-
   for (std::vector<Entry>::iterator i = entries.begin(); i < entries.end(); ++i)
   {
     file.write(reinterpret_cast<char*>(&(*i).viewed), sizeof((*i).viewed));
@@ -392,8 +357,6 @@ void Data::Types::Bopdex::load(std::ifstream& file)
   file.read(reinterpret_cast<char*>(&num_entries), sizeof(num_entries));
   entries.reserve(num_entries);
 
-  std::cout << "Loading " << num_entries << " entires" << std::endl;
-
   for (size_t i = 0; i < num_entries; ++i)
   {
     Entry entry;
@@ -403,7 +366,6 @@ void Data::Types::Bopdex::load(std::ifstream& file)
     file.read(reinterpret_cast<char*>(&entry.num_defeated), sizeof(entry.num_defeated));
     entries.push_back(entry);
   }
-  std::cout << "(After bopdex) tellg() is " << std::to_string(static_cast<int>(file.tellg())) << std::endl;
 }
 
 /*
@@ -428,8 +390,6 @@ void Data::Types::Achievement::save(std::ofstream& file)
   num_achievements = completed_achievements.size();
   file.write(reinterpret_cast<char*>(&num_achievements), sizeof(num_achievements));
 
-  std::cout << "Saving " << num_achievements << " achievements" << std::endl;
-
   write_bools(file, completed_achievements, num_achievements);
 }
 
@@ -438,8 +398,6 @@ void Data::Types::Achievement::load(std::ifstream& file)
   check_file(file);
 
   file.read(reinterpret_cast<char*>(&num_achievements), sizeof(num_achievements));
-
-  std::cout << "Loading " << num_achievements << " achievements" << std::endl;
 
   completed_achievements = read_bools(file, num_achievements);
 }

@@ -63,6 +63,9 @@ Editor::Tool::Tabs::Main::Main(SDLW::Renderer* renderer, const std::string& text
 {
   tools.push_back(new Tool::Main::Save(renderer, 0, Constants::Window.height - Constants::Window.toolBarHeight));
   tools.push_back(new Tool::Main::Load(renderer, 0, Constants::Window.height - Constants::Window.toolBarHeight + Base::HEIGHT * 1));
+  tools.push_back(new Tool::Main::Section(renderer, 0, Constants::Window.height - Constants::Window.toolBarHeight + Base::HEIGHT * 2));
+  tools.push_back(new Tool::Main::SectionAdd(renderer, 0, Constants::Window.height - Constants::Window.toolBarHeight + Base::HEIGHT * 3));
+  tools.push_back(new Tool::Main::SectionDelete(renderer, 0, Constants::Window.height - Constants::Window.toolBarHeight + Base::HEIGHT * 4));
 }
 
 // Tile tab

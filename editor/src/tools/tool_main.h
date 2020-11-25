@@ -24,6 +24,33 @@ namespace Editor
 
         void update(MouseState);
       };
+
+      class Section : public Numeric
+      {
+      public:
+        Section(SDLW::Renderer*, int x, int y);
+        ~Section();
+        
+        void update(MouseState);
+      private:
+        std::uint16_t current_section;
+      };
+
+      class SectionAdd : public Base
+      {
+      public:
+        SectionAdd(SDLW::Renderer*, int x, int y);
+
+        void update(MouseState);
+      };
+
+      class SectionDelete : public Base
+      {
+      public:
+        SectionDelete(SDLW::Renderer*, int x, int y);
+
+        void update(MouseState);
+      };
     };
   };
 };

@@ -31,7 +31,8 @@ namespace Editor
     static Inputs get_inputs();
     static std::string get_current_file();
     static size_t get_first_tile();
-    static unsigned int get_current_section();
+    static std::uint16_t get_current_section();
+    static void set_current_section(std::uint16_t);
     static unsigned int get_current_zoom();
     // Data is going to be manipulated so might as well be public
     static Data::Save::Data data;
@@ -44,6 +45,7 @@ namespace Editor
     static size_t firstTile; // Top-left most tile
     static void update_current_file();
     static void create_current_file_texture();
+    static void update_current_section();
 
     static bool running;
     static SDLW::Window* window;
@@ -52,7 +54,8 @@ namespace Editor
     static Tool::Manager* tool_manager;
     static std::string current_file;
     static std::string queue_file;
-    static unsigned int current_section;
+    static std::uint16_t current_section;
+    static std::uint16_t queue_section;
     static unsigned int current_zoom;
     static SDLW::Texture* current_file_tex;
     static SDLW::Texture* spritesheet;

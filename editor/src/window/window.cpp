@@ -11,7 +11,8 @@ Editor::Tool::Manager* Editor::Window::tool_manager;
 std::string Editor::Window::current_file;
 SDLW::Texture* Editor::Window::current_file_tex;
 std::string Editor::Window::queue_file;
-unsigned int Editor::Window::current_section = 0;
+std::uint16_t Editor::Window::current_section = 0;
+std::uint16_t Editor::Window::queue_section = current_section;
 unsigned int Editor::Window::current_zoom = 1;
 Data::Save::Data Editor::Window::data = Data::Save::load("res/default.sbbd");
 SDLW::Texture* Editor::Window::spritesheet;
@@ -129,7 +130,15 @@ void Editor::Window::update()
     update_current_file();
   }
 
+  if (queue_section != current_section)
+  {
+    update_current_section();
+  }
+
   static unsigned int tempFirstTile = firstTile, tempViewX = firstTile % data.map.sections[current_section].size.x, tempViewY = firstTile / data.map.sections[current_section].size.y;
+  
+  tool_manager->update(MouseState::HOVER);
+
   if (inputs.mouseDown)
   {
     if (!inputs.oldMouseDown) // Click
@@ -273,15 +282,18 @@ void Editor::Window::update_current_file()
 
   create_current_file_texture();
 
-  // Simple assignment isn't working, I'm going to manually edit all of these values
-  Data::Save::Data new_data = Data::Save::load(current_file);
+  data = Data::Save::load(current_file);
+}
 
-  data.map = new_data.map;
-  data.player = new_data.player;
-  data.inventory = new_data.inventory;
-  data.story = new_data.story;
-  data.bopdex = new_data.bopdex;
-  data.achievement = new_data.achievement;
+void Editor::Window::update_current_section()
+{
+  if (queue_section < 0 || queue_section > data.map.sections.size() - 1)
+  {
+    queue_section = current_section;
+    return; // Queue is invalid
+  }
+
+  current_section = queue_section;
 }
 
 void Editor::Window::set_current_file(const std::string& new_file)
@@ -289,9 +301,14 @@ void Editor::Window::set_current_file(const std::string& new_file)
   queue_file = new_file;
 }
 
+void Editor::Window::set_current_section(std::uint16_t new_section)
+{
+  queue_section = new_section;
+}
+
 bool Editor::Window::is_running() { return running; }
 Editor::Inputs Editor::Window::get_inputs() { return inputs; }
 std::string Editor::Window::get_current_file() { return current_file; };
 size_t Editor::Window::get_first_tile() { return firstTile; };
-unsigned int Editor::Window::get_current_section() { return current_section; }
+std::uint16_t Editor::Window::get_current_section() { return current_section; }
 unsigned int Editor::Window::get_current_zoom() { return current_zoom; }

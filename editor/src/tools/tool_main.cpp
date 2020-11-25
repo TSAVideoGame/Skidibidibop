@@ -108,3 +108,163 @@ void Editor::Tool::Main::Load::update(MouseState ms)
     }
   }
 }
+
+/*
+ * ========================================
+ * Sect(ions) Tool
+ * ========================================
+ */
+
+Editor::Tool::Main::Section::Section(SDLW::Renderer* renderer_p, int x_p, int y_p) : Editor::Tool::Numeric(renderer_p, "Sect.", x_p, y_p, 0, 999999, nullptr)
+{
+  current_section = Window::get_current_section();
+  variable = &current_section;
+}
+
+Editor::Tool::Main::Section::~Section()
+{
+
+}
+
+void Editor::Tool::Main::Section::update(MouseState ms)
+{
+  current_section = Window::get_current_section();
+
+  switch (ms)
+  {
+    case MouseState::HOVER:
+    {
+       break;
+    }
+    case MouseState::CLICK:
+    {
+      // Up button
+      if (hover_increment())
+      {
+        Window::selected_tool = nullptr;
+
+        if (current_section < max)
+        {
+          Window::set_current_section(current_section + 1);
+        }
+      }
+
+      // Down button
+      if (hover_decrement())
+      {
+        Window::selected_tool = nullptr;
+
+        if (current_section > min)
+        {
+          Window::set_current_section(current_section - 1);
+        }
+      }
+
+      break;
+    }
+    case MouseState::DRAG:
+    {
+      break;
+    }
+    case MouseState::RELEASE:
+    {
+      break;
+    }
+  }
+}
+
+/*
+ * ========================================
+ * SectionAdd Tool
+ * ========================================
+ */
+
+Editor::Tool::Main::SectionAdd::SectionAdd(SDLW::Renderer* renderer, int x, int y) : Editor::Tool::Base(renderer, "Sect+", x , y)
+{
+
+}
+
+void Editor::Tool::Main::SectionAdd::update(MouseState ms)
+{
+  Inputs inputs = Window::get_inputs();
+  switch (ms)
+  {
+    case MouseState::HOVER:
+    {
+       break;
+    }
+    case MouseState::CLICK:
+    {
+      if (inputs.mouseX >= x && inputs.mouseX < x + WIDTH && inputs.mouseY >= y && inputs.mouseY < y + HEIGHT)
+      {
+        Data::Types::Map::Section s;
+        s.size = {1, 1};
+        s.tiles.push_back(Data::Types::Map::Tile());
+        Window::data.map.sections.push_back(s);
+
+        Window::set_current_section(Window::data.map.sections.size() - 1);
+      }
+      break;
+    }
+    case MouseState::DRAG:
+    {
+      break;
+    }
+    case MouseState::RELEASE:
+    {
+      break;
+    }
+  }
+}
+
+/*
+ * ========================================
+ * SectionDelete Tool
+ * ========================================
+ */
+
+Editor::Tool::Main::SectionDelete::SectionDelete(SDLW::Renderer* renderer, int x, int y) : Editor::Tool::Base(renderer, "Sect-", x , y)
+{
+
+}
+
+void Editor::Tool::Main::SectionDelete::update(MouseState ms)
+{
+  Inputs inputs = Window::get_inputs();
+  switch (ms)
+  {
+    case MouseState::HOVER:
+    {
+       break;
+    }
+    case MouseState::CLICK:
+    {
+      if (inputs.mouseX >= x && inputs.mouseX < x + WIDTH && inputs.mouseY >= y && inputs.mouseY < y + HEIGHT)
+      {
+        if (Window::data.map.sections.size() > 1 && Window::get_current_section() != Window::data.map.sections.size() - 1)
+        {
+          Confirmation::Bool confirm("Are you sure (Will delete the last section)");
+          while (confirm.getData()->result == nullptr)
+          {
+            confirm.input();
+            confirm.update();
+            confirm.draw();
+          }
+          if (*reinterpret_cast<bool*>(confirm.getData()->result))
+          {
+            Window::data.map.sections.pop_back();
+          }
+        }
+        break;
+      }
+    }
+    case MouseState::DRAG:
+    {
+      break;
+    }
+    case MouseState::RELEASE:
+    {
+      break;
+    }
+  }
+}
