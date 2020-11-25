@@ -93,6 +93,15 @@ namespace Editor
           void update(MouseState);
         };
 
+        class State : public Numeric
+        {
+        public:
+          State(SDLW::Renderer*, int x, int y, int min, int max, std::uint16_t* variable);
+          ~State();
+
+          void update(MouseState);
+        };
+
         class Flag : public Numeric
         {
         public:

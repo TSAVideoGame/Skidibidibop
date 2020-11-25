@@ -215,8 +215,9 @@ Editor::Tool::Tile::Edit::Main::Main(SDLW::Renderer* renderer, int x, int y) : E
   tools.push_back(new RightCollision (renderer, x + WIDTH * 1 + 16 * ( 6) + HEIGHT * 2, initialY + HEIGHT * 2, nullptr));
   tools.push_back(new BottomCollision(renderer, x + WIDTH * 1 + 16 * ( 6) + HEIGHT * 2, initialY + HEIGHT * 3, nullptr));
   tools.push_back(new LeftCollision  (renderer, x + WIDTH * 1 + 16 * ( 6) + HEIGHT * 2, initialY + HEIGHT * 4, nullptr));
-  tools.push_back(new Flag           (renderer, x + WIDTH * 2 + 16 * (12) + HEIGHT * 4, initialY + HEIGHT * 0, 0, 999999, nullptr));
-  tools.push_back(new Monster        (renderer, x + WIDTH * 3 + 16 * (18) + HEIGHT * 6, initialY + HEIGHT * 0, 0, 999999, nullptr));
+  tools.push_back(new State          (renderer, x + WIDTH * 2 + 16 * (12) + HEIGHT * 4, initialY + HEIGHT * 0, 0, 999999, nullptr));
+  tools.push_back(new Flag           (renderer, x + WIDTH * 2 + 16 * (12) + HEIGHT * 4, initialY + HEIGHT * 1, 0, 999999, nullptr));
+  tools.push_back(new Monster        (renderer, x + WIDTH * 2 + 16 * (12) + HEIGHT * 4, initialY + HEIGHT * 2, 0, 999999, nullptr));
 }
 
 Editor::Tool::Tile::Edit::Main::~Main()
@@ -552,6 +553,64 @@ void Editor::Tool::Tile::Edit::LeftCollision::update(MouseState ms)
     {
       if (hover())
         *variable = !*variable;
+
+      break;
+    }
+    case MouseState::DRAG:
+    {
+      break;
+    }
+    case MouseState::RELEASE:
+    {
+      break;
+    }
+  }
+}
+
+/*
+ * ========================================
+ * Edit::State Tool
+ * ========================================
+ */
+Editor::Tool::Tile::Edit::State::State(SDLW::Renderer* renderer_p, int x_p, int y_p, int min_p, int max_p, std::uint16_t* variable_p) : Editor::Tool::Numeric(renderer_p, "State", x_p, y_p, min_p, max_p, variable_p)
+{
+
+}
+
+Editor::Tool::Tile::Edit::State::~State()
+{
+
+}
+
+void Editor::Tool::Tile::Edit::State::update(MouseState ms)
+{
+  variable = &dynamic_cast<Main*>(Window::selected_tool)->selected_tile->state;
+
+  switch (ms)
+  {
+    case MouseState::HOVER:
+    {
+       break;
+    }
+    case MouseState::CLICK:
+    {
+      // Up button
+      if (hover_increment())
+      {
+        if (*variable < max)
+        {
+          ++*variable;
+        }
+      }
+
+      // Down button
+      if (hover_decrement())
+      {
+        if (*variable > min)
+        {
+          --*variable;
+        }
+      }
 
       break;
     }
