@@ -259,14 +259,15 @@ void Editor::Tool::Tile::Edit::Main::update(MouseState ms)
           unsigned int map_y = section->size.y;
           size_t first_tile = Window::get_first_tile();
 
-          unsigned int window_tiles_x = Constants::Window.width / Constants::Grid.size;
+          unsigned int window_tiles_x = Constants::Window.width / grid_size;
           unsigned int max_tiles_x = map_x - (first_tile % map_x) < window_tiles_x ? map_x - (first_tile % map_x) : window_tiles_x;
-          unsigned int window_tiles_y = (Constants::Window.height - Constants::Window.toolBarHeight) / Constants::Grid.size;
+          unsigned int window_tiles_y = (Constants::Window.height - Constants::Window.toolBarHeight) / grid_size;
           unsigned int max_tiles_y = map_y - (first_tile / map_y) < window_tiles_y ? map_y - (first_tile / map_y) : window_tiles_y;
-          if (grid_x <= max_tiles_x - 1 && grid_y <= max_tiles_y + 1) // idk cheif, pure mystery
+
+          if (grid_x <= max_tiles_x - 1 && grid_y <= max_tiles_y - 1) // grid_ are indices, max_tiles_ are lengths
           {
-            selected_tile = &section->tiles[first_tile + grid_x + (map_x * (grid_y - first_tile / map_x))];
-            selected_tile_num = first_tile + grid_x + (map_x * (grid_y - first_tile / map_x));
+            selected_tile = &section->tiles[first_tile + grid_x + (map_x * grid_y)];
+            selected_tile_num = first_tile + grid_x + (map_x * grid_y);
           }
         }
       }
@@ -310,7 +311,7 @@ void Editor::Tool::Tile::Edit::Main::draw()
     renderer->set_draw_color(255, 255, 255, 128);
     SDL_Rect selected_tile_rect = {0, 0, grid_size, grid_size};
     selected_tile_rect.x = (selected_tile_num % map_x - first_tile % map_x) * grid_size;
-    selected_tile_rect.y = (selected_tile_num / map_y - first_tile / map_y) * grid_size;
+    selected_tile_rect.y = (selected_tile_num / map_x - first_tile / map_x) * grid_size;
     SDL_RenderFillRect(renderer->get_SDL(), &selected_tile_rect);
 
     // Draw the tools
