@@ -5,26 +5,26 @@ int main(int argc, char* args[])
   const int FPS = 30;
   const int FRAME_DELAY = 1000 / FPS;
 
-  Game::Core::Core::init();
+  Game::Core::init();
 
-  while (Game::Core::Core::isRunning())
+  while (Game::Core::is_running())
   {
-    Uint32 frameStart = SDL_GetTicks();
+    Uint32 frame_start = SDL_GetTicks();
 
-    Game::Core::Core::input();
-    Game::Core::Core::update();
-    Game::Core::Core::draw();
+    Game::Core::input();
+    Game::Core::update();
+    Game::Core::draw();
 
-    int frameTime = SDL_GetTicks() - frameStart;
+    int frame_time = SDL_GetTicks() - frame_start;
 
-    while (FRAME_DELAY > frameTime)
+    while (FRAME_DELAY > frame_time)
     {
-      Game::Core::Core::input();
-      frameTime = SDL_GetTicks() - frameStart;
+      Game::Core::input();
+      frame_time = SDL_GetTicks() - frame_start;
     }
   }
 
-  Game::Core::Core::close();
+  Game::Core::close();
 
   return 0;
 }

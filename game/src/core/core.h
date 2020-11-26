@@ -1,55 +1,56 @@
-#ifndef SKIDIBIDIBOP_GAME_CORE_CORE
-#define SKIDIBIDIBOP_GAME_CORE_CORE
+#ifndef SKIDIBIDIBOP_GAME_CORE
+#define SKIDIBIDIBOP_GAME_CORE
 
 #include "sdlw.h"
-#include "camera.h"
-#include "core_states.h"
-#include "core_manager_manager.h"
-#include "core_inputs.h"
+#include <vector>
+#include "plugin.h"
+#include <cstdint>
 
 namespace Game
 {
-  namespace Core
+  class Core
   {
-    struct
+  public:
+    static void init();
+    static void close();
+
+    static void input();
+    static void update();
+    static void draw();
+
+    // Plugin functions
+    template<typename T> static T get_plugin()
     {
-      struct
-      {
-        int WIDTH = 960;
-        int HEIGHT = 640;
-      } WINDOW;
-    } CONSTANTS;
+      static std::size_t index = add_plugin(new T());
+      static_assert(std::is_base_of<Plugins::Plugin, T>::value, "Invalid plugin");
+      return *(dynamic_cast<T*>(plugins[index]));
+    }
 
-    // Using an enum rather than an enum class to make some of the math easier
-    enum Directions {DIR_TOP, DIR_TOP_RIGHT, DIR_RIGHT, DIR_BOTTOM_RIGHT, DIR_BOTTOM, DIR_BOTTOM_LEFT, DIR_LEFT, DIR_TOP_LEFT};
+    // Get / Set
+    static bool is_running();
+  private:
+    // Unused methods
+    Core();
+    ~Core();
 
-    class Core
+    // Plugin functions
+    static void load_plugins();
+    static void close_plugins();
+    // The template uses this so I am defining it here as well
+    static std::size_t add_plugin(Plugins::Plugin* p)
     {
-    public:
-      static void init();
-      static void close();
+      static std::size_t index = 0;
+      plugins.push_back(p);
+      return index++;
+    }
 
-      static void input();
-      static void update();
-      static void draw();
-
-      static bool isRunning() { return running; }
-      static States::State getState() { return state; }
-      static Inputs::Pressed getInputs() { return inputs; }
-      static SDLW::Texture* const getTexture() { return texture; }
-
-      static Game::Core::Camera camera;
-    private:
-      Core();
-
-      static bool running;
-      static States::State state;
-      static Inputs::Pressed inputs;
-      static SDLW::Window* window;
-      static SDLW::Renderer* renderer;
-      static SDLW::Texture* texture;
-      static ManagerManager* manager;
-    };
+    // Basic stuff
+    static SDLW::Window* window;
+    static SDLW::Renderer* renderer;
+    static SDLW::Texture* spritesheet;
+    static bool running;
+    // Plugins
+    static std::vector<Plugins::Plugin*> plugins;
   };
 };
 

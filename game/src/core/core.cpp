@@ -1,124 +1,79 @@
 #include "core.h"
-#include <SDL2/SDL.h>
 
-bool Game::Core::Core::running = true;
-Game::Core::States::State Game::Core::Core::state = {Game::Core::States::States::TITLE, {}};
-Game::Core::Inputs::Pressed Game::Core::Core::inputs = {false, false, false, false, false, false, false, false};
-SDLW::Window* Game::Core::Core::window;
-SDLW::Renderer* Game::Core::Core::renderer;
-SDLW::Texture* Game::Core::Core::texture;
-Game::Core::ManagerManager* Game::Core::Core::manager;
+/*
+ * ========================================
+ * Game::Core
+ *
+ * Handles game loop input, update, and
+ * drawing
+ * ========================================
+ */
 
-Game::Core::Camera Game::Core::Core::camera = {0, 0};
+// Data members
+SDLW::Window* Game::Core::window;
+SDLW::Renderer* Game::Core::renderer;
+SDLW::Texture* Game::Core::spritesheet;
+bool Game::Core::running;
 
-void Game::Core::Core::init()
+std::vector<Game::Plugins::Plugin*> Game::Core::plugins;
+
+void Game::Core::init()
 {
-  if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-    running = false;
+  SDL_Init(SDL_INIT_EVERYTHING);
+  
+  window = new SDLW::Window("Skidibidbop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 960, 640, 0);
 
-  window = new SDLW::Window("Skidibidibop", 0, 0, CONSTANTS.WINDOW.WIDTH, CONSTANTS.WINDOW.HEIGHT, 0);
-  renderer = new SDLW::Renderer(window);
-  texture = new SDLW::Texture("res/spritesheet.png", renderer);
-
-  // This is for testing purposes
-  state.current = States::States::GAME;
-  state.data.game.state = States::Game::States::NORMAL;
-
-  manager = new ManagerManager(renderer);
+  running = true;
 }
 
-void Game::Core::Core::close()
+void Game::Core::close()
 {
-  delete manager;
-
-  delete texture;
-  delete renderer;
   delete window;
 
-  SDL_Quit();
+  SDL_Quit(); 
 }
 
-void Game::Core::Core::input()
+void Game::Core::input()
+{
+
+}
+
+void Game::Core::update()
 {
   SDL_Event e;
-  while (SDL_PollEvent(&e))
+  SDL_PollEvent(&e);
+
+  switch (e.type)
   {
-    switch (e.type)
+    case SDL_QUIT:
     {
-      case SDL_QUIT:
-      {
-        running = false;
-        break;
-      }
-      case SDL_KEYDOWN:
-      {
-        switch (e.key.keysym.sym)
-        {
-          case Inputs::UP_KEY:
-          {
-            inputs.up = true;
-            break;
-          }
-          case Inputs::RIGHT_KEY:
-          {
-            inputs.right = true;
-            break;
-          }
-          case Inputs::DOWN_KEY:
-          {
-            inputs.down = true;
-            break;
-          }
-          case Inputs::LEFT_KEY:
-          {
-            inputs.left = true;
-            break;
-          }
-        }
-        break;
-      }
-      case SDL_KEYUP:
-      {
-        switch (e.key.keysym.sym)
-        {
-          case Inputs::UP_KEY:
-          {
-            inputs.up = false;
-            break;
-          }
-          case Inputs::RIGHT_KEY:
-          {
-            inputs.right = false;
-            break;
-          }
-          case Inputs::DOWN_KEY:
-          {
-            inputs.down = false;
-            break;
-          }
-          case Inputs::LEFT_KEY:
-          {
-            inputs.left = false;
-            break;
-          }
-        }
-        break;
-      }
+      running = false;
+
+      break;
     }
   }
 }
 
-void Game::Core::Core::update()
+void Game::Core::draw()
 {
-  manager->update();
+
 }
 
-void Game::Core::Core::draw()
+// Plugin functions
+void Game::Core::load_plugins()
 {
-  renderer->setDrawColor(0, 0, 0, 255);
-  renderer->clear();
-
-  manager->draw();
-
-  renderer->present();
+  plugins.reserve(0);
 }
+
+void Game::Core::close_plugins()
+{
+  for (Plugins::Plugin* p : plugins)
+    delete p;
+}
+
+// Getters / Setters
+bool Game::Core::is_running() { return running; }
+
+// Unused functions
+Game::Core::Core() {}
+Game::Core::~Core() {}

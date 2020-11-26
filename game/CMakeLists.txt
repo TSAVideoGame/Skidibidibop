@@ -6,24 +6,16 @@ add_executable(game
   ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
 
   ${CMAKE_CURRENT_LIST_DIR}/src/core/core.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/core/core_manager_manager.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/core/core_object.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/core/core_object_manager.cpp
-
-  ${CMAKE_CURRENT_LIST_DIR}/src/player/player_manager.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/player/player_object.cpp
-
-  ${CMAKE_CURRENT_LIST_DIR}/src/map/map.cpp
-  ${CMAKE_CURRENT_LIST_DIR}/src/map/tile.cpp
 )
 
 # Ignore the /usr/include/SDL2 part, my VIM is messed up :(
 target_include_directories(game PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}/plugins
+  ${CMAKE_CURRENT_LIST_DIR}/plugins/audio
+  ${CMAKE_CURRENT_LIST_DIR}/plugins/text
+
   ${CMAKE_CURRENT_LIST_DIR}/src
   ${CMAKE_CURRENT_LIST_DIR}/src/core
-  ${CMAKE_CURRENT_LIST_DIR}/src/map
-  ${CMAKE_CURRENT_LIST_DIR}/src/player
-  ${CMAKE_CURRENT_LIST_DIR}/src/sdl
   ${CMAKE_CURRENT_LIST_DIR}/../data/include
   ${CMAKE_CURRENT_LIST_DIR}/../sdlw/include
   /usr/include/SDL2
