@@ -19,18 +19,26 @@ std::vector<Game::Plugins::Plugin*> Game::Core::plugins;
 
 void Game::Core::init()
 {
-  SDL_Init(SDL_INIT_EVERYTHING);
+  SDL_Init(0);
+  SDL_InitSubSystem(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_EVENTS);
   
   window = new SDLW::Window("Skidibidbop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 960, 640, 0);
 
   running = true;
+
+  load_plugins();
+
+  get_plugin<Plugins::Audio>()->play_music(0);
 }
 
 void Game::Core::close()
 {
+  close_plugins();
+
   delete window;
 
-  SDL_Quit(); 
+  SDL_QuitSubSystem(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+  SDL_Quit();
 }
 
 void Game::Core::input()
@@ -64,7 +72,9 @@ void Game::Core::draw()
 // Plugin functions
 void Game::Core::load_plugins()
 {
-  plugins.reserve(0);
+  plugins.reserve(1);
+
+  get_plugin<Plugins::Audio>()->add_music("res/music/TSA_test_1.wav");
 }
 
 void Game::Core::close_plugins()

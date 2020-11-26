@@ -3,7 +3,7 @@
 
 #include "sdlw.h"
 #include <vector>
-#include "plugin.h"
+#include "plugins.h"
 #include <cstdint>
 
 namespace Game
@@ -19,11 +19,11 @@ namespace Game
     static void draw();
 
     // Plugin functions
-    template<typename T> static T get_plugin()
+    template<typename T> static T* get_plugin()
     {
       static std::size_t index = add_plugin(new T());
       static_assert(std::is_base_of<Plugins::Plugin, T>::value, "Invalid plugin");
-      return *(dynamic_cast<T*>(plugins[index]));
+      return (dynamic_cast<T*>(plugins[index]));
     }
 
     // Get / Set

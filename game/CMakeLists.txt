@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.10)
 project(game)
 
 add_executable(game
+  ${CMAKE_CURRENT_LIST_DIR}/plugins/audio/audio.cpp
+
   ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
 
   ${CMAKE_CURRENT_LIST_DIR}/src/core/core.cpp
@@ -26,7 +28,7 @@ target_link_directories(game PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../sdlw/lib
 )
 
-target_link_libraries(game sbbdata sdlw SDL2)
+target_link_libraries(game sbbdata sdlw SDL2 SDL2_mixer)
 
 set_target_properties(game PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
 

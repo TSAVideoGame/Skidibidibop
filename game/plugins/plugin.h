@@ -1,5 +1,5 @@
-#ifndef SKIDIBIDIBOP_GAME_PLUGIN
-#define SKIDIBIDIBOP_GAME_PLUGIN
+#ifndef SKIDIBIDIBOP_GAME_PLUGINS_PLUGIN
+#define SKIDIBIDIBOP_GAME_PLUGINS_PLUGIN
 
 namespace Game
 {
@@ -12,8 +12,8 @@ namespace Game
     class Plugin
     {
     protected:
-      Plugin();
-      virtual ~Plugin();
+      Plugin() {}
+      virtual ~Plugin() {}
 
       friend class Game::Core; // Only core should create/delete plugins, IDK why I need full scope but getting errors without it
     };
