@@ -17,10 +17,11 @@ int main(int argc, char* args[])
 
     int frame_time = SDL_GetTicks() - frame_start;
 
-    while (FRAME_DELAY > frame_time)
+    if (FRAME_DELAY > frame_time)
     {
-      Game::Core::input();
-      frame_time = SDL_GetTicks() - frame_start;
+      SDL_Delay(FRAME_DELAY - frame_time);
+      //Game::Core::input();
+      //frame_time = SDL_GetTicks() - frame_start;
     }
   }
 

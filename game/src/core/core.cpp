@@ -35,23 +35,25 @@ void Game::Core::close()
 
 void Game::Core::input()
 {
+  SDL_Event e;
 
+  while (SDL_PollEvent(&e))
+  {
+    switch (e.type)
+    {
+      case SDL_QUIT:
+      {
+        running = false;
+
+        break;
+      }
+    }
+  }
 }
 
 void Game::Core::update()
 {
-  SDL_Event e;
-  SDL_PollEvent(&e);
 
-  switch (e.type)
-  {
-    case SDL_QUIT:
-    {
-      running = false;
-
-      break;
-    }
-  }
 }
 
 void Game::Core::draw()

@@ -17,3 +17,39 @@ p, a, span, h2, h3, h4, h5, h6 {
   font-family: sans-serif;
   color: #3a3a3a;
 }
+
+pre.highlight {
+  padding: 16px;
+  border-radius: 16px;
+  background-color: #2a2d37;
+  color: #fff;
+  box-shadow: 0 5px 15px rgba(0,0,0,.25);
+  overflow-x: auto;
+  padding-right: 16px;
+
+  span {
+    color: inherit;
+
+    // Code styling
+    &.k {
+      color: #8350af;
+    }
+
+    &.nc {
+      color: #89cbfe;
+    }
+
+    &.kt {
+      color: #5cb8ff;
+    }
+
+    &.nl {
+      color: #a77ccc;
+    }
+
+    &.c1 {
+      color: #ccc;
+      font-style: italic;
+    }
+  }
+}
