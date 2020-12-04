@@ -8,6 +8,10 @@ add_executable(game
   ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
 
   ${CMAKE_CURRENT_LIST_DIR}/src/core/core.cpp
+
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/entity.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/component.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/transform_component.cpp
 )
 
 # Ignore the /usr/include/SDL2 part, my VIM is messed up :(
@@ -18,6 +22,9 @@ target_include_directories(game PUBLIC
 
   ${CMAKE_CURRENT_LIST_DIR}/src
   ${CMAKE_CURRENT_LIST_DIR}/src/core
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components
+
   ${CMAKE_CURRENT_LIST_DIR}/../data/include
   ${CMAKE_CURRENT_LIST_DIR}/../sdlw/include
   /usr/include/SDL2
