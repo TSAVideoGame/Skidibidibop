@@ -39,12 +39,24 @@ namespace Game
         {
           std::uint32_t index;
         };
+
+        Instance get_instance(Entity&);
+
+        SDL_Rect get_src_rect(Instance&);
+        void     set_src_rect(Instance&, SDL_Rect&);
+
+        SDL_Rect get_dest_rect(Instance&);
+        void     set_dest_rect(Instance&, SDL_Rect&);
+
+        Instance add_component(Entity&);
+        void destroy_component(Instance&);
+        // TODO: Delete componenet when entity is destroyed
       private:
         Data data;
 
         std::unordered_map<Entity, std::uint32_t> map;
 
-        void allocate(std::uint32_t);
+        void allocate(std::size_t);
       };
     };
   };

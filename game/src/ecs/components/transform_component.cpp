@@ -5,7 +5,19 @@
 
 Game::ECS::Components::TransformManager::TransformManager()
 {
-  allocate(1); // allocate the null component
+  // Initialze data
+  data.instances = 0;
+  data.allocated = 0;
+  data.buffer = std::malloc(0);
+
+  data.entity = reinterpret_cast<Entity*>(data.buffer);
+  data.tile_x = reinterpret_cast<std::uint16_t*>(data.buffer);
+  data.tile_y = reinterpret_cast<std::uint16_t*>(data.buffer);
+  data.offset_x = reinterpret_cast<int*>(data.buffer);
+  data.offset_y = reinterpret_cast<int*>(data.buffer);
+
+  // Allocate at least the null component
+  allocate(1);
 }
 
 Game::ECS::Components::TransformManager::~TransformManager()

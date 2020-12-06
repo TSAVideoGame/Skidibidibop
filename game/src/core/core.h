@@ -5,6 +5,7 @@
 #include <vector>
 #include "plugins.h"
 #include <cstdint>
+#include "entity.h"
 #include "component.h"
 
 namespace Game
@@ -32,7 +33,7 @@ namespace Game
 
     // Components
     // TODO: It shouldn't really be public
-    static ECS::Components::Manager components;
+    static ECS::Components::Manager* components;
   private:
     // Unused methods
     Core();
@@ -56,6 +57,8 @@ namespace Game
     static bool running;
     // Plugins
     static std::vector<Plugins::Plugin*> plugins;
+    // ECS
+    static ECS::EntityManager* entity_manager; 
   };
 };
 

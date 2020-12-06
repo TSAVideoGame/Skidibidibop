@@ -3,11 +3,13 @@
 
 namespace Game
 {
-  const struct
+  constexpr struct
   {
     struct
     {
-    };
+      int width = 960;
+      int height = 640;
+    } Window;
   } Constants;
 };
 

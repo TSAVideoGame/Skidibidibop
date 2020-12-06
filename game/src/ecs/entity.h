@@ -22,7 +22,7 @@ namespace Game
       std::uint32_t get_index() const { return id & INDEX_MASK; }
       std::uint32_t get_generation() const { return (id >> INDEX_BITS) & GENERATION_MASK; }
 
-      bool operator ==(const Entity& e) { return id == e.id; }
+      bool operator ==(const Entity& e) const { return id == e.id; }
     };
 
     class EntityManager
@@ -46,7 +46,7 @@ namespace std
 {
   template<> struct hash<Game::ECS::Entity>
   {
-    std::size_t operator()(const Game::ECS::Entity& e)
+    std::size_t operator()(const Game::ECS::Entity& e) const
     {
       return std::hash<std::uint32_t>{}(e.id);
     }

@@ -1,4 +1,5 @@
 #include "core.h"
+#include "constants.h"
 
 /*
  * ========================================
@@ -9,34 +10,63 @@
  * ========================================
  */
 
-// Data members
-SDLW::Window* Game::Core::window;
-SDLW::Renderer* Game::Core::renderer;
-SDLW::Texture* Game::Core::spritesheet;
-bool Game::Core::running;
+/*
+ * ========================================
+ * Data members
+ * ========================================
+ */
+// Basic
+SDLW::Window* Game::Core::window = nullptr;
+SDLW::Renderer* Game::Core::renderer = nullptr;
+SDLW::Texture* Game::Core::spritesheet = nullptr;
+bool Game::Core::running = false;
 
+// Plugins
 std::vector<Game::Plugins::Plugin*> Game::Core::plugins;
 
-Game::ECS::Components::Manager Game::Core::components;
+// ECS
+Game::ECS::Components::Manager* Game::Core::components = nullptr;
+Game::ECS::EntityManager* Game::Core::entity_manager = nullptr;
 
+/*
+ * ========================================
+ * Core::init
+ * ========================================
+ */
 void Game::Core::init()
 {
   SDL_Init(0);
   SDL_InitSubSystem(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_EVENTS);
   
-  window = new SDLW::Window("Skidibidbop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 960, 640, 0);
+  window = new SDLW::Window("Skidibidbop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Constants.Window.width, Constants.Window.height, 0);
+  renderer = new SDLW::Renderer(window);
+  spritesheet = new SDLW::Texture("res/spritesheet.png", renderer);
 
   running = true;
 
   load_plugins();
 
+  // Testing plugins
   get_plugin<Plugins::Audio>()->play_music(0);
+
+  components = new ECS::Components::Manager();
+  entity_manager = new ECS::EntityManager();
 }
 
+/*
+ * ========================================
+ * Core::close
+ * ========================================
+ */
 void Game::Core::close()
 {
+  delete entity_manager;
+  delete components;
+
   close_plugins();
 
+  delete spritesheet;
+  delete renderer;
   delete window;
 
   SDL_QuitSubSystem(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_EVENTS);

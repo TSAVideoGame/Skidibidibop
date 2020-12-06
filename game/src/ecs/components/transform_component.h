@@ -60,6 +60,7 @@ namespace Game
 
         Instance add_component(Entity&);
         void destroy_component(Instance&);
+        // TODO: Destroy component when entity is destroyed
       private:
         Data data;
         // Given an entity id, this is how we will get the instance index
