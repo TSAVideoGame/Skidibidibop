@@ -45,10 +45,18 @@ namespace Game
         };
 
         Instance get_instance(Entity&);
+
         std::uint16_t get_tile_x(Instance&);
+        void          set_tile_x(Instance&, std::uint16_t);
+
         std::uint16_t get_tile_y(Instance&);
-        int get_offset_x(Instance&);
-        int get_offset_y(Instance&);
+        void          set_tile_y(Instance&, std::uint16_t);
+
+        int           get_offset_x(Instance&);
+        void          set_offset_x(Instance&, int);
+
+        int           get_offset_y(Instance&);
+        void          set_offset_y(Instance&, int);
 
         Instance add_component(Entity&);
         void destroy_component(Instance&);

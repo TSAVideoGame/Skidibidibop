@@ -17,6 +17,8 @@ bool Game::Core::running;
 
 std::vector<Game::Plugins::Plugin*> Game::Core::plugins;
 
+Game::ECS::Components::Manager Game::Core::components;
+
 void Game::Core::init()
 {
   SDL_Init(0);

@@ -5,6 +5,7 @@
 #include <vector>
 #include "plugins.h"
 #include <cstdint>
+#include "component.h"
 
 namespace Game
 {
@@ -28,6 +29,10 @@ namespace Game
 
     // Get / Set
     static bool is_running();
+
+    // Components
+    // TODO: It shouldn't really be public
+    static ECS::Components::Manager components;
   private:
     // Unused methods
     Core();
