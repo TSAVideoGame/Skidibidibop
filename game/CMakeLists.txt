@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(game)
 
 add_executable(game
+  ${CMAKE_CURRENT_LIST_DIR}/plugins/plugin.cpp
   ${CMAKE_CURRENT_LIST_DIR}/plugins/audio/audio.cpp
 
   ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp

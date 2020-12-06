@@ -1,5 +1,6 @@
 #include "core.h"
 #include "constants.h"
+#include "plugins.h"
 
 /*
  * ========================================
@@ -21,13 +22,6 @@ SDLW::Renderer* Game::Core::renderer = nullptr;
 SDLW::Texture* Game::Core::spritesheet = nullptr;
 bool Game::Core::running = false;
 
-// Plugins
-std::vector<Game::Plugins::Plugin*> Game::Core::plugins;
-
-// ECS
-Game::ECS::Components::Manager* Game::Core::components = nullptr;
-Game::ECS::EntityManager* Game::Core::entity_manager = nullptr;
-
 /*
  * ========================================
  * Core::init
@@ -44,13 +38,9 @@ void Game::Core::init()
 
   running = true;
 
-  load_plugins();
-
   // Testing plugins
-  get_plugin<Plugins::Audio>()->play_music(0);
-
-  components = new ECS::Components::Manager();
-  entity_manager = new ECS::EntityManager();
+  Plugins::Manager::get_instance().get_plugin<Plugins::Audio>()->add_music("res/music/TSA_test_1.wav");
+  Plugins::Manager::get_instance().get_plugin<Plugins::Audio>()->play_music(0);
 }
 
 /*
@@ -60,11 +50,6 @@ void Game::Core::init()
  */
 void Game::Core::close()
 {
-  delete entity_manager;
-  delete components;
-
-  close_plugins();
-
   delete spritesheet;
   delete renderer;
   delete window;
@@ -99,20 +84,6 @@ void Game::Core::update()
 void Game::Core::draw()
 {
 
-}
-
-// Plugin functions
-void Game::Core::load_plugins()
-{
-  plugins.reserve(1);
-
-  get_plugin<Plugins::Audio>()->add_music("res/music/TSA_test_1.wav");
-}
-
-void Game::Core::close_plugins()
-{
-  for (Plugins::Plugin* p : plugins)
-    delete p;
 }
 
 // Getters / Setters

@@ -3,10 +3,7 @@
 
 #include "sdlw.h"
 #include <vector>
-#include "plugins.h"
 #include <cstdint>
-#include "entity.h"
-#include "component.h"
 
 namespace Game
 {
@@ -20,45 +17,18 @@ namespace Game
     static void update();
     static void draw();
 
-    // Plugin functions
-    template<typename T> static T* get_plugin()
-    {
-      static std::size_t index = add_plugin(new T());
-      static_assert(std::is_base_of<Plugins::Plugin, T>::value, "Invalid plugin");
-      return (dynamic_cast<T*>(plugins[index]));
-    }
-
     // Get / Set
     static bool is_running();
-
-    // Components
-    // TODO: It shouldn't really be public
-    static ECS::Components::Manager* components;
   private:
     // Unused methods
     Core();
     ~Core();
-
-    // Plugin functions
-    static void load_plugins();
-    static void close_plugins();
-    // The template uses this so I am defining it here as well
-    static std::size_t add_plugin(Plugins::Plugin* p)
-    {
-      static std::size_t index = 0;
-      plugins.push_back(p);
-      return index++;
-    }
 
     // Basic stuff
     static SDLW::Window* window;
     static SDLW::Renderer* renderer;
     static SDLW::Texture* spritesheet;
     static bool running;
-    // Plugins
-    static std::vector<Plugins::Plugin*> plugins;
-    // ECS
-    static ECS::EntityManager* entity_manager; 
   };
 };
 

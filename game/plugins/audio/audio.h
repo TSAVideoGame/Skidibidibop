@@ -44,8 +44,11 @@ namespace Game
 
       AudioData data;
 
+      friend class Manager;
       friend class Game::Core;
     };
+
+    extern Manager::RegisterPlugin<Audio> audio_plugin;
   };
 };
 

@@ -1,7 +1,7 @@
 #include "audio.h"
 #include "sdlw.h"
 
-#include <iostream>
+Game::Plugins::Manager::RegisterPlugin<Game::Plugins::Audio> Game::Plugins::audio_plugin;
 
 // Public members
 void Game::Plugins::Audio::play_music(int index)

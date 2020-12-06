@@ -58,6 +58,8 @@ namespace Game
 
         void allocate(std::size_t);
       };
+
+      Manager::RegisterComponent<RenderManager> render_manager();
     };
   };
 };

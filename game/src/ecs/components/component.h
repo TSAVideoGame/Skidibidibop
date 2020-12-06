@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <deque>
+#include <unordered_map>
 
 namespace Game
 {
@@ -25,27 +26,38 @@ namespace Game
         virtual ~Component() {}
       };
 
+      /*
+       * ========================================
+       * Components::Manager
+       *
+       * A singleton which holds all the components
+       * ========================================
+       */
       class Manager
       {
       public:
-        Manager();
-        ~Manager();
+        static Manager& get_instance();
 
-        template<typename T> T* get_component()
+        template <typename T> class RegisterComponent
         {
-          static std::size_t index = add_component(new T());
-          static_assert(std::is_base_of<Component, T>::value, "Invalid component");
+        public:
+          RegisterComponent()
+          {
+            Manager::get_instance().components.push_back(new T());
+            Manager::get_instance().get_component<T>();
+          }
+        };
+
+        template <typename T> T* get_component()
+        {
+          static std::size_t index = components.size() - 1;
           return dynamic_cast<T*>(components[index]);
         }
       private:
-        std::vector<Component*> components;
+        Manager();
+        ~Manager();
 
-        std::size_t add_component(Component* c)
-        {
-          static std::size_t index = 0;
-          components.push_back(c);
-          return index++;
-        }
+        static std::vector<Component*> components;
       };
     };
   };

@@ -68,6 +68,9 @@ namespace Game
 
         void allocate(std::uint32_t);
       };
+      
+      // Register the transform component
+      Manager::RegisterComponent<TransformManager> transform_manager();
     };
   };
 };
