@@ -2,6 +2,7 @@
 #define SKIDIBIDIBOP_GAME_ECS_SYSTEMS_SYSTEM
 
 #include <vector>
+#include <stdexcept>
 
 namespace Game
 {
@@ -23,8 +24,12 @@ namespace Game
        * ========================================
        * Systems::Manager
        *
+       * Singleton managing systems
+       *
        * This works a little differently than
        * the plugin and component classes
+       *
+       * TODO: Order of updates/draws
        * ========================================
        */
       struct ManagerData
@@ -32,6 +37,8 @@ namespace Game
       private:
         std::vector<void(*)()> update_functions;
         std::vector<void(*)()> draw_functions;
+
+        std::size_t index = 0;
         std::vector<System*> systems;
 
         friend class Manager;
@@ -40,17 +47,32 @@ namespace Game
       class Manager
       {
       public:
-        static void register_system(System*);
-        static void register_update(void(*)());
-        static void register_draw(void(*)());
+        static Manager& get_instance();
+
+        void register_update(void(*)());
+        void register_draw(void(*)());
+
+        template <typename T> class RegisterSystem
+        {
+        public:
+          RegisterSystem()
+          {
+            static_assert(std::is_base_of<System, T>::value, "System does not dervie from Game::ECS::Systems::System");
+            Manager::get_instance().data.systems.push_back(new T());
+          }
+        };
       private:
-        static void init();
-        static void close();
+        // TODO: Core should not create/delete manager
+        Manager();
+        ~Manager();
 
-        static void update();
-        static void draw();
+        void init();
+        void close();
 
-        static ManagerData data;
+        void update();
+        void draw();
+
+        ManagerData data;
 
         friend class Game::Core;
       };

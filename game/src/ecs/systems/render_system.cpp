@@ -1,7 +1,7 @@
 #include "render_system.h"
 #include <iostream>
 
-//Game::ECS::Systems::Manager::register_system(new Game::ECS::Systems::Render());
+Game::ECS::Systems::Manager::RegisterSystem<Game::ECS::Systems::Render> Game::ECS::Systems::render_system;
 
 void Game::ECS::Systems::Render::draw()
 {
@@ -10,5 +10,5 @@ void Game::ECS::Systems::Render::draw()
 
 void Game::ECS::Systems::Render::register_functions()
 {
-  Manager::register_draw(draw); 
+  Manager::get_instance().register_draw(draw); 
 }

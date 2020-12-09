@@ -2,8 +2,6 @@
 #include "transform_component.h"
 #include "render_component.h"
 
-std::vector<Game::ECS::Components::Component*> Game::ECS::Components::Manager::components;
-
 Game::ECS::Components::Manager& Game::ECS::Components::Manager::get_instance()
 {
   static Manager instance;

@@ -5,7 +5,14 @@
  * Systems::Manager
  * ========================================
  */
-Game::ECS::Systems::ManagerData Game::ECS::Systems::Manager::data;
+Game::ECS::Systems::Manager::Manager() {}
+Game::ECS::Systems::Manager::~Manager() {}
+
+Game::ECS::Systems::Manager& Game::ECS::Systems::Manager::get_instance()
+{
+  static Manager instance;
+  return instance;
+}
 
 void Game::ECS::Systems::Manager::init()
 {
@@ -39,11 +46,6 @@ void Game::ECS::Systems::Manager::draw()
  * are just registering (the verb) the systems
  * ========================================
  */
-void Game::ECS::Systems::Manager::register_system(System* s)
-{
-  data.systems.push_back(s);
-}
-
 void Game::ECS::Systems::Manager::register_update(void(*f)())
 {
   data.update_functions.push_back(f);

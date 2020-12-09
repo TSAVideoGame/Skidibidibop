@@ -2,8 +2,7 @@
 #define SKIDIBIDIBOP_GAME_ECS_COMPONENTS_COMPONENT
 
 #include <vector>
-#include <deque>
-#include <unordered_map>
+#include <stdexcept>
 
 namespace Game
 {
@@ -44,20 +43,20 @@ namespace Game
           RegisterComponent()
           {
             Manager::get_instance().components.push_back(new T());
-            Manager::get_instance().get_component<T>();
           }
         };
 
         template <typename T> T* get_component()
         {
-          static std::size_t index = components.size() - 1;
-          return dynamic_cast<T*>(components[index]);
+          static std::size_t i = index == components.size() - 1 ? index++ : throw std::logic_error("Unregistered component");
+          return dynamic_cast<T*>(components[i]);
         }
       private:
         Manager();
         ~Manager();
 
-        static std::vector<Component*> components;
+        std::size_t index = 0;
+        std::vector<Component*> components;
       };
     };
   };

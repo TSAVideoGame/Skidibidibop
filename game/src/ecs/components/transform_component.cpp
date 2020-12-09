@@ -3,6 +3,8 @@
 #include <cstring>
 #include <stdexcept>
 
+Game::ECS::Components::Manager::RegisterComponent<Game::ECS::Components::TransformManager> Game::ECS::Components::transform_manager;
+
 Game::ECS::Components::TransformManager::TransformManager()
 {
   // Initialze data

@@ -2,6 +2,7 @@
 #define SKIDIBIDIBOP_GAME_PLUGINS_PLUGIN
 
 #include <vector>
+#include <stdexcept>
 
 namespace Game
 {
@@ -36,21 +37,20 @@ namespace Game
         {
           static_assert(std::is_base_of<Plugin, T>::value, "Plugin does not derive from Game::Plugins::Plugin");
           Manager::get_instance().plugins.push_back(new T());
-          Manager::get_instance().get_plugin<T>();
         }
       };
 
-      // TODO: This will mess up if you get a plugin which isn't registered
       template <typename T> T* get_plugin()
       {
-        static std::size_t index = plugins.size() - 1;
-        return dynamic_cast<T*>(plugins[index]);
+        static std::size_t i = index == plugins.size() - 1 ? index++ : throw std::logic_error("Getting unregistered plugin");
+        return dynamic_cast<T*>(plugins[i]);
       }
     private:
       Manager();
       ~Manager();
 
-      static std::vector<Plugin*> plugins; 
+      std::size_t index = 0; // Plugin index, needed for the get_plugin function
+      std::vector<Plugin*> plugins; 
     };
   };
 };

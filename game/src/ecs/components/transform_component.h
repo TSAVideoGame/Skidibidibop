@@ -70,7 +70,7 @@ namespace Game
       };
       
       // Register the transform component
-      Manager::RegisterComponent<TransformManager> transform_manager();
+      extern Manager::RegisterComponent<TransformManager> transform_manager;
     };
   };
 };

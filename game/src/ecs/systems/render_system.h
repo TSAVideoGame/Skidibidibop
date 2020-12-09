@@ -15,6 +15,8 @@ namespace Game
         static void draw();
         void register_functions();
       };
+
+      extern Manager::RegisterSystem<Render> render_system;
     };
   };
 };

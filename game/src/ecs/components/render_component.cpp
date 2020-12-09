@@ -2,6 +2,8 @@
 #include <cstring>
 #include <stdexcept>
 
+Game::ECS::Components::Manager::RegisterComponent<Game::ECS::Components::RenderManager> Game::ECS::Components::render_manager;
+
 Game::ECS::Components::RenderManager::RenderManager()
 {
   // Initialze data

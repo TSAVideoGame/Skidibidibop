@@ -1,6 +1,7 @@
 #include "core.h"
 #include "constants.h"
 #include "plugins.h"
+#include "system.h"
 
 /*
  * ========================================
@@ -38,6 +39,8 @@ void Game::Core::init()
 
   running = true;
 
+  ECS::Systems::Manager::get_instance().init();
+
   // Testing plugins
   Plugins::Manager::get_instance().get_plugin<Plugins::Audio>()->add_music("res/music/TSA_test_1.wav");
   Plugins::Manager::get_instance().get_plugin<Plugins::Audio>()->play_music(0);
@@ -50,6 +53,8 @@ void Game::Core::init()
  */
 void Game::Core::close()
 {
+  ECS::Systems::Manager::get_instance().close();
+
   delete spritesheet;
   delete renderer;
   delete window;
@@ -78,12 +83,12 @@ void Game::Core::input()
 
 void Game::Core::update()
 {
-
+  ECS::Systems::Manager::get_instance().update();
 }
 
 void Game::Core::draw()
 {
-
+  ECS::Systems::Manager::get_instance().draw();
 }
 
 // Getters / Setters
