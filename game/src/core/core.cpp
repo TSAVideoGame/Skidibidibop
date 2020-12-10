@@ -3,6 +3,11 @@
 #include "plugins.h"
 #include "system.h"
 
+// Temporary
+#include "entity.h"
+#include "component.h"
+#include "render_component.h"
+
 /*
  * ========================================
  * Game::Core
@@ -22,6 +27,10 @@ SDLW::Window* Game::Core::window = nullptr;
 SDLW::Renderer* Game::Core::renderer = nullptr;
 SDLW::Texture* Game::Core::spritesheet = nullptr;
 bool Game::Core::running = false;
+
+// Temporary entities to test out drawing
+static Game::ECS::Entity player = Game::ECS::EntityManager::get_instance().create_entity();
+#include <iostream>
 
 /*
  * ========================================
@@ -44,6 +53,15 @@ void Game::Core::init()
   // Testing plugins
   Plugins::Manager::get_instance().get_plugin<Plugins::Audio>()->add_music("res/music/TSA_test_1.wav");
   Plugins::Manager::get_instance().get_plugin<Plugins::Audio>()->play_music(0);
+
+  // ECS testing
+  ECS::Components::RenderManager* rm = ECS::Components::Manager::get_instance().get_component<ECS::Components::RenderManager>();
+  ECS::Components::RenderManager::Instance rmi = rm->add_component(player);
+
+  SDL_Rect src_rect = {0, 6 * 32, 32 ,32};
+  rm->set_src_rect(rmi, src_rect);
+  SDL_Rect dest_rect = {0, 0, 32, 32};
+  rm->set_dest_rect(rmi, dest_rect);
 }
 
 /*
@@ -88,7 +106,11 @@ void Game::Core::update()
 
 void Game::Core::draw()
 {
-  ECS::Systems::Manager::get_instance().draw();
+  renderer->clear();
+
+  ECS::Systems::Manager::get_instance().draw(renderer);
+
+  renderer->present();
 }
 
 // Getters / Setters

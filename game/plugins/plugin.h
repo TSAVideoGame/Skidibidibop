@@ -37,6 +37,7 @@ namespace Game
         {
           static_assert(std::is_base_of<Plugin, T>::value, "Plugin does not derive from Game::Plugins::Plugin");
           Manager::get_instance().plugins.push_back(new T());
+          Manager::get_instance().get_plugin<T>(); // Increments index
         }
       };
 

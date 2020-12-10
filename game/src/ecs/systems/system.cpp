@@ -32,10 +32,10 @@ void Game::ECS::Systems::Manager::update()
     f();
 }
 
-void Game::ECS::Systems::Manager::draw()
+void Game::ECS::Systems::Manager::draw(SDLW::Renderer* renderer)
 {
-  for (void(*f)() : data.draw_functions)
-    f();
+  for (void(*f)(SDLW::Renderer*) : data.draw_functions)
+    f(renderer);
 }
 
 /*
@@ -51,7 +51,7 @@ void Game::ECS::Systems::Manager::register_update(void(*f)())
   data.update_functions.push_back(f);
 }
 
-void Game::ECS::Systems::Manager::register_draw(void(*f)())
+void Game::ECS::Systems::Manager::register_draw(void(*f)(SDLW::Renderer*))
 {
   data.draw_functions.push_back(f);
 }

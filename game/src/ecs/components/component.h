@@ -4,6 +4,8 @@
 #include <vector>
 #include <stdexcept>
 
+#include <string>
+
 namespace Game
 {
   namespace ECS
@@ -43,6 +45,7 @@ namespace Game
           RegisterComponent()
           {
             Manager::get_instance().components.push_back(new T());
+            Manager::get_instance().get_component<T>(); // This is needed to increment the index
           }
         };
 

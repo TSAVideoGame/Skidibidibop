@@ -1,5 +1,11 @@
 #include "entity.h"
 
+Game::ECS::EntityManager& Game::ECS::EntityManager::get_instance()
+{
+  static EntityManager instance;
+  return instance;
+}
+
 /*
  * ========================================
  * EntityManager::create_entity

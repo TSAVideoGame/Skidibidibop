@@ -28,10 +28,15 @@ namespace Game
     class EntityManager
     {
     public:
+      static EntityManager& get_instance();
+
       Entity create_entity();
       void destory_entity(Entity& e);
       bool is_alive(const Entity& e);
     private:
+      EntityManager() {}
+      ~EntityManager() {}
+
       Entity build_entity(std::uint32_t index, std::uint32_t generation);
 
       std::vector<std::uint8_t> generations;

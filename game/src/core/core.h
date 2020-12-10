@@ -19,6 +19,8 @@ namespace Game
 
     // Get / Set
     static bool is_running();
+    // Temporary
+    static SDLW::Texture* get_texture() { return spritesheet; }
   private:
     // Unused methods
     Core();

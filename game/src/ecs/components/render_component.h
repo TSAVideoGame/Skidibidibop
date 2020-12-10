@@ -51,8 +51,8 @@ namespace Game
         Instance add_component(Entity&);
         void destroy_component(Instance&);
         // TODO: Delete componenet when entity is destroyed
-      private:
         Data data;
+      private:
 
         std::unordered_map<Entity, std::uint32_t> map;
 

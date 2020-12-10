@@ -1,6 +1,7 @@
 #ifndef SKIDIBIDIBOP_GAME_ECS_SYSTEMS_SYSTEM
 #define SKIDIBIDIBOP_GAME_ECS_SYSTEMS_SYSTEM
 
+#include "sdlw.h"
 #include <vector>
 #include <stdexcept>
 
@@ -36,7 +37,7 @@ namespace Game
       {
       private:
         std::vector<void(*)()> update_functions;
-        std::vector<void(*)()> draw_functions;
+        std::vector<void(*)(SDLW::Renderer*)> draw_functions;
 
         std::size_t index = 0;
         std::vector<System*> systems;
@@ -50,7 +51,7 @@ namespace Game
         static Manager& get_instance();
 
         void register_update(void(*)());
-        void register_draw(void(*)());
+        void register_draw(void(*)(SDLW::Renderer*));
 
         template <typename T> class RegisterSystem
         {
@@ -70,7 +71,7 @@ namespace Game
         void close();
 
         void update();
-        void draw();
+        void draw(SDLW::Renderer*);
 
         ManagerData data;
 
