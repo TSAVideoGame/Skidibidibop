@@ -2,6 +2,7 @@
 #include "constants.h"
 #include "plugins.h"
 #include "system.h"
+#include "scene.h"
 
 // Temporary
 #include "entity.h"
@@ -48,7 +49,8 @@ void Game::Core::init()
 
   running = true;
 
-  ECS::Systems::Manager::get_instance().init();
+  // TODO: Scenes::Manager should set up void scene by itself
+  Scenes::Manager::get_instance().set_scene(Scenes::Manager::get_instance().get_scene<Scenes::Void>());
 
   // Testing plugins
   Plugins::Manager::get_instance().get_plugin<Plugins::Audio>()->add_music("res/music/TSA_test_1.wav");
@@ -71,8 +73,6 @@ void Game::Core::init()
  */
 void Game::Core::close()
 {
-  ECS::Systems::Manager::get_instance().close();
-
   delete spritesheet;
   delete renderer;
   delete window;
@@ -101,14 +101,14 @@ void Game::Core::input()
 
 void Game::Core::update()
 {
-  ECS::Systems::Manager::get_instance().update();
+  Scenes::Manager::get_instance().update();
 }
 
 void Game::Core::draw()
 {
   renderer->clear();
 
-  ECS::Systems::Manager::get_instance().draw(renderer);
+  Scenes::Manager::get_instance().draw(renderer);
 
   renderer->present();
 }

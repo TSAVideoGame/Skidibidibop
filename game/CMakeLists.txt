@@ -9,6 +9,7 @@ add_executable(game
   ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
 
   ${CMAKE_CURRENT_LIST_DIR}/src/core/core.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/core/scene.cpp
 
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/entity.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/component.cpp

@@ -13,8 +13,3 @@ void Game::ECS::Systems::Render::draw(SDLW::Renderer* renderer)
     renderer->copy(Core::get_texture(), &rm->data.src_rect[i], &rm->data.dest_rect[i]);
   }
 }
-
-void Game::ECS::Systems::Render::register_functions()
-{
-  Manager::get_instance().register_draw(draw); 
-}

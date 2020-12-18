@@ -13,12 +13,25 @@ namespace Game
   {
     namespace Systems
     {
+      /*
+       * ========================================
+       * System
+       *
+       * There aren't even update and draw methods
+       * here, that's because a system can do
+       * whatever it wants basically, as long as
+       * it's main goal is 'manipulating' the data
+       * ========================================
+       */
       class System
       {
       public:
         virtual ~System() {}
-        // TODO: register functions should only be called by Systems::Manager, but it needs to be inherited
-        virtual void register_functions() {}
+      protected:
+        // Only Systems::Manager will initialize systems
+        System() {}
+
+        friend class Manager;
       };
 
       /*
@@ -27,31 +40,15 @@ namespace Game
        *
        * Singleton managing systems
        *
-       * This works a little differently than
-       * the plugin and component classes
-       *
-       * TODO: Order of updates/draws
+       * At first systems don't really need a manager,
+       * because scenes manage systems, but this system
+       * manager will manage the instances of a system
        * ========================================
        */
-      struct ManagerData
-      {
-      private:
-        std::vector<void(*)()> update_functions;
-        std::vector<void(*)(SDLW::Renderer*)> draw_functions;
-
-        std::size_t index = 0;
-        std::vector<System*> systems;
-
-        friend class Manager;
-      };
-
       class Manager
       {
       public:
         static Manager& get_instance();
-
-        void register_update(void(*)());
-        void register_draw(void(*)(SDLW::Renderer*));
 
         template <typename T> class RegisterSystem
         {
@@ -59,23 +56,21 @@ namespace Game
           RegisterSystem()
           {
             static_assert(std::is_base_of<System, T>::value, "System does not dervie from Game::ECS::Systems::System");
-            Manager::get_instance().data.systems.push_back(new T());
+            Manager::get_instance().systems.push_back(new T());
           }
         };
+
+        template <typename T> T* get_system()
+        {
+          static std::size_t i = index == systems.size() - 1 ? index++ : throw std::logic_error("Unregistered System");
+          return dynamic_cast<T*>(systems[i]);
+        }
       private:
-        // TODO: Core should not create/delete manager
         Manager();
         ~Manager();
 
-        void init();
-        void close();
-
-        void update();
-        void draw(SDLW::Renderer*);
-
-        ManagerData data;
-
-        friend class Game::Core;
+        std::size_t index = 0;
+        std::vector<System*> systems;
       };
     };
   };

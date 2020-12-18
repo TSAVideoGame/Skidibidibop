@@ -1,6 +1,4 @@
 #include "component.h"
-#include "transform_component.h"
-#include "render_component.h"
 
 Game::ECS::Components::Manager& Game::ECS::Components::Manager::get_instance()
 {

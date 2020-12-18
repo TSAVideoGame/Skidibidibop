@@ -14,7 +14,6 @@ namespace Game
       {
       public:
         static void draw(SDLW::Renderer*);
-        void register_functions();
       };
 
       extern Manager::RegisterSystem<Render> render_system;
