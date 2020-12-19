@@ -4,6 +4,7 @@
 #include "sdlw.h"
 #include <vector>
 #include <cstdint>
+#include "input.h"
 
 namespace Game
 {
@@ -19,6 +20,7 @@ namespace Game
 
     // Get / Set
     static bool is_running();
+    static const Input::Data get_inputs();
     // Temporary
     static SDLW::Texture* get_texture() { return spritesheet; }
   private:
@@ -31,6 +33,9 @@ namespace Game
     static SDLW::Renderer* renderer;
     static SDLW::Texture* spritesheet;
     static bool running;
+    // Input
+    static Input::Data inputs;
+    static Input::KeyBindings key_bindings;
   };
 };
 

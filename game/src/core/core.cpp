@@ -24,7 +24,9 @@ SDLW::Window* Game::Core::window = nullptr;
 SDLW::Renderer* Game::Core::renderer = nullptr;
 SDLW::Texture* Game::Core::spritesheet = nullptr;
 bool Game::Core::running = false;
-
+// Input
+Game::Input::Data inputs = {false, false, false, false, false, false, false, false, false};
+Game::Input::KeyBindings key_bindings;
 /*
  * ========================================
  * Core::init
@@ -80,6 +82,56 @@ void Game::Core::input()
 
         break;
       }
+      case SDL_KEYDOWN:
+      {
+        SDL_Keycode key = e.key.keysym.sym;
+
+        if (key == key_bindings.up)
+          inputs.up = true;
+        if (key == key_bindings.right)
+          inputs.right = true;
+        if (key == key_bindings.down)
+          inputs.down = true;
+        if (key == key_bindings.left)
+          inputs.left = true;
+        if (key == key_bindings.slot_a)
+          inputs.slot_a = true;
+        if (key == key_bindings.slot_b)
+          inputs.slot_b = true;
+        if (key == key_bindings.slot_c)
+          inputs.slot_c = true;
+        if (key == key_bindings.attack)
+          inputs.attack = true;
+        if (key == key_bindings.pause)
+          inputs.pause = true;
+
+        break;
+      }
+      case SDL_KEYUP:
+      {
+        SDL_Keycode key = e.key.keysym.sym;
+
+        if (key == key_bindings.up)
+          inputs.up = false;
+        if (key == key_bindings.right)
+          inputs.right = false;
+        if (key == key_bindings.down)
+          inputs.down = false;
+        if (key == key_bindings.left)
+          inputs.left = false;
+        if (key == key_bindings.slot_a)
+          inputs.slot_a = false;
+        if (key == key_bindings.slot_b)
+          inputs.slot_b = false;
+        if (key == key_bindings.slot_c)
+          inputs.slot_c = false;
+        if (key == key_bindings.attack)
+          inputs.attack = false;
+        if (key == key_bindings.pause)
+          inputs.pause = false;
+
+        break;
+      }
     }
   }
 }
@@ -100,7 +152,7 @@ void Game::Core::draw()
 
 // Getters / Setters
 bool Game::Core::is_running() { return running; }
-
+const Game::Input::Data Game::Core::get_inputs() { return inputs; }
 // Unused functions
 Game::Core::Core() {}
 Game::Core::~Core() {}
