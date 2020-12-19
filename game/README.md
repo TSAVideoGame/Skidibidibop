@@ -24,5 +24,4 @@ Another note I would like to add is if I make this a full fledged 2D game engine
 these are the managers of which the user can (and should be) creating clients for
 
 ## To-do
-- Figure out ways to organize related entities (like level, title screen)
-- Entities owning other entities
+- Components, Systems, Scenes, etc. should not be initializable except for the respective manager class

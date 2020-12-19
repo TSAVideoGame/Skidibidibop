@@ -29,6 +29,7 @@ namespace Game
         virtual ~System() {}
       protected:
         // Only Systems::Manager will initialize systems
+        // TODO: This doesn't work
         System() {}
 
         friend class Manager;
