@@ -25,8 +25,8 @@ SDLW::Renderer* Game::Core::renderer = nullptr;
 SDLW::Texture* Game::Core::spritesheet = nullptr;
 bool Game::Core::running = false;
 // Input
-Game::Input::Data inputs = {false, false, false, false, false, false, false, false, false};
-Game::Input::KeyBindings key_bindings;
+Game::Input::Data Game::Core::inputs = {false, false, false, false, false, false, false, false, false};
+Game::Input::KeyBindings Game::Core::key_bindings;
 /*
  * ========================================
  * Core::init
