@@ -29,6 +29,7 @@ namespace FFM
 
       static bool is_running();
       static Inputs get_inputs();
+      static SDLW::Texture* get_spritesheet();
 
       // Is going to manipulated anyways so will just be public
       static Data::Types::Chunk data;

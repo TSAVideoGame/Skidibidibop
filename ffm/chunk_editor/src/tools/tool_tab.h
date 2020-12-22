@@ -43,6 +43,12 @@ namespace FFM
         public:
           Main(SDLW::Renderer*, int x, int y);
         };
+
+        class Objects : public Tab
+        {
+        public:
+          Objects(SDLW::Renderer*, int x, int y);
+        };
       };
     };
   };

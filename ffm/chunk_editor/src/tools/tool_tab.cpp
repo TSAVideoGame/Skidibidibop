@@ -1,6 +1,7 @@
 #include "tool_tab.h"
 #include "utility.h"
 #include "tool_main.h"
+#include "tool_objects.h"
 
 /*
  * ========================================
@@ -75,4 +76,12 @@ FFM::ChunkEditor::Tools::Tabs::Main::Main(SDLW::Renderer* renderer, int x, int y
   tools.push_back(new Tools::Main::Load(renderer, 16, (16 + 32) * 2));
   tools.push_back(new Tools::Main::PosX(renderer, 16, (16 + 32) * 3));
   tools.push_back(new Tools::Main::PosY(renderer, 16, (16 + 32) * 4));
+}
+
+FFM::ChunkEditor::Tools::Tabs::Objects::Objects(SDLW::Renderer* renderer, int x, int y) : Tab(renderer, "Objs", x, y, {255, 180, 10})
+{
+  tools.reserve(2);
+
+  tools.push_back(new Tools::Objects::Edit::Main(renderer, 16, (16 + 32) * 1));
+  tools.push_back(new Tools::Objects::Images    (renderer, 16, (16 + 32) * 3));
 }

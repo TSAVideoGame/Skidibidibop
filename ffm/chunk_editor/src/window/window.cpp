@@ -30,7 +30,7 @@ void FFM::ChunkEditor::Window::init()
 
   window = new SDLW::Window("FFM Chunk Editor", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Constants::Window.TOOL_WIDTH + Constants::Window.VIEW_WIDTH, Constants::Window.VIEW_HEIGHT, 0);
   renderer = new SDLW::Renderer(window);
-  spritesheet = new SDLW::Texture("res/spritesheet", renderer);
+  spritesheet = new SDLW::Texture("res/spritesheet.png", renderer);
 
   tool_manager = new Tools::Manager(renderer);
 
@@ -194,6 +194,7 @@ void FFM::ChunkEditor::Window::update_background()
  */
 bool FFM::ChunkEditor::Window::is_running() { return running; }
 FFM::ChunkEditor::Inputs FFM::ChunkEditor::Window::get_inputs() { return inputs; }
+SDLW::Texture* FFM::ChunkEditor::Window::get_spritesheet() { return spritesheet; }
 
 /*
  * ========================================
