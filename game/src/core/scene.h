@@ -23,6 +23,7 @@ namespace Game
     public:
       static Manager& get_instance();
 
+      // TODO: There isn't any transition between the scenes
       void set_scene(Scene*);
 
       void update();

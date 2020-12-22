@@ -14,3 +14,10 @@ compile_commands.json
 
 # Game data stuff
 *.sbbd
+*.ffmf
+*.ffmc
+
+# Resources
+*.wav
+*.png
+*.ttf

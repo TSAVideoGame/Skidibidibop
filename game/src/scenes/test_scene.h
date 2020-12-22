@@ -16,7 +16,7 @@ namespace Game
       void draw(SDLW::Renderer*);
     };
 
-    extern Manager::RegisterScene<TestScene> testScene;
+    extern Manager::RegisterScene<TestScene> test_scene;
   };
 };
 

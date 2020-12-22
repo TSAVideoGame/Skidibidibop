@@ -6,7 +6,7 @@
 
 static Game::ECS::Entity player = Game::ECS::EntityManager::get_instance().create_entity();
 
-Game::Scenes::Manager::RegisterScene<Game::Scenes::TestScene> testScene;
+Game::Scenes::Manager::RegisterScene<Game::Scenes::TestScene> test_scene;
 
 Game::Scenes::TestScene::TestScene()
 {
