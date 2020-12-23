@@ -70,12 +70,13 @@ bool FFM::ChunkEditor::Tools::Tab::is_hovered(int mx, int my)
  */
 FFM::ChunkEditor::Tools::Tabs::Main::Main(SDLW::Renderer* renderer, int x, int y) : Tab(renderer, "Main", x, y, {20, 20, 20})
 {
-  tools.reserve(4);
+  tools.reserve(5);
 
-  tools.push_back(new Tools::Main::Save(renderer, 16, (16 + 32) * 1));
-  tools.push_back(new Tools::Main::Load(renderer, 16, (16 + 32) * 2));
-  tools.push_back(new Tools::Main::PosX(renderer, 16, (16 + 32) * 3));
-  tools.push_back(new Tools::Main::PosY(renderer, 16, (16 + 32) * 4));
+  tools.push_back(new Tools::Main::Save      (renderer, 16, (16 + 32) * 1));
+  tools.push_back(new Tools::Main::Load      (renderer, 16, (16 + 32) * 2));
+  tools.push_back(new Tools::Main::Background(renderer, 16, (16 + 32) * 3));
+  tools.push_back(new Tools::Main::PosX      (renderer, 16, (16 + 32) * 4));
+  tools.push_back(new Tools::Main::PosY      (renderer, 16, (16 + 32) * 5));
 }
 
 FFM::ChunkEditor::Tools::Tabs::Objects::Objects(SDLW::Renderer* renderer, int x, int y) : Tab(renderer, "Objs", x, y, {255, 180, 10})

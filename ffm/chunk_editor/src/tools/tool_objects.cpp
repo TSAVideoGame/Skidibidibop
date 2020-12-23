@@ -1,5 +1,7 @@
 #include "tool_objects.h"
 #include "window.h"
+#include "constants.h"
+#include <algorithm>
 
 /*
  * ========================================
@@ -12,6 +14,7 @@ FFM::ChunkEditor::Tools::Objects::Edit::Main::Main(SDLW::Renderer* renderer, int
   tools.push_back(new Delete(renderer, x, y + (16 +32)));
   
   selected_tool = nullptr;
+  selected_object = -1;
 }
 
 FFM::ChunkEditor::Tools::Objects::Edit::Main::~Main()
@@ -22,35 +25,57 @@ FFM::ChunkEditor::Tools::Objects::Edit::Main::~Main()
 
 void FFM::ChunkEditor::Tools::Objects::Edit::Main::update(MouseState ms)
 {
+  if (this != Window::selected_tool)
+  {
+    selected_object = -1;
+    selected_tool = nullptr;
+  }
+
   switch (ms)
   {
     case MouseState::CLICK:
     {
-      if (is_hovered(Window::get_inputs()))
+      Inputs in = Window::get_inputs();
+
+      if (is_hovered(in))
       {
         Window::selected_tool = this;
       }
 
       if (this == Window::selected_tool)
       {
-        // Update all tools in case new one is selected
-        for (Base* t : tools)
-          t->update(ms);
+        // Super inefficient, but it works!
+        for (int i = 0; i < Window::data.objects.size(); ++i)
+        {
+          Data::Types::Chunk::Vertex v = Window::data.vertices[Window::data.objects[i].vertex];
+          int view_x = in.mouse_x - Constants::Window.TOOL_WIDTH;
+          if (view_x >= v.x &&
+              view_x <  v.x + 32 &&
+              in.mouse_y >= v.y &&
+              in.mouse_y <  v.y + 32)
+          {
+            selected_object = i; 
+          }
+        }
+
+        if (selected_object != -1)
+        {
+          // Update all tools in case new one is selected
+          for (Base* t : tools)
+            t->update(ms);
+        }
       }
 
       break;
     }
   }
-
-  if (this == Window::selected_tool && selected_tool)
-    selected_tool->update(ms);
 }
 
 void FFM::ChunkEditor::Tools::Objects::Edit::Main::draw()
 {
   Base::draw();
 
-  if (this == Window::selected_tool)
+  if (this == Window::selected_tool && selected_object != -1)
   {
     for (Base* t : tools)
       t->draw();
@@ -69,7 +94,24 @@ FFM::ChunkEditor::Tools::Objects::Edit::Delete::Delete(SDLW::Renderer* renderer,
 
 void FFM::ChunkEditor::Tools::Objects::Edit::Delete::update(MouseState ms)
 {
+  switch (ms)
+  {
+    case MouseState::CLICK:
+    {
+      if (is_hovered(Window::get_inputs()))
+      {
+        int selected_object = reinterpret_cast<Edit::Main*>(Window::selected_tool)->selected_object;
+        // Swap selected and last objects / vertices, remap the index for the object, erase the object
+        std::iter_swap(Window::data.objects.begin() + selected_object, Window::data.objects.end() - 1);
+        std::iter_swap(Window::data.vertices.begin() + selected_object, Window::data.vertices.end() - 1);
+        Window::data.objects[selected_object].vertex = static_cast<std::uint16_t>(selected_object);
+        Window::data.objects.erase(Window::data.objects.end() - 1);
+        Window::data.vertices.erase(Window::data.vertices.end() - 1);
 
+        Window::selected_tool = nullptr;
+      }
+    }
+  }
 }
 
 /*
@@ -77,7 +119,7 @@ void FFM::ChunkEditor::Tools::Objects::Edit::Delete::update(MouseState ms)
  * Images
  * ========================================
  */
-FFM::ChunkEditor::Tools::Objects::Images::Images(SDLW::Renderer* renderer, int x, int y) : Numeric(renderer, "Page", x, y, 0, 99999, &page)
+FFM::ChunkEditor::Tools::Objects::Images::Images(SDLW::Renderer* renderer, int x, int y) : Numeric(renderer, "Page", x, y, 0, 10000, &page)
 {
   page = 0;
   selected_id = -1;
@@ -85,33 +127,58 @@ FFM::ChunkEditor::Tools::Objects::Images::Images(SDLW::Renderer* renderer, int x
 
 void FFM::ChunkEditor::Tools::Objects::Images::update(MouseState ms)
 {
+  Numeric::update(ms);
+
   switch (ms)
   {
     case MouseState::CLICK:
     {
-      if (hover_increment())
+      Inputs in = Window::get_inputs();
+
+      if (in.mouse_x >= x && in.mouse_x < x + 32)
       {
-        if (*variable < max)
-          ++*variable;
+        if (in.mouse_y >= y && in.mouse_y < (y + 32 + 8) + PAGE_AMOUNT * (32 + 8))
+        {
+          selected_id = page * PAGE_AMOUNT + ((in.mouse_y - (y + 32 + 8)) / (32 + 8));
+        }
       }
 
-      if (hover_decrement())
+      break;
+    }
+    case MouseState::RELEASE:
+    {
+      // Actually add the object
+      Inputs in = Window::get_inputs();
+      if (in.mouse_x > Constants::Window.TOOL_WIDTH)
       {
-        if (*variable > min)
-          --*variable;
+        Window::data.vertices.push_back({in.mouse_x - Constants::Window.TOOL_WIDTH, in.mouse_y});
+        Window::data.objects.push_back({static_cast<std::uint16_t>(Window::data.vertices.size() - 1), static_cast<std::uint16_t>(selected_id)});
       }
+
+      // De-select
+      selected_id = -1;
     }
   }
 }
 
 void FFM::ChunkEditor::Tools::Objects::Images::draw()
 {
+  // Draw page tools
   Numeric::draw();
 
+  // Draw the objects
   for (int i = 0; i < PAGE_AMOUNT; ++i)
   {
     SDL_Rect src_rect = {(page * PAGE_AMOUNT + i) * 32, 0, 32, 32};
     SDL_Rect dest_rect = {x, (y + 32 + 8) + i * (32 + 8), 32, 32};
+    renderer->copy(Window::get_spritesheet(), &src_rect, &dest_rect);
+  }
+
+  // Draw the drag n drop object
+  if (selected_id != -1)
+  {
+    SDL_Rect src_rect = {selected_id * 32, 0, 32, 32};
+    SDL_Rect dest_rect = {Window::get_inputs().mouse_x, Window::get_inputs().mouse_y, 32, 32};
     renderer->copy(Window::get_spritesheet(), &src_rect, &dest_rect);
   }
 }

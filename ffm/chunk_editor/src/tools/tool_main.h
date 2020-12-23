@@ -27,20 +27,25 @@ namespace FFM
           void update(MouseState);
         };
 
-        class PosX : public Numeric
+        class Background : public Numeric<std::uint32_t>
+        {
+        public:
+          Background(SDLW::Renderer*, int x, int y);
+          void update(MouseState);
+        private:
+          std::uint32_t prev_id;
+        };
+
+        class PosX : public Numeric<std::uint16_t>
         {
         public:
           PosX(SDLW::Renderer*, int x, int y);
-
-          void update(MouseState);
         };
 
-        class PosY : public Numeric
+        class PosY : public Numeric<std::uint16_t>
         {
         public:
           PosY(SDLW::Renderer*, int x, int y);
-
-          void update(MouseState);
         };
       };
     };

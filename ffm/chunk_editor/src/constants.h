@@ -20,6 +20,12 @@ namespace FFM
         int VIEW_WIDTH = Chunk.TILE_SIZE * Chunk.X_TILES;
         int VIEW_HEIGHT = Chunk.TILE_SIZE * Chunk.Y_TILES;
       } Window;
+
+      constexpr struct
+      {
+        unsigned int MONSTERS = 0;
+        unsigned int NPCS = 0;
+      } Spritesheet;
     };
   };
 };

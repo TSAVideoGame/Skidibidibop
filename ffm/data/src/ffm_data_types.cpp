@@ -11,6 +11,7 @@ FFM::Data::Types::Chunk::Chunk()
 {
   x = 0;
   y = 0;
+  background_id = 0;
   num_vertices = 0;
   num_lines = 0;
   num_objects = 0;
@@ -27,6 +28,8 @@ void FFM::Data::Types::Chunk::save(std::ofstream& file)
   // Save the chunk position
   file.write(reinterpret_cast<char*>(&x), sizeof(x));
   file.write(reinterpret_cast<char*>(&y), sizeof(y));
+
+  file.write(reinterpret_cast<char*>(&background_id), sizeof(background_id));
 
   // Save Vertices
   num_vertices = vertices.size();
@@ -81,6 +84,7 @@ void FFM::Data::Types::Chunk::load(std::ifstream& file)
   file.read(reinterpret_cast<char*>(&x), sizeof(x));
   file.read(reinterpret_cast<char*>(&y), sizeof(y));
 
+  file.read(reinterpret_cast<char*>(&background_id), sizeof(background_id));
   // Load the vertices
   file.read(reinterpret_cast<char*>(&num_vertices), sizeof(num_vertices));
   vertices.reserve(num_vertices);

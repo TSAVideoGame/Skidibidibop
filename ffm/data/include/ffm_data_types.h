@@ -65,6 +65,7 @@ namespace FFM
 
 
         std::uint16_t x, y; // The chunk's (x,y) relative to the map
+        std::uint32_t background_id;
 
         std::uint16_t num_vertices;
         std::vector<Vertex> vertices;

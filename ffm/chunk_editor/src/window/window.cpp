@@ -143,25 +143,31 @@ void FFM::ChunkEditor::Window::update()
   }
 
   // Release mouse
-  /*if (!inputs.mouse_down && inputs.old_mouse_down)
+  if (!inputs.mouse_down && inputs.old_mouse_down)
   {
-    
-  }*/
+    tool_manager->update(MouseState::RELEASE); 
+  }
 
   // Scroll
 }
 
+// Helper draw functions
+static void draw_objects(SDLW::Renderer* renderer)
+{
+  for (std::vector<FFM::Data::Types::Chunk::Object>::iterator i = FFM::ChunkEditor::Window::data.objects.begin(); i < FFM::ChunkEditor::Window::data.objects.end(); ++i)
+  {
+    FFM::Data::Types::Chunk::Vertex v = FFM::ChunkEditor::Window::data.vertices[i->vertex];
+    SDL_Rect src_rect = {i->id * 32, 0, 32, 32};
+    SDL_Rect dest_rect = {v.x + FFM::ChunkEditor::Constants::Window.TOOL_WIDTH, v.y, 32, 32};
+    renderer->copy(FFM::ChunkEditor::Window::get_spritesheet(), &src_rect, &dest_rect);
+  }
+}
+
+// Actual draw function
 void FFM::ChunkEditor::Window::draw()
 {
   renderer->set_draw_color(255, 255, 255, 255);
   renderer->clear();
-
-  // Draw tool stuff
-  SDL_Color c = tool_manager->get_color();
-  renderer->set_draw_color(c.r, c.g, c.b, 255);
-  SDL_Rect toolbar = {0, 0, Constants::Window.TOOL_WIDTH, Constants::Window.VIEW_HEIGHT};
-  SDL_RenderFillRect(renderer->get_SDL(), &toolbar);
-  tool_manager->draw();
 
   // Draw view area
   if (background)
@@ -169,6 +175,14 @@ void FFM::ChunkEditor::Window::draw()
     SDL_Rect d_rect = {Constants::Window.TOOL_WIDTH, 0, Constants::Window.VIEW_WIDTH, Constants::Window.VIEW_HEIGHT};
     renderer->copy(background, nullptr, &d_rect);
   }
+  draw_objects(renderer);
+
+  // Draw tool stuff
+  SDL_Color c = tool_manager->get_color();
+  renderer->set_draw_color(c.r, c.g, c.b, 255);
+  SDL_Rect toolbar = {0, 0, Constants::Window.TOOL_WIDTH, Constants::Window.VIEW_HEIGHT};
+  SDL_RenderFillRect(renderer->get_SDL(), &toolbar);
+  tool_manager->draw();
 
   renderer->present();
 }
@@ -183,7 +197,7 @@ void FFM::ChunkEditor::Window::update_background()
   if (background != nullptr)
     delete background;
 
-  std::string file_name = "res/chunk_images/" +std::to_string(data.x) + "_" + std::to_string(data.y) + ".png";
+  std::string file_name = "res/chunk_images/" +std::to_string(data.background_id) + ".png";
   background = new SDLW::Texture(file_name.c_str(), renderer);
 }
 

@@ -24,6 +24,7 @@ namespace FFM
             void draw();
 
             Base* selected_tool;
+            int selected_object; // The index of it
           private:
             std::vector<Base*> tools;
             
@@ -40,7 +41,7 @@ namespace FFM
           };
         };
 
-        class Images : public Numeric
+        class Images : public Numeric<std::uint16_t>
         {
         public:
           Images(SDLW::Renderer*, int x, int y);

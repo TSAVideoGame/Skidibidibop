@@ -3,8 +3,8 @@
 
 #include "sdlw.h"
 #include <string>
-#include "tool.h"
 #include <vector>
+#include "window_inputs.h"
 
 namespace FFM
 {
@@ -12,6 +12,8 @@ namespace FFM
   {
     namespace Tools
     {
+      class Base;
+
       class Tab
       {
       public:
