@@ -13,6 +13,7 @@ namespace FFM
       int click_mouse_x, click_mouse_y;
       int old_mouse_x, old_mouse_y;
       int mouse_x, mouse_y, mouse_wheel_y;
+      bool up, right, down, left;
     };
   };
 };

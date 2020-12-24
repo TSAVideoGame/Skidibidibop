@@ -12,7 +12,7 @@ SDLW::Window* FFM::ChunkEditor::Window::window = nullptr;
 SDLW::Renderer* FFM::ChunkEditor::Window::renderer = nullptr;
 SDLW::Texture* FFM::ChunkEditor::Window::spritesheet = nullptr;
 SDLW::Texture* FFM::ChunkEditor::Window::background = nullptr;
-FFM::ChunkEditor::Inputs FFM::ChunkEditor::Window::inputs = {false, false, 0, 0, 0, 0, 0, 0, 0};
+FFM::ChunkEditor::Inputs FFM::ChunkEditor::Window::inputs = {false, false, 0, 0, 0, 0, 0, 0, 0, false, false, false, false};
 
 FFM::ChunkEditor::Tools::Manager* FFM::ChunkEditor::Window::tool_manager = nullptr;
 
@@ -64,6 +64,12 @@ void FFM::ChunkEditor::Window::input()
   inputs.old_mouse_y = inputs.mouse_y;
   inputs.mouse_wheel_y = 0; // Also set mouse wheel to 0
 
+  // Reset arrows (they are only true on release)
+  inputs.up = false;
+  inputs.right = false;
+  inputs.down = false;
+  inputs.left = false;
+
   // Handle events
   SDL_Event e;
   while (SDL_PollEvent(&e))
@@ -74,6 +80,70 @@ void FFM::ChunkEditor::Window::input()
       {
         running = false;
 
+        break;
+      }
+      /*
+      case SDL_KEYDOWN:
+      {
+        switch (e.key.keysym.sym)
+        {
+          case SDLK_UP:
+          {
+            inputs.up = true;
+
+            break;
+          }
+          case SDLK_RIGHT:
+          {
+            inputs.right = true;
+
+            break;
+          }
+          case SDLK_DOWN:
+          {
+            inputs.down = true;
+
+            break;
+          }
+          case SDLK_LEFT:
+          {
+            inputs.left = true;
+
+            break;
+          }
+        }
+        break;
+      }
+      */
+      case SDL_KEYUP:
+      {
+        switch (e.key.keysym.sym)
+        {
+          case SDLK_UP:
+          {
+            inputs.up = true;
+
+            break;
+          }
+          case SDLK_RIGHT:
+          {
+            inputs.right = true;
+
+            break;
+          }
+          case SDLK_DOWN:
+          {
+            inputs.down = true;
+
+            break;
+          }
+          case SDLK_LEFT:
+          {
+            inputs.left = true;
+
+            break;
+          }
+        }
         break;
       }
       case SDL_MOUSEBUTTONDOWN:
@@ -163,6 +233,54 @@ static void draw_objects(SDLW::Renderer* renderer)
   }
 }
 
+static void draw_collisions(SDLW::Renderer* renderer)
+{
+  // Draw Vertices
+  // This is tricky because we don't want to draw the object/monster/npc vertices
+  // Also this is inefficient
+  for (std::size_t i = 0; i < FFM::ChunkEditor::Window::data.vertices.size(); ++i)
+  {
+    // Make sure vertex isn't being used by non-line thing
+    bool found = false;
+    for (std::size_t oi = 0; oi < FFM::ChunkEditor::Window::data.objects.size(); ++oi)
+    {
+      if (FFM::ChunkEditor::Window::data.objects[oi].vertex == i)
+      {
+        found = true;
+        break;
+      }
+    }
+    if (found)
+      continue;
+    for (std::size_t mi = 0; mi < FFM::ChunkEditor::Window::data.enemies.size(); ++mi)
+    {
+      if (FFM::ChunkEditor::Window::data.enemies[mi].vertex == i)
+      {
+        found = true;
+        break;
+      }
+    }
+    if (found)
+      continue;
+    for (std::size_t ni = 0; ni < FFM::ChunkEditor::Window::data.npcs.size(); ++ni)
+    {
+      if (FFM::ChunkEditor::Window::data.npcs[ni].vertex == i)
+      {
+        found = true;
+        break;
+      }
+    }
+    if (found)
+      continue;
+
+
+    FFM::Data::Types::Chunk::Vertex v = FFM::ChunkEditor::Window::data.vertices[i];
+    renderer->set_draw_color(0, 0, 0, 255);
+    SDL_Rect dest_rect = {(v.x - 5) + FFM::ChunkEditor::Constants::Window.TOOL_WIDTH, v.y - 5, 9, 9};
+    SDL_RenderFillRect(renderer->get_SDL(), &dest_rect);
+  }
+}
+
 // Actual draw function
 void FFM::ChunkEditor::Window::draw()
 {
@@ -175,6 +293,7 @@ void FFM::ChunkEditor::Window::draw()
     SDL_Rect d_rect = {Constants::Window.TOOL_WIDTH, 0, Constants::Window.VIEW_WIDTH, Constants::Window.VIEW_HEIGHT};
     renderer->copy(background, nullptr, &d_rect);
   }
+  draw_collisions(renderer);
   draw_objects(renderer);
 
   // Draw tool stuff

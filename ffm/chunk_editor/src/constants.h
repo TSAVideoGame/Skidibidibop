@@ -23,6 +23,7 @@ namespace FFM
 
       constexpr struct
       {
+        unsigned int OBJECTS = 16;
         unsigned int MONSTERS = 0;
         unsigned int NPCS = 0;
       } Spritesheet;

@@ -51,6 +51,12 @@ namespace FFM
         public:
           Objects(SDLW::Renderer*, int x, int y);
         };
+
+        class Collisions : public Tab
+        {
+        public:
+          Collisions(SDLW::Renderer*, int x, int y);
+        };
       };
     };
   };

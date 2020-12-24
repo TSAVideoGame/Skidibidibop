@@ -11,7 +11,47 @@ namespace FFM
     {
       namespace Collisions
       {
+        namespace Vertex
+        {
+          class Add : public Base
+          {
+          public:
+            Add(SDLW::Renderer*, int x, int y);
 
+            void update(MouseState);
+            void draw();
+          };
+
+          class Remove : public Base
+          {
+          public:
+            Remove(SDLW::Renderer*, int x, int y);
+
+            void update(MouseState);
+          };
+        }
+
+        namespace Line
+        {
+          class Add : public Base
+          {
+          public:
+            Add(SDLW::Renderer*, int x, int y);
+
+            void update(MouseState);
+          private:
+            int v1;
+            // We don't need to store the 2nd vertex
+          };
+
+          class Remove : public Base
+          {
+          public:
+            Remove(SDLW::Renderer*, int x, int y);
+
+            void update(MouseState);
+          };
+        }
       };
     };
   };

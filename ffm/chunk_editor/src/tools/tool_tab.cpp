@@ -2,6 +2,7 @@
 #include "utility.h"
 #include "tool_main.h"
 #include "tool_objects.h"
+#include "tool_collisions.h"
 
 /*
  * ========================================
@@ -70,13 +71,14 @@ bool FFM::ChunkEditor::Tools::Tab::is_hovered(int mx, int my)
  */
 FFM::ChunkEditor::Tools::Tabs::Main::Main(SDLW::Renderer* renderer, int x, int y) : Tab(renderer, "Main", x, y, {20, 20, 20})
 {
-  tools.reserve(5);
+  tools.reserve(6);
 
   tools.push_back(new Tools::Main::Save      (renderer, 16, (16 + 32) * 1));
   tools.push_back(new Tools::Main::Load      (renderer, 16, (16 + 32) * 2));
   tools.push_back(new Tools::Main::Background(renderer, 16, (16 + 32) * 3));
-  tools.push_back(new Tools::Main::PosX      (renderer, 16, (16 + 32) * 4));
-  tools.push_back(new Tools::Main::PosY      (renderer, 16, (16 + 32) * 5));
+  tools.push_back(new Tools::Main::Music     (renderer, 16, (16 + 32) * 4));
+  tools.push_back(new Tools::Main::PosX      (renderer, 16, (16 + 32) * 5));
+  tools.push_back(new Tools::Main::PosY      (renderer, 16, (16 + 32) * 6));
 }
 
 FFM::ChunkEditor::Tools::Tabs::Objects::Objects(SDLW::Renderer* renderer, int x, int y) : Tab(renderer, "Objs", x, y, {255, 180, 10})
@@ -85,4 +87,14 @@ FFM::ChunkEditor::Tools::Tabs::Objects::Objects(SDLW::Renderer* renderer, int x,
 
   tools.push_back(new Tools::Objects::Edit::Main(renderer, 16, (16 + 32) * 1));
   tools.push_back(new Tools::Objects::Images    (renderer, 16, (16 + 32) * 3));
+}
+
+FFM::ChunkEditor::Tools::Tabs::Collisions::Collisions(SDLW::Renderer* renderer, int x, int y) : Tab(renderer, "Coll", x, y, {30, 140, 10})
+{
+  tools.reserve(4);
+
+  tools.push_back(new Tools::Collisions::Vertex::Add   (renderer, 16, (16 + 32) * 1));
+  tools.push_back(new Tools::Collisions::Vertex::Remove(renderer, 16, (16 + 32) * 2));
+  tools.push_back(new Tools::Collisions::Line::Add     (renderer, 16, (16 + 32) * 3));
+  tools.push_back(new Tools::Collisions::Vertex::Remove(renderer, 16, (16 + 32) * 4));
 }

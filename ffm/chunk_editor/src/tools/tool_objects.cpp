@@ -31,12 +31,29 @@ void FFM::ChunkEditor::Tools::Objects::Edit::Main::update(MouseState ms)
     selected_tool = nullptr;
   }
 
+  Inputs in = Window::get_inputs();
   switch (ms)
   {
+    case MouseState::HOVER:
+    {
+      if (selected_object != - 1)
+      {
+        // Move 'tool'
+        Data::Types::Chunk::Vertex* v = &Window::data.vertices[Window::data.objects[selected_object].vertex];
+        if (in.up && v->y > 0)
+          --v->y;
+        if (in.right && v->x < Constants::Window.VIEW_WIDTH)
+          ++v->x;
+        if (in.down && v->y < Constants::Window.VIEW_HEIGHT)
+          ++v->y;
+        if (in.left && v->x > 0)
+          --v->x;
+      }
+
+      break;
+    }
     case MouseState::CLICK:
     {
-      Inputs in = Window::get_inputs();
-
       if (is_hovered(in))
       {
         Window::selected_tool = this;
@@ -140,6 +157,9 @@ void FFM::ChunkEditor::Tools::Objects::Images::update(MouseState ms)
         if (in.mouse_y >= y && in.mouse_y < (y + 32 + 8) + PAGE_AMOUNT * (32 + 8))
         {
           selected_id = page * PAGE_AMOUNT + ((in.mouse_y - (y + 32 + 8)) / (32 + 8));
+          // Don't select empty sprites (because total may not divide evenly with PAGE_AMOUNT)
+          if (selected_id > Constants::Spritesheet.OBJECTS - 1) // -1 because OBJECTS is length while id is index
+            selected_id = -1;
         }
       }
 
@@ -147,16 +167,19 @@ void FFM::ChunkEditor::Tools::Objects::Images::update(MouseState ms)
     }
     case MouseState::RELEASE:
     {
-      // Actually add the object
-      Inputs in = Window::get_inputs();
-      if (in.mouse_x > Constants::Window.TOOL_WIDTH)
+      if (selected_id != -1)
       {
-        Window::data.vertices.push_back({in.mouse_x - Constants::Window.TOOL_WIDTH, in.mouse_y});
-        Window::data.objects.push_back({static_cast<std::uint16_t>(Window::data.vertices.size() - 1), static_cast<std::uint16_t>(selected_id)});
-      }
+        // Actually add the object
+        Inputs in = Window::get_inputs();
+        if (in.mouse_x > Constants::Window.TOOL_WIDTH)
+        {
+          Window::data.vertices.push_back({static_cast<std::uint16_t>(in.mouse_x - Constants::Window.TOOL_WIDTH), static_cast<std::uint16_t>(in.mouse_y)});
+          Window::data.objects.push_back({static_cast<std::uint16_t>(Window::data.vertices.size() - 1), static_cast<std::uint16_t>(selected_id)});
+        }
 
-      // De-select
-      selected_id = -1;
+        // De-select
+        selected_id = -1;
+      }
     }
   }
 }

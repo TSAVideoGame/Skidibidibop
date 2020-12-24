@@ -134,6 +134,16 @@ void FFM::ChunkEditor::Tools::Main::Background::update(MouseState ms)
 
 /*
  * ========================================
+ * Music
+ * ========================================
+ */
+FFM::ChunkEditor::Tools::Main::Music::Music(SDLW::Renderer* renderer, int x, int y) : Numeric(renderer, "Music", x, y, 0, 10000, &Window::data.music_id)
+{
+
+}
+
+/*
+ * ========================================
  * PosX Tool (Position X)
  * ========================================
  */

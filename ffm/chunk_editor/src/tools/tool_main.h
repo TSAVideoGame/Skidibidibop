@@ -36,6 +36,14 @@ namespace FFM
           std::uint32_t prev_id;
         };
 
+        class Music : public Numeric<std::uint16_t>
+        {
+        public:
+          Music(SDLW::Renderer*, int x, int y);
+        private:
+          std::uint32_t prev_id;
+        };
+
         class PosX : public Numeric<std::uint16_t>
         {
         public:

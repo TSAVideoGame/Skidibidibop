@@ -34,7 +34,7 @@ namespace FFM
 
         struct Vertex
         {
-          int x, y;
+          std::uint16_t x, y;
         };
 
         struct Line
@@ -66,6 +66,7 @@ namespace FFM
 
         std::uint16_t x, y; // The chunk's (x,y) relative to the map
         std::uint32_t background_id;
+        std::uint16_t music_id;
 
         std::uint16_t num_vertices;
         std::vector<Vertex> vertices;

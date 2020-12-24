@@ -30,6 +30,7 @@ void FFM::Data::Types::Chunk::save(std::ofstream& file)
   file.write(reinterpret_cast<char*>(&y), sizeof(y));
 
   file.write(reinterpret_cast<char*>(&background_id), sizeof(background_id));
+  file.write(reinterpret_cast<char*>(&music_id), sizeof(music_id));
 
   // Save Vertices
   num_vertices = vertices.size();
@@ -85,6 +86,8 @@ void FFM::Data::Types::Chunk::load(std::ifstream& file)
   file.read(reinterpret_cast<char*>(&y), sizeof(y));
 
   file.read(reinterpret_cast<char*>(&background_id), sizeof(background_id));
+  file.read(reinterpret_cast<char*>(&music_id), sizeof(music_id));
+
   // Load the vertices
   file.read(reinterpret_cast<char*>(&num_vertices), sizeof(num_vertices));
   vertices.reserve(num_vertices);
