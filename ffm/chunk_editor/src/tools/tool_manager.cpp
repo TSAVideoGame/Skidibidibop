@@ -11,8 +11,8 @@ FFM::ChunkEditor::Tools::Manager::Manager(SDLW::Renderer* renderer)
   tabs.push_back(new Tabs::Main      (renderer, Constants::Window.TOOL_WIDTH - (width * 1), 0));
   tabs.push_back(new Tabs::Objects   (renderer, Constants::Window.TOOL_WIDTH - (width * 2), 0));
   tabs.push_back(new Tabs::Collisions(renderer, Constants::Window.TOOL_WIDTH - (width * 3), 0));
-  tabs.push_back(new Tab             (renderer, "Monsts", Constants::Window.TOOL_WIDTH - (width * 4), 0, {160,  20,  10}));
-  tabs.push_back(new Tab             (renderer, "NPCs"  , Constants::Window.TOOL_WIDTH - (width * 5), 0, { 10,  60,  160}));
+  tabs.push_back(new Tabs::Monsters  (renderer, Constants::Window.TOOL_WIDTH - (width * 4), 0));
+  tabs.push_back(new Tabs::NPCs      (renderer, Constants::Window.TOOL_WIDTH - (width * 5), 0));
 
   selected_tab = tabs[0];
   selected_tab->is_selected = true;

@@ -3,6 +3,8 @@
 #include "tool_main.h"
 #include "tool_objects.h"
 #include "tool_collisions.h"
+#include "tool_monsters.h"
+#include "tool_npcs.h"
 
 /*
  * ========================================
@@ -94,7 +96,25 @@ FFM::ChunkEditor::Tools::Tabs::Collisions::Collisions(SDLW::Renderer* renderer, 
   tools.reserve(4);
 
   tools.push_back(new Tools::Collisions::Vertex::Add   (renderer, 16, (16 + 32) * 1));
-  tools.push_back(new Tools::Collisions::Vertex::Remove(renderer, 16, (16 + 32) * 2));
+  // tools.push_back(new Tools::Collisions::Vertex::Remove(renderer, 16, (16 + 32) * 2)); too complicated for right now
   tools.push_back(new Tools::Collisions::Line::Add     (renderer, 16, (16 + 32) * 3));
-  tools.push_back(new Tools::Collisions::Vertex::Remove(renderer, 16, (16 + 32) * 4));
+  // tools.push_back(new Tools::Collisions::Line::Remove(renderer, 16, (16 + 32) * 4));
+  tools.push_back(new Tools::Collisions::Clear         (renderer, 16, (16 + 32) * 5));
 }
+
+FFM::ChunkEditor::Tools::Tabs::Monsters::Monsters(SDLW::Renderer* renderer, int x, int y) : Tab(renderer, "Monst.", x, y, {160, 20, 10})
+{
+  tools.reserve(2);
+
+  tools.push_back(new Tools::Monsters::Edit::Main(renderer, 16, (16 + 32) * 1));
+  tools.push_back(new Tools::Monsters::Add       (renderer, 16, (16 + 32) * 4));
+}
+
+FFM::ChunkEditor::Tools::Tabs::NPCs::NPCs(SDLW::Renderer* renderer, int x, int y) : Tab(renderer, "NPCs", x, y, {10, 60, 160})
+{
+  tools.reserve(2);
+  
+  tools.push_back(new Tools::NPCs::Edit::Main(renderer, 16, (16 + 32) * 1));
+  tools.push_back(new Tools::NPCs::Add       (renderer, 16, (16 + 32) * 4));
+}
+

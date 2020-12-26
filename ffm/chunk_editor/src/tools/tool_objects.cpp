@@ -39,7 +39,7 @@ void FFM::ChunkEditor::Tools::Objects::Edit::Main::update(MouseState ms)
       if (selected_object != - 1)
       {
         // Move 'tool'
-        Data::Types::Chunk::Vertex* v = &Window::data.vertices[Window::data.objects[selected_object].vertex];
+        Data::Types::Chunk::Vertex* v = &Window::object_vertices[Window::objects[selected_object].vertex];
         if (in.up && v->y > 0)
           --v->y;
         if (in.right && v->x < Constants::Window.VIEW_WIDTH)
@@ -62,9 +62,9 @@ void FFM::ChunkEditor::Tools::Objects::Edit::Main::update(MouseState ms)
       if (this == Window::selected_tool)
       {
         // Super inefficient, but it works!
-        for (int i = 0; i < Window::data.objects.size(); ++i)
+        for (int i = 0; i < Window::objects.size(); ++i)
         {
-          Data::Types::Chunk::Vertex v = Window::data.vertices[Window::data.objects[i].vertex];
+          Data::Types::Chunk::Vertex v = Window::object_vertices[Window::objects[i].vertex];
           int view_x = in.mouse_x - Constants::Window.TOOL_WIDTH;
           if (view_x >= v.x &&
               view_x <  v.x + 32 &&
@@ -118,13 +118,18 @@ void FFM::ChunkEditor::Tools::Objects::Edit::Delete::update(MouseState ms)
       if (is_hovered(Window::get_inputs()))
       {
         int selected_object = reinterpret_cast<Edit::Main*>(Window::selected_tool)->selected_object;
-        // Swap selected and last objects / vertices, remap the index for the object, erase the object
-        std::iter_swap(Window::data.objects.begin() + selected_object, Window::data.objects.end() - 1);
-        std::iter_swap(Window::data.vertices.begin() + selected_object, Window::data.vertices.end() - 1);
-        Window::data.objects[selected_object].vertex = static_cast<std::uint16_t>(selected_object);
-        Window::data.objects.erase(Window::data.objects.end() - 1);
-        Window::data.vertices.erase(Window::data.vertices.end() - 1);
+        // Swap selected and last objects and their vertices
+        // Assumes objects and vertices have nice 1:1 mapping and all
+        std::iter_swap(Window::objects.begin() + selected_object, Window::objects.end() - 1);
+        std::iter_swap(Window::object_vertices.begin() + selected_object, Window::object_vertices.end() - 1);
 
+        // Update the index of the swapped object's vertex
+        Window::objects[selected_object].vertex = static_cast<std::uint16_t>(selected_object);
+        // Erase the elements at the end
+        Window::objects.erase(Window::objects.end() - 1);
+        Window::object_vertices.erase(Window::object_vertices.end() - 1);
+
+        // De-select the tool
         Window::selected_tool = nullptr;
       }
     }
@@ -173,8 +178,8 @@ void FFM::ChunkEditor::Tools::Objects::Images::update(MouseState ms)
         Inputs in = Window::get_inputs();
         if (in.mouse_x > Constants::Window.TOOL_WIDTH)
         {
-          Window::data.vertices.push_back({static_cast<std::uint16_t>(in.mouse_x - Constants::Window.TOOL_WIDTH), static_cast<std::uint16_t>(in.mouse_y)});
-          Window::data.objects.push_back({static_cast<std::uint16_t>(Window::data.vertices.size() - 1), static_cast<std::uint16_t>(selected_id)});
+          Window::object_vertices.push_back({static_cast<std::uint16_t>(in.mouse_x - Constants::Window.TOOL_WIDTH), static_cast<std::uint16_t>(in.mouse_y)});
+          Window::objects.push_back({static_cast<std::uint16_t>(Window::object_vertices.size() - 1), static_cast<std::uint16_t>(selected_id)});
         }
 
         // De-select

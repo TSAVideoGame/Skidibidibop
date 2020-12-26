@@ -32,7 +32,20 @@ namespace FFM
       static SDLW::Texture* get_spritesheet();
 
       // Is going to manipulated anyways so will just be public
-      static Data::Types::Chunk data;
+      // This is pretty messy
+      // Long story short, code wasn't planned beforehand
+      static std::uint32_t background_id;
+      static std::uint16_t music_id;
+      static std::uint16_t x, y;
+      static std::vector<Data::Types::Chunk::Object> objects;
+      static std::vector<Data::Types::Chunk::Vertex> object_vertices;
+      static std::vector<Data::Types::Chunk::Enemy> monsters;
+      static std::vector<Data::Types::Chunk::Vertex> monster_vertices;
+      static std::vector<Data::Types::Chunk::NPC> npcs;
+      static std::vector<Data::Types::Chunk::Vertex> npc_vertices;
+      static std::vector<Data::Types::Chunk::Line> lines;
+      static std::vector<Data::Types::Chunk::Vertex> line_vertices;
+
       static Tools::Base* selected_tool; 
     private:
       Window();

@@ -29,7 +29,7 @@ namespace FFM
 
             void update(MouseState);
           };
-        }
+        };
 
         namespace Line
         {
@@ -51,7 +51,15 @@ namespace FFM
 
             void update(MouseState);
           };
-        }
+        };
+
+        class Clear : public Base
+        {
+        public:
+          Clear(SDLW::Renderer*, int x, int y);
+
+          void update(MouseState);
+        };
       };
     };
   };

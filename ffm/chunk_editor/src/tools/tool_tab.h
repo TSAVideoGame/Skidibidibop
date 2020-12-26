@@ -52,6 +52,18 @@ namespace FFM
           Objects(SDLW::Renderer*, int x, int y);
         };
 
+        class Monsters : public Tab
+        {
+        public:
+          Monsters(SDLW::Renderer*, int x, int y);
+        };
+
+        class NPCs : public Tab
+        {
+        public:
+          NPCs(SDLW::Renderer*, int x, int y);
+        };
+
         class Collisions : public Tab
         {
         public:
