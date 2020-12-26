@@ -18,6 +18,8 @@ add_executable(game
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/render_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/system.cpp
 
+  ${CMAKE_CURRENT_LIST_DIR}/src/logger/logger.cpp
+
   ${CMAKE_CURRENT_LIST_DIR}/src/scenes/test_scene.cpp
 )
 
@@ -32,6 +34,7 @@ target_include_directories(game PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems
+  ${CMAKE_CURRENT_LIST_DIR}/src/logger
   ${CMAKE_CURRENT_LIST_DIR}/src/scenes
 
   ${CMAKE_CURRENT_LIST_DIR}/../data/include

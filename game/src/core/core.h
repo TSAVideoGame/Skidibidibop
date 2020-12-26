@@ -5,6 +5,7 @@
 #include <vector>
 #include <cstdint>
 #include "input.h"
+#include "logger.h"
 
 namespace Game
 {
@@ -21,6 +22,8 @@ namespace Game
     // Get / Set
     static bool is_running();
     static const Input::Data get_inputs();
+    // Logger
+    static Logger logger;
     // Temporary
     static SDLW::Texture* get_texture() { return spritesheet; }
   private:

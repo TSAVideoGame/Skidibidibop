@@ -27,6 +27,9 @@ bool Game::Core::running = false;
 // Input
 Game::Input::Data Game::Core::inputs = {false, false, false, false, false, false, false, false, false};
 Game::Input::KeyBindings Game::Core::key_bindings;
+// Logger
+Game::Logger Game::Core::logger("log");
+
 /*
  * ========================================
  * Core::init
@@ -40,6 +43,9 @@ void Game::Core::init()
   window = new SDLW::Window("Skidibidbop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Constants.Window.width, Constants.Window.height, 0);
   renderer = new SDLW::Renderer(window);
   spritesheet = new SDLW::Texture("res/spritesheet.png", renderer);
+
+  logger.enable(Logger::LOG | Logger::ERROR);
+  logger.log(Logger::LOG, "Initialized window, renderer, and spritesheet");
 
   running = true;
 
