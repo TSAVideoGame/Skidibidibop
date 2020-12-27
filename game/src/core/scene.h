@@ -9,6 +9,11 @@ namespace Game
 {
   namespace Scenes
   {
+    /*
+     * ========================================
+     * Scene
+     * ========================================
+     */
     class Scene
     {
     public:
@@ -18,6 +23,30 @@ namespace Game
       virtual void draw(SDLW::Renderer*);
     };
 
+    /*
+     * ========================================
+     * Void Scene
+     *
+     * An empty scene
+     * ========================================
+     */
+    class Void : public Scene
+    {
+    public:
+      Void() : Scene() {}
+      ~Void() {}
+      void update() {}
+      void draw(SDLW::Renderer*) {}
+    };
+
+
+    /*
+     * ========================================
+     * Manager
+     *
+     * Singleton which manages all the scenes
+     * ========================================
+     */
     class Manager
     {
     public:
@@ -40,11 +69,22 @@ namespace Game
         }
       };
 
+      // Template specialization for Void scene, it just sets it as the current scene
+      /*template <> class RegisterScene<Void>
+      {
+      public:
+        RegisterScene()
+        {
+          Manager::get_instance().scenes.push_back(new Void());
+          Manager::get_instance().set_scene(Manager::get_instance().get_scene<Void>());
+        }
+      };*/
+
       template <typename T> T* get_scene()
       {
         static std::size_t i = index == scenes.size() - 1 ? index++ : throw std::logic_error("Unregistered Scene");
         return dynamic_cast<T*>(scenes[i]);
-      }
+      } 
     private:
       Manager();
       ~Manager();
@@ -55,15 +95,7 @@ namespace Game
       std::vector<Scene*> scenes;
     };
 
-    class Void : public Scene
-    {
-    public:
-      Void() : Scene() {}
-      ~Void() {}
-      void update() {}
-      void draw(SDLW::Renderer*) {}
-    };
-
+    // Register the void scene
     extern Manager::RegisterScene<Void> void_scene;
   };
 

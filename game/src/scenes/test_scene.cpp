@@ -1,16 +1,26 @@
 #include "test_scene.h"
 #include "entity.h"
+#include "transform_component.h"
 #include "render_component.h"
 #include "render_system.h"
+#include "physics_component.h"
+#include "physics_system.h"
 #include "core.h"
 
-static Game::ECS::Entity player = Game::ECS::EntityManager::get_instance().create_entity();
+static Game::ECS::Entity player = Game::ECS::EntityManager::get_instance().get_null();
 
 Game::Scenes::Manager::RegisterScene<Game::Scenes::TestScene> test_scene;
 
 Game::Scenes::TestScene::TestScene()
 {
+  player = Game::ECS::EntityManager::get_instance().create_entity();
 
+  ECS::Components::TransformManager* tm = ECS::Components::Manager::get_instance().get_component<ECS::Components::TransformManager>();
+  ECS::Components::TransformManager::Instance tmi = tm->add_component(player);
+
+  tm->set_offset_x(tmi, 0);
+  tm->set_offset_y(tmi, 0);
+  
   ECS::Components::RenderManager* rm = ECS::Components::Manager::get_instance().get_component<ECS::Components::RenderManager>();
   ECS::Components::RenderManager::Instance rmi = rm->add_component(player);
 
@@ -18,6 +28,16 @@ Game::Scenes::TestScene::TestScene()
   rm->set_src_rect(rmi, src_rect);
   SDL_Rect dest_rect = {0, 0, 32, 32};
   rm->set_dest_rect(rmi, dest_rect);
+
+  ECS::Components::PhysicsManager* pm = ECS::Components::Manager::get_instance().get_component<ECS::Components::PhysicsManager>();
+  ECS::Components::PhysicsManager::Instance pmi = pm->add_component(player);
+
+  pm->set_x_vel(pmi, 0);
+  pm->set_y_vel(pmi, 0);
+  pm->set_x_accel(pmi, 0);
+  pm->set_y_accel(pmi, 0);
+  pm->set_max_x_vel(pmi, 11);
+  pm->set_max_y_vel(pmi, 11);
 }
 
 Game::Scenes::TestScene::~TestScene()
@@ -27,25 +47,36 @@ Game::Scenes::TestScene::~TestScene()
 
 void Game::Scenes::TestScene::update()
 {
-  ECS::Components::RenderManager* rm = ECS::Components::Manager::get_instance().get_component<ECS::Components::RenderManager>();
-  ECS::Components::RenderManager::Instance rmi = rm->get_instance(player);
-  // Testing input, really should change transform/physics component, then all the dest_rects should be updated
-  if (Core::get_inputs().up)
+  ECS::Components::PhysicsManager* pm = ECS::Components::Manager::get_instance().get_component<ECS::Components::PhysicsManager>();
+  ECS::Components::PhysicsManager::Instance pmi = pm->get_instance(player);
+  
+  Input::Data in = Core::get_inputs();
+
+  if (in.up || in.down)
   {
-    rm->data.dest_rect[rmi.index].y -= 5;
+    if (in.up)
+      pm->set_y_accel(pmi, -2);
+    else
+      pm->set_y_accel(pmi, 2);
   }
-  if (Core::get_inputs().right)
+  else
   {
-    rm->data.dest_rect[rmi.index].x += 5;
+    pm->set_y_accel(pmi, pm->get_y_vel(pmi) / -2);
   }
-  if (Core::get_inputs().down)
+
+  if (in.right || in.left)
   {
-    rm->data.dest_rect[rmi.index].y += 5;
+    if (in.right)
+      pm->set_x_accel(pmi, 2);
+    else
+      pm->set_x_accel(pmi, -2);
   }
-  if (Core::get_inputs().left)
+  else
   {
-    rm->data.dest_rect[rmi.index].x -= 5;
+    pm->set_x_accel(pmi, pm->get_x_vel(pmi) / -2);
   }
+
+  ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Physics>()->update();
 }
 
 void Game::Scenes::TestScene::draw(SDLW::Renderer* renderer)

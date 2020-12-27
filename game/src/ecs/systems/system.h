@@ -58,12 +58,14 @@ namespace Game
           {
             static_assert(std::is_base_of<System, T>::value, "System does not dervie from Game::ECS::Systems::System");
             Manager::get_instance().systems.push_back(new T());
+            Manager::get_instance().get_system<T>();
           }
         };
 
         template <typename T> T* get_system()
         {
-          static std::size_t i = index == systems.size() - 1 ? index++ : throw std::logic_error("Unregistered System");
+          static std::size_t i = index == systems.size() - 1 ?  index++ : throw std::logic_error("Unregistered System");
+
           return dynamic_cast<T*>(systems[i]);
         }
       private:

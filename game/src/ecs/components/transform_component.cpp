@@ -12,14 +12,15 @@ Game::ECS::Components::TransformManager::TransformManager()
   data.allocated = 0;
   data.buffer = std::malloc(0);
 
-  data.entity = reinterpret_cast<Entity*>(data.buffer);
-  data.tile_x = reinterpret_cast<std::uint16_t*>(data.buffer);
-  data.tile_y = reinterpret_cast<std::uint16_t*>(data.buffer);
+  data.entity   = reinterpret_cast<Entity*>(data.buffer);
+  data.tile_x   = reinterpret_cast<std::uint16_t*>(data.buffer);
+  data.tile_y   = reinterpret_cast<std::uint16_t*>(data.buffer);
   data.offset_x = reinterpret_cast<int*>(data.buffer);
   data.offset_y = reinterpret_cast<int*>(data.buffer);
 
   // Allocate at least the null component
   allocate(1);
+  add_component(EntityManager::get_instance().get_null());
 }
 
 Game::ECS::Components::TransformManager::~TransformManager()
@@ -27,7 +28,7 @@ Game::ECS::Components::TransformManager::~TransformManager()
   std::free(data.buffer);
 }
 
-Game::ECS::Components::TransformManager::Instance Game::ECS::Components::TransformManager::get_instance(Entity& e)
+Game::ECS::Components::TransformManager::Instance Game::ECS::Components::TransformManager::get_instance(const Entity& e)
 {
   Instance i;
 
@@ -66,16 +67,16 @@ void Game::ECS::Components::TransformManager::set_offset_y(Instance& i, int y) {
  * Component handling
  * ========================================
  */
-Game::ECS::Components::TransformManager::Instance Game::ECS::Components::TransformManager::add_component(Entity& e)
+Game::ECS::Components::TransformManager::Instance Game::ECS::Components::TransformManager::add_component(const Entity& e)
 {
   // TODO: Do some fancy allocation stuff here instead of allocating every time something is added
-  allocate(++data.instances);
+  allocate(data.instances + 1);
 
-  data.entity[data.instances - 1] = e;
+  data.entity[data.instances] = e;
 
-  map.insert({e, data.instances - 1});
+  map.insert({e, data.instances});
 
-  return {data.instances - 1};
+  return {data.instances++};
 }
 
 void Game::ECS::Components::TransformManager::destroy_component(Instance& i)

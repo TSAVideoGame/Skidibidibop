@@ -40,7 +40,7 @@ namespace Game
           std::uint32_t index;
         };
 
-        Instance get_instance(Entity&);
+        Instance get_instance(const Entity&);
 
         SDL_Rect get_src_rect(Instance&);
         void     set_src_rect(Instance&, SDL_Rect&);
@@ -48,7 +48,7 @@ namespace Game
         SDL_Rect get_dest_rect(Instance&);
         void     set_dest_rect(Instance&, SDL_Rect&);
 
-        Instance add_component(Entity&);
+        Instance add_component(const Entity&);
         void destroy_component(Instance&);
         // TODO: Delete componenet when entity is destroyed
         Data data;

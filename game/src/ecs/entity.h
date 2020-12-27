@@ -10,6 +10,16 @@ namespace Game
 {
   namespace ECS
   {
+    /*
+     * ========================================
+     * Entity
+     *
+     * Just an id
+     * Some bits are the index and some are for
+     * generation, which is index repetition
+     * because it is a weak reference
+     * ========================================
+     */
     struct Entity
     {
       static const std::uint8_t INDEX_BITS = 24;
@@ -33,8 +43,9 @@ namespace Game
       Entity create_entity();
       void destory_entity(Entity& e);
       bool is_alive(const Entity& e);
+      const Entity& get_null() { return null_entity; }
     private:
-      EntityManager() {}
+      EntityManager() { null_entity = create_entity(); }
       ~EntityManager() {}
 
       Entity build_entity(std::uint32_t index, std::uint32_t generation);
@@ -42,6 +53,7 @@ namespace Game
       std::vector<std::uint8_t> generations;
       std::deque<std::uint32_t> empty_indices;
       static const std::uint32_t MIN_EMPTY_INDICES = 1 << 10; // This value needs some more thought into it, but should be fine for this game
+      Entity null_entity;
     };
   };
 };

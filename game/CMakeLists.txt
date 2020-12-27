@@ -13,8 +13,10 @@ add_executable(game
 
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/entity.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/component.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/physics_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/render_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/transform_component.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/physics_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/render_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/system.cpp
 
@@ -52,3 +54,6 @@ target_link_libraries(game sbbdata sdlw SDL2 SDL2_mixer)
 set_target_properties(game PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Make sure to turn this off later
+set(CMAKE_BUILD_TYPE debug)

@@ -1,5 +1,5 @@
-#ifndef SKIDIBIDIBOP_GAME_ECS_COMPONENTS_TRANSFORM_COMPONENT
-#define SKIDIBIDIBOP_GAME_ECS_COMPONENTS_TRANSFORM_COMPONENT
+#ifndef SKIDIBIDIBOP_GAME_ECS_COMPONENTS_PHYSICS_COMPONENT
+#define SKIDIBIDIBOP_GAME_ECS_COMPONENTS_PHYSICS_COMPONENT
 
 #include "entity.h"
 #include <cstdint>
@@ -14,16 +14,18 @@ namespace Game
     {
       /*
        * ========================================
-       * Transform Component
+       * Physics Component
        *
-       * Has data related to position
+       * Has data related to movement
+       * - Velocities (vel)
+       * - Acceleration (accel)
        * ========================================
        */
-      class TransformManager : public Component
+      class PhysicsManager : public Component
       {
       public:
-        TransformManager();
-        ~TransformManager();
+        PhysicsManager();
+        ~PhysicsManager();
         // All the data is stored in one buffer
         struct Data
         {
@@ -32,10 +34,12 @@ namespace Game
           void* buffer;
 
           Entity* entity;
-          std::uint16_t* tile_x;
-          std::uint16_t* tile_y;
-          int* offset_x;
-          int* offset_y;
+          float* x_vel;
+          float* y_vel;
+          float* x_accel;
+          float* y_accel;
+          float* max_x_vel;
+          float* max_y_vel;
         };
 
         // An instance of the component
@@ -46,23 +50,29 @@ namespace Game
 
         Instance get_instance(const Entity&);
 
-        std::uint16_t get_tile_x(Instance&);
-        void          set_tile_x(Instance&, std::uint16_t);
+        float get_x_vel(Instance&);
+        void  set_x_vel(Instance&, float);
 
-        std::uint16_t get_tile_y(Instance&);
-        void          set_tile_y(Instance&, std::uint16_t);
+        float get_y_vel(Instance&);
+        void  set_y_vel(Instance&, float);
 
-        int           get_offset_x(Instance&);
-        void          set_offset_x(Instance&, int);
+        float get_x_accel(Instance&);
+        void  set_x_accel(Instance&, float);
 
-        int           get_offset_y(Instance&);
-        void          set_offset_y(Instance&, int);
+        float get_y_accel(Instance&);
+        void  set_y_accel(Instance&, float);
+
+        float get_max_x_vel(Instance&);
+        void  set_max_x_vel(Instance&, float);
+
+        float get_max_y_vel(Instance&);
+        void  set_max_y_vel(Instance&, float);
 
         Instance add_component(const Entity&);
         void destroy_component(Instance&);
         // TODO: Destroy component when entity is destroyed
-      private:
         Data data;
+      private:
         // Given an entity id, this is how we will get the instance index
         std::unordered_map<Entity, std::uint32_t> map;
 
@@ -70,7 +80,7 @@ namespace Game
       };
       
       // Register the transform component
-      extern Manager::RegisterComponent<TransformManager> transform_manager;
+      extern Manager::RegisterComponent<PhysicsManager> physics_manager;
     };
   };
 };

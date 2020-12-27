@@ -25,3 +25,4 @@ these are the managers of which the user can (and should be) creating clients fo
 
 ## To-do
 - Components, Systems, Scenes, etc. should not be initializable except for the respective manager class
+- Resource Manager

@@ -13,13 +13,15 @@ namespace Game
       bool slot_a, slot_b, slot_c;
       bool attack;
       bool pause;
+      int mouse_x, mouse_y;
+      bool mouse_down;
     };
 
     struct KeyBindings
     {
       SDL_Keycode up     = SDLK_w;
       SDL_Keycode right  = SDLK_d;
-      SDL_Keycode down = SDLK_s;
+      SDL_Keycode down   = SDLK_s;
       SDL_Keycode left   = SDLK_a;
 
       SDL_Keycode slot_a = SDLK_1;

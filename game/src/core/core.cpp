@@ -2,6 +2,7 @@
 #include "constants.h"
 #include "plugins.h"
 #include "scene.h"
+#include <cstdint>
 
 #include "test_scene.h"
 
@@ -33,24 +34,35 @@ Game::Logger Game::Core::logger("log");
 /*
  * ========================================
  * Core::init
+ *
+ * Initializes SDL, creates some objects
  * ========================================
  */
 void Game::Core::init()
 {
-  SDL_Init(0);
-  SDL_InitSubSystem(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_EVENTS);
-  
+  logger.enable(Logger::LOG | Logger::ERROR);
+
+  // Initialize SDL and subsystems
+  if (SDL_Init(0))
+  {
+    logger.log(Logger::ERROR, "Could not initialize SDL");
+    std::exit(-1);
+  }
+
+  if(SDL_InitSubSystem(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_EVENTS))
+  {
+    logger.log(Logger::ERROR, "Could not initialize SDL Subsystems");
+    std::exit(-1);
+  }
+ 
+  // Initialize SDLW objects
+  // TODO: Make sure all of these do not return nullptrs
   window = new SDLW::Window("Skidibidbop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, Constants.Window.width, Constants.Window.height, 0);
   renderer = new SDLW::Renderer(window);
   spritesheet = new SDLW::Texture("res/spritesheet.png", renderer);
 
-  logger.enable(Logger::LOG | Logger::ERROR);
-  logger.log(Logger::LOG, "Initialized window, renderer, and spritesheet");
-
   running = true;
 
-  // TODO: Scenes::Manager should set up void scene by itself
-  Scenes::Manager::get_instance().set_scene(Scenes::Manager::get_instance().get_scene<Scenes::Void>());
   // Use the test scene
   Scenes::Manager::get_instance().set_scene(Scenes::Manager::get_instance().get_scene<Scenes::TestScene>());
 
@@ -138,8 +150,19 @@ void Game::Core::input()
 
         break;
       }
+      // TODO: Mose button input
+      case SDL_MOUSEBUTTONDOWN:
+      {
+        break;
+      }
+      case SDL_MOUSEBUTTONUP:
+      {
+        break;
+      }
     }
   }
+
+  SDL_GetMouseState(&inputs.mouse_x, &inputs.mouse_y);
 }
 
 void Game::Core::update()
