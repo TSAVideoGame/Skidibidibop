@@ -16,6 +16,17 @@ FFM::Data::Types::Chunk::Chunk()
   num_lines = 0;
   num_objects = 0;
   num_enemies = 0;
+  
+  size = 
+    sizeof(x) +
+    sizeof(y) +
+    sizeof(background_id) +
+    sizeof(music_id) +
+    sizeof(vertices) * num_vertices +
+    sizeof(lines) * num_lines +
+    sizeof(objects) * num_objects +
+    sizeof(enemies) * num_enemies +
+    sizeof(npcs) * num_npcs;
 }
 
 FFM::Data::Types::Chunk::Chunk(std::ifstream& file)
@@ -25,6 +36,26 @@ FFM::Data::Types::Chunk::Chunk(std::ifstream& file)
 
 void FFM::Data::Types::Chunk::save(std::ofstream& file)
 {
+  // Set all the num_ variables
+  num_vertices = vertices.size();
+  num_lines = lines.size();
+  num_objects = objects.size();
+  num_enemies = enemies.size();
+  num_npcs = npcs.size();
+  
+  size = 
+    sizeof(x) +
+    sizeof(y) +
+    sizeof(background_id) +
+    sizeof(music_id) +
+    sizeof(vertices) * num_vertices +
+    sizeof(lines) * num_lines +
+    sizeof(objects) * num_objects +
+    sizeof(enemies) * num_enemies +
+    sizeof(npcs) * num_npcs;
+
+  file.write(reinterpret_cast<char*>(&size), sizeof(size));
+
   // Save the chunk position
   file.write(reinterpret_cast<char*>(&x), sizeof(x));
   file.write(reinterpret_cast<char*>(&y), sizeof(y));
@@ -33,7 +64,6 @@ void FFM::Data::Types::Chunk::save(std::ofstream& file)
   file.write(reinterpret_cast<char*>(&music_id), sizeof(music_id));
 
   // Save Vertices
-  num_vertices = vertices.size();
   file.write(reinterpret_cast<char*>(&num_vertices), sizeof(num_vertices));
   for (std::vector<Vertex>::iterator i = vertices.begin(); i < vertices.end(); ++i)
   {
@@ -42,7 +72,6 @@ void FFM::Data::Types::Chunk::save(std::ofstream& file)
   }
 
   // Save Lines
-  num_lines = lines.size();
   file.write(reinterpret_cast<char*>(&num_lines), sizeof(num_lines));
   for (std::vector<Line>::iterator i = lines.begin(); i < lines.end(); ++i)
   {
@@ -52,7 +81,6 @@ void FFM::Data::Types::Chunk::save(std::ofstream& file)
   }
 
   // Save Objectss
-  num_objects = objects.size();
   file.write(reinterpret_cast<char*>(&num_objects), sizeof(num_objects));
   for (std::vector<Object>::iterator i = objects.begin(); i < objects.end(); ++i)
   {
@@ -61,7 +89,6 @@ void FFM::Data::Types::Chunk::save(std::ofstream& file)
   }
 
   // Save Enemies
-  num_enemies = enemies.size();
   file.write(reinterpret_cast<char*>(&num_enemies), sizeof(num_enemies));
   for (std::vector<Enemy>::iterator i = enemies.begin(); i < enemies.end(); ++i)
   {
@@ -70,7 +97,6 @@ void FFM::Data::Types::Chunk::save(std::ofstream& file)
   }
 
   // Save NPCs
-  num_npcs = npcs.size();
   file.write(reinterpret_cast<char*>(&num_npcs), sizeof(num_npcs));
   for (std::vector<NPC>::iterator i = npcs.begin(); i < npcs.end(); ++i)
   {
@@ -81,6 +107,8 @@ void FFM::Data::Types::Chunk::save(std::ofstream& file)
 
 void FFM::Data::Types::Chunk::load(std::ifstream& file)
 {
+  file.read(reinterpret_cast<char*>(&size), sizeof(size));
+
   // Load the chunk position
   file.read(reinterpret_cast<char*>(&x), sizeof(x));
   file.read(reinterpret_cast<char*>(&y), sizeof(y));
@@ -148,4 +176,46 @@ void FFM::Data::Types::Chunk::load(std::ifstream& file)
 void FFM::Data::Types::Chunk::clean()
 {
   // TODO
+}
+
+/*
+ * ========================================
+ * Map
+ * ========================================
+ */
+FFM::Data::Types::Map::Map()
+{
+  num_chunks = 0;
+}
+
+FFM::Data::Types::Map::Map(std::ifstream& file)
+{
+  load(file);
+}
+
+void FFM::Data::Types::Map::save(std::ofstream& file)
+{
+  file.write(reinterpret_cast<char*>(&x), sizeof(x));
+  file.write(reinterpret_cast<char*>(&y), sizeof(y));
+
+  file.write(reinterpret_cast<char*>(&num_chunks), sizeof(num_chunks));
+
+  for (std::vector<std::uint32_t>::iterator i = sizes.begin(); i < sizes.end(); ++i)
+  {
+    file.write(reinterpret_cast<char*>(*i), sizeof(*i));
+  }
+}
+
+void FFM::Data::Types::Map::load(std::ifstream& file)
+{
+  file.read(reinterpret_cast<char*>(&x), sizeof(x));
+  file.read(reinterpret_cast<char*>(&y), sizeof(y));
+
+  file.read(reinterpret_cast<char*>(&num_chunks), sizeof(num_chunks));
+  for (std::uint32_t i = 0; i < num_chunks; ++i)
+  {
+    std::uint32_t size;
+    file.read(reinterpret_cast<char*>(&size), sizeof(size));
+    sizes.push_back(size);
+  }
 }

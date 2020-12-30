@@ -64,6 +64,7 @@ namespace FFM
         };
 
 
+        std::uint32_t size; // Size in bytes
         std::uint16_t x, y; // The chunk's (x,y) relative to the map
         std::uint32_t background_id;
         std::uint16_t music_id;
@@ -80,6 +81,14 @@ namespace FFM
         std::vector<NPC> npcs;
       };
 
+      /*
+       * ========================================
+       * Map Data
+       *
+       * To access chunks use the sizes vector
+       * along with the .ffmf file
+       * ========================================
+       */
       class Map : public Base
       {
       public:
@@ -87,10 +96,11 @@ namespace FFM
         Map(std::ifstream&);
 
         void save(std::ofstream&);
-        void load(std::ofstream&);
+        void load(std::ifstream&);
 
+        std::uint16_t x, y;
         std::uint32_t num_chunks;
-        std::vector<Chunk> chunks;
+        std::vector<std::uint32_t> sizes;
       };
     };
   };
