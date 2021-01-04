@@ -23,13 +23,16 @@
 // Basic
 SDLW::Window* Game::Core::window = nullptr;
 SDLW::Renderer* Game::Core::renderer = nullptr;
-SDLW::Texture* Game::Core::spritesheet = nullptr;
 bool Game::Core::running = false;
 // Input
 Game::Input::Data Game::Core::inputs = {false, false, false, false, false, false, false, false, false};
 Game::Input::KeyBindings Game::Core::key_bindings;
 // Logger
 Game::Logger Game::Core::logger("log");
+// Resources
+SDLW::Texture* Game::Core::spritesheet = nullptr;
+std::ifstream Game::Core::map_file;
+FFM::Data::Types::Map Game::Core::map_helper;
 
 /*
  * ========================================

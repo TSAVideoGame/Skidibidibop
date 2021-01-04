@@ -5,6 +5,7 @@
 #include "render_system.h"
 #include "physics_component.h"
 #include "physics_system.h"
+#include "map_system.h"
 #include "core.h"
 
 static Game::ECS::Entity player = Game::ECS::EntityManager::get_instance().get_null();
@@ -13,15 +14,25 @@ Game::Scenes::Manager::RegisterScene<Game::Scenes::TestScene> test_scene;
 
 Game::Scenes::TestScene::TestScene()
 {
+  // Set Map resources
+  Core::map_file.close();
+  Core::map_file.open("res/map.ffmf", std::ifstream::binary);
+  std::ifstream f("res/map.ffmfd", std::ifstream::binary);
+  Core::map_helper.load(f);
+  f.close();
+  // Get pointers to components
+  ECS::Components::TransformManager* tm = ECS::Components::Manager::get_instance().get_component<ECS::Components::TransformManager>();
+  ECS::Components::RenderManager* rm = ECS::Components::Manager::get_instance().get_component<ECS::Components::RenderManager>();
+  ECS::Components::PhysicsManager* pm = ECS::Components::Manager::get_instance().get_component<ECS::Components::PhysicsManager>();
+
+  // Set up the player
   player = Game::ECS::EntityManager::get_instance().create_entity();
 
-  ECS::Components::TransformManager* tm = ECS::Components::Manager::get_instance().get_component<ECS::Components::TransformManager>();
   ECS::Components::TransformManager::Instance tmi = tm->add_component(player);
 
   tm->set_offset_x(tmi, 0);
   tm->set_offset_y(tmi, 0);
   
-  ECS::Components::RenderManager* rm = ECS::Components::Manager::get_instance().get_component<ECS::Components::RenderManager>();
   ECS::Components::RenderManager::Instance rmi = rm->add_component(player);
 
   SDL_Rect src_rect = {0, 6 * 32, 32, 32};
@@ -29,7 +40,6 @@ Game::Scenes::TestScene::TestScene()
   SDL_Rect dest_rect = {0, 0, 32, 32};
   rm->set_dest_rect(rmi, dest_rect);
 
-  ECS::Components::PhysicsManager* pm = ECS::Components::Manager::get_instance().get_component<ECS::Components::PhysicsManager>();
   ECS::Components::PhysicsManager::Instance pmi = pm->add_component(player);
 
   pm->set_x_vel(pmi, 0);
@@ -47,6 +57,8 @@ Game::Scenes::TestScene::~TestScene()
 
 void Game::Scenes::TestScene::update()
 {
+  ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Map>()->update();
+
   ECS::Components::PhysicsManager* pm = ECS::Components::Manager::get_instance().get_component<ECS::Components::PhysicsManager>();
   ECS::Components::PhysicsManager::Instance pmi = pm->get_instance(player);
   
@@ -81,5 +93,6 @@ void Game::Scenes::TestScene::update()
 
 void Game::Scenes::TestScene::draw(SDLW::Renderer* renderer)
 {
+  ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Map>()->draw(renderer);
   ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Render>()->draw(renderer); 
 }

@@ -23,6 +23,11 @@ int main()
 
   std::ofstream out_file("map.ffmf", std::ofstream::binary | std::ofstream::trunc);
   std::ofstream out_file_helper("map.ffmfd", std::ofstream::binary | std::ofstream::trunc);
+  
+  FFM::Data::Types::Map map;
+  map.offsets.reserve(x * y + 1);
+  map.offsets.push_back(0);
+  
   for (std::uint16_t i = 0; i < x * y; ++i)
   {
     std::ifstream chunkf(dir_path + std::to_string(i % x) + "_" + std::to_string(i / x) + ".ffmc");
@@ -30,18 +35,22 @@ int main()
     {
       FFM::Data::Types::Chunk c(chunkf);
       c.save(out_file);
-      out_file_helper.write(reinterpret_cast<char*>(&c.size), sizeof(c.size));
+      map.offsets.push_back(map.offsets[i] + c.size());
     }
     else
     {
       null_chunk.save(out_file);
-      out_file_helper.write(reinterpret_cast<char*>(&null_chunk.size), sizeof(null_chunk.size));
+      map.offsets.push_back(map.offsets[i] + null_chunk.size());
     }
 
     chunkf.close();
   }
+  
+  map.offsets.erase(map.offsets.end() - 1); // There will be an extra offset
+  map.save(out_file_helper);
 
   out_file.close();
+  out_file_helper.close();
 
   return 0;
 }

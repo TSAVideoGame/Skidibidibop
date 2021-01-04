@@ -6,6 +6,8 @@
 #include <cstdint>
 #include "input.h"
 #include "logger.h"
+#include "ffm_data.h"
+#include <fstream>
 
 namespace Game
 {
@@ -26,6 +28,9 @@ namespace Game
     static Logger logger;
     // Temporary
     static SDLW::Texture* get_texture() { return spritesheet; }
+    // Resources (Temporary)
+    static std::ifstream map_file;
+    static FFM::Data::Types::Map map_helper;
   private:
     // Unused methods
     Core();
@@ -34,11 +39,12 @@ namespace Game
     // Basic stuff
     static SDLW::Window* window;
     static SDLW::Renderer* renderer;
-    static SDLW::Texture* spritesheet;
     static bool running;
     // Input
     static Input::Data inputs;
     static Input::KeyBindings key_bindings;
+    // Resources
+    static SDLW::Texture* spritesheet;
   };
 };
 

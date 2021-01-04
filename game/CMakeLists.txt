@@ -16,6 +16,7 @@ add_executable(game
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/physics_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/render_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/transform_component.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/map_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/physics_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/render_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/system.cpp
@@ -41,15 +42,17 @@ target_include_directories(game PUBLIC
 
   ${CMAKE_CURRENT_LIST_DIR}/../data/include
   ${CMAKE_CURRENT_LIST_DIR}/../sdlw/include
+  ${CMAKE_CURRENT_LIST_DIR}/../ffm/data/include
   /usr/include/SDL2
 )
 
 target_link_directories(game PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../data/lib
   ${CMAKE_CURRENT_LIST_DIR}/../sdlw/lib
+  ${CMAKE_CURRENT_LIST_DIR}/../ffm/data/lib
 )
 
-target_link_libraries(game sbbdata sdlw SDL2 SDL2_mixer)
+target_link_libraries(game sbbdata ffmdata sdlw SDL2 SDL2_mixer)
 
 set_target_properties(game PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
 

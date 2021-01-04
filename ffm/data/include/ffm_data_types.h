@@ -29,6 +29,7 @@ namespace FFM
         void save(std::ofstream&);
         void load(std::ifstream&);
 
+        std::uint32_t size();
         // Remove stray vertices, pack the vectors
         void clean();
 
@@ -64,7 +65,6 @@ namespace FFM
         };
 
 
-        std::uint32_t size; // Size in bytes
         std::uint16_t x, y; // The chunk's (x,y) relative to the map
         std::uint32_t background_id;
         std::uint16_t music_id;
@@ -100,7 +100,7 @@ namespace FFM
 
         std::uint16_t x, y;
         std::uint32_t num_chunks;
-        std::vector<std::uint32_t> sizes;
+        std::vector<std::uint32_t> offsets;
       };
     };
   };
