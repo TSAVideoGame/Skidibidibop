@@ -33,6 +33,8 @@ Game::Logger Game::Core::logger("log");
 SDLW::Texture* Game::Core::spritesheet = nullptr;
 std::ifstream Game::Core::map_file;
 FFM::Data::Types::Map Game::Core::map_helper;
+Game::Camera Game::Core::camera = {0, 0};
+std::uint32_t Game::Core::current_chunk = 0;
 
 /*
  * ========================================

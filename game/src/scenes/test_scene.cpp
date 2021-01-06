@@ -6,7 +6,9 @@
 #include "physics_component.h"
 #include "physics_system.h"
 #include "map_system.h"
+#include "camera_system.h"
 #include "core.h"
+#include "constants.h"
 
 static Game::ECS::Entity player = Game::ECS::EntityManager::get_instance().get_null();
 
@@ -30,8 +32,8 @@ Game::Scenes::TestScene::TestScene()
 
   ECS::Components::TransformManager::Instance tmi = tm->add_component(player);
 
-  tm->set_offset_x(tmi, 0);
-  tm->set_offset_y(tmi, 0);
+  tm->set_offset_x(tmi, Constants.Window.width / 2);
+  tm->set_offset_y(tmi, Constants.Window.height / 2);
   
   ECS::Components::RenderManager::Instance rmi = rm->add_component(player);
 
@@ -55,6 +57,8 @@ Game::Scenes::TestScene::~TestScene()
   
 }
 
+static int camera_move_x = 0;
+static int camera_move_y = 0;
 void Game::Scenes::TestScene::update()
 {
   ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Map>()->update();
@@ -89,6 +93,39 @@ void Game::Scenes::TestScene::update()
   }
 
   ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Physics>()->update();
+
+  // Move camera if player is at a certain 'box'
+  ECS::Components::TransformManager* tm = ECS::Components::Manager::get_instance().get_component<ECS::Components::TransformManager>();
+  ECS::Components::TransformManager::Instance tmi = tm->get_instance(player);
+
+  if (tm->get_offset_x(tmi) > 760)
+  {
+    camera_move_x = 800;
+  }
+  else if (tm->get_offset_x(tmi) < 40)
+  {
+    camera_move_x = -800;
+  }
+  if (tm->get_offset_y(tmi) > 760)
+  {
+    camera_move_y = 800;
+  }
+  else if (tm->get_offset_y(tmi) < 40)
+  {
+    camera_move_y = -800;
+  }
+
+  ECS::Systems::Camera* cs = ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Camera>();
+  if (camera_move_x != 0)
+  {
+    camera_move_x /= 8;
+    cs->move_camera(camera_move_x, 0);
+  }
+  if (camera_move_y != 0)
+  {
+    camera_move_y /= 8;
+    cs->move_camera(0, camera_move_y);
+  }
 }
 
 void Game::Scenes::TestScene::draw(SDLW::Renderer* renderer)

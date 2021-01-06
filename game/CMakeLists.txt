@@ -12,10 +12,14 @@ add_executable(game
   ${CMAKE_CURRENT_LIST_DIR}/src/core/scene.cpp
 
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/entity.cpp
+
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/camera_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/physics_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/render_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/transform_component.cpp
+
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/camera_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/map_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/physics_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/render_system.cpp

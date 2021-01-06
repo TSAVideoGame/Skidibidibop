@@ -11,6 +11,12 @@
 
 namespace Game
 {
+  // Temporary, should be an entity/component thingy
+  struct Camera 
+  {
+    int x, y;
+  };
+
   class Core
   {
   public:
@@ -31,6 +37,8 @@ namespace Game
     // Resources (Temporary)
     static std::ifstream map_file;
     static FFM::Data::Types::Map map_helper;
+    static Camera camera;
+    static std::uint32_t current_chunk;
   private:
     // Unused methods
     Core();

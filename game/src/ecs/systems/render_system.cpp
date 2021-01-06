@@ -16,8 +16,9 @@ void Game::ECS::Systems::Render::draw(SDLW::Renderer* renderer)
     Components::TransformManager::Instance tmi = tm->get_instance(rm->data.entity[i]);
     if (tmi.index != 0)
     {
-      rm->data.dest_rect[i].x = tm->get_offset_x(tmi);
-      rm->data.dest_rect[i].y = tm->get_offset_y(tmi);
+      // TODO: All camera stuff here is temporary
+      rm->data.dest_rect[i].x = tm->get_offset_x(tmi) - Core::camera.x;
+      rm->data.dest_rect[i].y = tm->get_offset_y(tmi) - Core::camera.y;
     }
     // Temporary, texture shouldn't be obtained like this
     renderer->copy(Core::get_texture(), &rm->data.src_rect[i], &rm->data.dest_rect[i]);

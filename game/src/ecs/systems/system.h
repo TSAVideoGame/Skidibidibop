@@ -27,6 +27,7 @@ namespace Game
       {
       public:
         virtual ~System() {}
+        virtual void init() {}
       protected:
         // Only Systems::Manager will initialize systems
         // TODO: This doesn't work
@@ -58,7 +59,7 @@ namespace Game
           {
             static_assert(std::is_base_of<System, T>::value, "System does not dervie from Game::ECS::Systems::System");
             Manager::get_instance().systems.push_back(new T());
-            Manager::get_instance().get_system<T>();
+            Manager::get_instance().get_system<T>()->init();
           }
         };
 
