@@ -32,6 +32,8 @@ namespace Game
     static const Input::Data get_inputs();
     // Logger
     static Logger logger;
+    // If an update() needs the renderer it can get it via this, not final though
+    static SDLW::Renderer* renderer;
     // Temporary
     static SDLW::Texture* get_texture() { return spritesheet; }
     // Resources (Temporary)
@@ -46,7 +48,6 @@ namespace Game
 
     // Basic stuff
     static SDLW::Window* window;
-    static SDLW::Renderer* renderer;
     static bool running;
     // Input
     static Input::Data inputs;

@@ -45,7 +45,7 @@ void Game::ECS::Systems::Camera::move_camera(int x, int y)
   Components::CameraManager::Instance cmi = cm->get_instance(cameras[active_camera]);
   // X
   cm->set_x(cmi, cm->get_x(cmi) + x);
-  if (cm->get_x(cmi) >= 800)
+  /*if (cm->get_x(cmi) >= 800)
   {
     cm->set_x(cmi, cm->get_x(cmi) - 800);
     cm->set_chunk(cmi, cm->get_chunk(cmi) + 1);
@@ -54,10 +54,10 @@ void Game::ECS::Systems::Camera::move_camera(int x, int y)
   {
     cm->set_x(cmi, cm->get_x(cmi) + 800);
     cm->set_chunk(cmi, cm->get_chunk(cmi) - 1);
-  }
+  }*/
   // Y
   cm->set_y(cmi, cm->get_y(cmi) + y);
-  if (cm->get_y(cmi) >= 800)
+  /*if (cm->get_y(cmi) >= 800)
   {
     cm->set_y(cmi, cm->get_y(cmi) - 800);
     cm->set_chunk(cmi, cm->get_chunk(cmi) + Core::map_helper.x);
@@ -66,5 +66,21 @@ void Game::ECS::Systems::Camera::move_camera(int x, int y)
   {
     cm->set_y(cmi, cm->get_y(cmi) + 800);
     cm->set_chunk(cmi, cm->get_chunk(cmi) - Core::map_helper.x);
-  }
+  }*/
+}
+
+std::uint32_t Game::ECS::Systems::Camera::get_x()
+{
+  Components::CameraManager* cm = Components::Manager::get_instance().get_component<Components::CameraManager>();
+  Components::CameraManager::Instance cmi = cm->get_instance(cameras[active_camera]);
+
+  return cm->get_x(cmi); 
+}
+
+std::uint32_t Game::ECS::Systems::Camera::get_y()
+{
+  Components::CameraManager* cm = Components::Manager::get_instance().get_component<Components::CameraManager>();
+  Components::CameraManager::Instance cmi = cm->get_instance(cameras[active_camera]);
+
+  return cm->get_y(cmi); 
 }

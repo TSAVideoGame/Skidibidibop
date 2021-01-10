@@ -9,7 +9,7 @@ int main()
   std::cout << "FFM Builder\nBuilds the map given chunks\n\n" << std::endl;
   std::cout << "Enter map chunk dimensions (x,y):" << std::endl;
 
-  std::uint8_t x, y;
+  std::uint16_t x, y;
   std::string dir_path;
 
   std::cin >> x;
@@ -27,7 +27,7 @@ int main()
   FFM::Data::Types::Map map;
   map.offsets.reserve(x * y + 1);
   map.offsets.push_back(0);
-  
+ 
   for (std::uint16_t i = 0; i < x * y; ++i)
   {
     std::ifstream chunkf(dir_path + std::to_string(i % x) + "_" + std::to_string(i / x) + ".ffmc");

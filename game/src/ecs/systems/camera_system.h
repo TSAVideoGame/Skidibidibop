@@ -23,6 +23,8 @@ namespace Game
         static void set_active_camera(std::uint32_t);
         static Components::CameraManager::Instance get_active_camera();
         static void move_camera(int x, int y);
+        static std::uint32_t get_x();
+        static std::uint32_t get_y();
       private:
         static Entity cameras[10]; // std::vector is failing me :(
         static std::uint32_t active_camera; // Index of cameras vector

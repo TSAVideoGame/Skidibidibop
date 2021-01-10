@@ -12,6 +12,7 @@ namespace Game
   {
     namespace Systems
     {
+      // TODO: System inits and quits to clean resources,
       class Map : public System
       {
       public:
@@ -21,6 +22,7 @@ namespace Game
       private:
         static std::vector<FFM::Data::Types::Chunk> chunks;
         static std::uint32_t top_left_chunk;
+        static std::vector<SDLW::Texture*> chunk_textures;
       };
 
       extern Manager::RegisterSystem<Map> map_system;

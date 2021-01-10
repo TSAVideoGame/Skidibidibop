@@ -97,34 +97,40 @@ void Game::Scenes::TestScene::update()
   // Move camera if player is at a certain 'box'
   ECS::Components::TransformManager* tm = ECS::Components::Manager::get_instance().get_component<ECS::Components::TransformManager>();
   ECS::Components::TransformManager::Instance tmi = tm->get_instance(player);
+  int player_x = tm->get_offset_x(tmi) - ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Camera>()->get_x();
+  int player_y = tm->get_offset_y(tmi) - ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Camera>()->get_y();
 
-  if (tm->get_offset_x(tmi) > 760)
+  if (player_x > 860)
   {
-    camera_move_x = 800;
+    camera_move_x = 960;
   }
-  else if (tm->get_offset_x(tmi) < 40)
+  else if (player_x < 100)
   {
-    camera_move_x = -800;
+    camera_move_x = -960;
   }
-  if (tm->get_offset_y(tmi) > 760)
+  if (player_y > 540)
   {
-    camera_move_y = 800;
+    camera_move_y = 640;
   }
-  else if (tm->get_offset_y(tmi) < 40)
+  else if (player_y < 100)
   {
-    camera_move_y = -800;
+    camera_move_y = -640;
   }
 
   ECS::Systems::Camera* cs = ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Camera>();
   if (camera_move_x != 0)
   {
-    camera_move_x /= 8;
-    cs->move_camera(camera_move_x, 0);
+    cs->move_camera(camera_move_x / 64, 0);
+    camera_move_x -= camera_move_x / 64;
+    if (std::abs(camera_move_x / 64) < 5)
+      camera_move_x = 0;
   }
   if (camera_move_y != 0)
   {
-    camera_move_y /= 8;
-    cs->move_camera(0, camera_move_y);
+    cs->move_camera(0, camera_move_y / 64);
+    camera_move_y -= camera_move_y / 64;
+    if (std::abs(camera_move_y / 64) < 5)
+      camera_move_y = 0;
   }
 }
 
