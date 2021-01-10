@@ -21,6 +21,11 @@ namespace Game
        * here, that's because a system can do
        * whatever it wants basically, as long as
        * it's main goal is 'manipulating' the data
+       *
+       * You can define inits and quits if you need
+       * resources but the Systems::Manager will
+       * take care of calling it, all you need to
+       * do is register the system
        * ========================================
        */
       class System
@@ -28,6 +33,7 @@ namespace Game
       public:
         virtual ~System() {}
         virtual void init() {}
+        virtual void quit() {}
       protected:
         // Only Systems::Manager will initialize systems
         // TODO: This doesn't work

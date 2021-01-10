@@ -2,6 +2,7 @@
 #include "component.h"
 #include <stdexcept>
 #include "core.h"
+#include "constants.h"
 
 // Register
 Game::ECS::Systems::Manager::RegisterSystem<Game::ECS::Systems::Camera> camera_system;
@@ -41,32 +42,40 @@ Game::ECS::Components::CameraManager::Instance Game::ECS::Systems::Camera::get_a
  */
 void Game::ECS::Systems::Camera::move_camera(int x, int y)
 {
+  // I check for uint 'underflow' but if map boundaries are proper this check will be unessecary
   Components::CameraManager* cm = Components::Manager::get_instance().get_component<Components::CameraManager>();
   Components::CameraManager::Instance cmi = cm->get_instance(cameras[active_camera]);
   // X
-  cm->set_x(cmi, cm->get_x(cmi) + x);
-  /*if (cm->get_x(cmi) >= 800)
+  if (x < 0)
   {
-    cm->set_x(cmi, cm->get_x(cmi) - 800);
-    cm->set_chunk(cmi, cm->get_chunk(cmi) + 1);
+    if (!(std::abs(x) > cm->get_x(cmi)))
+    {
+      cm->set_x(cmi, cm->get_x(cmi) + x);
+    }
   }
-  else if (cm->get_x(cmi) < 0)
+  else
   {
-    cm->set_x(cmi, cm->get_x(cmi) + 800);
-    cm->set_chunk(cmi, cm->get_chunk(cmi) - 1);
-  }*/
+    if (((cm->get_x(cmi) + x) + Constants.Window.width <= Core::map_helper.x * 800))
+    {
+      cm->set_x(cmi, cm->get_x(cmi) + x);
+    }
+  }
+
   // Y
-  cm->set_y(cmi, cm->get_y(cmi) + y);
-  /*if (cm->get_y(cmi) >= 800)
+  if (y < 0)
   {
-    cm->set_y(cmi, cm->get_y(cmi) - 800);
-    cm->set_chunk(cmi, cm->get_chunk(cmi) + Core::map_helper.x);
+    if (!(std::abs(y) > cm->get_y(cmi)))
+    {
+      cm->set_y(cmi, cm->get_y(cmi) + y);
+    }
   }
-  else if (cm->get_y(cmi) < 0)
+  else
   {
-    cm->set_y(cmi, cm->get_y(cmi) + 800);
-    cm->set_chunk(cmi, cm->get_chunk(cmi) - Core::map_helper.x);
-  }*/
+    if (((cm->get_y(cmi) + y) + Constants.Window.height <= Core::map_helper.y * 800))
+    {
+      cm->set_y(cmi, cm->get_y(cmi) + y);
+    }
+  }
 }
 
 std::uint32_t Game::ECS::Systems::Camera::get_x()

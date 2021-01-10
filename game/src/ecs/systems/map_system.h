@@ -16,12 +16,14 @@ namespace Game
       class Map : public System
       {
       public:
+        void init();
+        void quit();
         static void update();
         static void draw(SDLW::Renderer*);
-        static std::uint32_t get_top_left_chunk();
+        static std::uint32_t get_current_chunk();
       private:
         static std::vector<FFM::Data::Types::Chunk> chunks;
-        static std::uint32_t top_left_chunk;
+        static std::uint32_t current_chunk;
         static std::vector<SDLW::Texture*> chunk_textures;
       };
 

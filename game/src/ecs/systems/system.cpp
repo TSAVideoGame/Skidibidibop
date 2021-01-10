@@ -14,5 +14,8 @@ Game::ECS::Systems::Manager::Manager()
 Game::ECS::Systems::Manager::~Manager()
 {
   for (System* s : systems)
+  {
+    s->quit();
     delete s;
+  }
 }

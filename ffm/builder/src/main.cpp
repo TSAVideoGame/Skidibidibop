@@ -27,6 +27,8 @@ int main()
   FFM::Data::Types::Map map;
   map.offsets.reserve(x * y + 1);
   map.offsets.push_back(0);
+  map.x = x;
+  map.y = y;
  
   for (std::uint16_t i = 0; i < x * y; ++i)
   {
