@@ -17,6 +17,8 @@ namespace Game
     int x, y;
   };
 
+  enum class GameState {NORMAL, MENU, SETTINGS, MAP, CUTSCENE};
+
   class Core
   {
   public:
@@ -30,6 +32,7 @@ namespace Game
     // Get / Set
     static bool is_running();
     static const Input::Data get_inputs();
+    static GameState get_state();
     // Logger
     static Logger logger;
     // If an update() needs the renderer it can get it via this, not final though
@@ -52,6 +55,8 @@ namespace Game
     // Input
     static Input::Data inputs;
     static Input::KeyBindings key_bindings;
+    // Game State
+    static GameState game_state;
     // Resources
     static SDLW::Texture* spritesheet;
   };

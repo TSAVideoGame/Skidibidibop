@@ -2,6 +2,7 @@
 #include "constants.h"
 #include "plugins.h"
 #include "scene.h"
+#include "system.h"
 #include <cstdint>
 
 #include "test_scene.h"
@@ -27,6 +28,8 @@ bool Game::Core::running = false;
 // Input
 Game::Input::Data Game::Core::inputs = {false, false, false, false, false, false, false, false, false};
 Game::Input::KeyBindings Game::Core::key_bindings;
+// State
+Game::GameState Game::Core::game_state = Game::GameState::NORMAL;
 // Logger
 Game::Logger Game::Core::logger("log");
 // Resources
@@ -71,6 +74,9 @@ void Game::Core::init()
   // Use the test scene
   Scenes::Manager::get_instance().set_scene(Scenes::Manager::get_instance().get_scene<Scenes::TestScene>());
 
+  // Init systems
+  ECS::Systems::Manager::get_instance().init();
+
   // Testing plugins
   Plugins::Manager::get_instance().get_plugin<Plugins::Audio>()->add_music("res/music/TSA_test_1.wav");
   Plugins::Manager::get_instance().get_plugin<Plugins::Audio>()->play_music(0);
@@ -83,6 +89,8 @@ void Game::Core::init()
  */
 void Game::Core::close()
 {
+  ECS::Systems::Manager::get_instance().quit();
+
   delete spritesheet;
   delete renderer;
   delete window;
@@ -187,6 +195,7 @@ void Game::Core::draw()
 // Getters / Setters
 bool Game::Core::is_running() { return running; }
 const Game::Input::Data Game::Core::get_inputs() { return inputs; }
+Game::GameState Game::Core::get_state() { return game_state; }
 // Unused functions
 Game::Core::Core() {}
 Game::Core::~Core() {}

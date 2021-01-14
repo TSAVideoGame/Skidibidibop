@@ -23,8 +23,8 @@ namespace Game
         static std::uint32_t get_current_chunk();
       private:
         static std::vector<FFM::Data::Types::Chunk> chunks;
-        static std::uint32_t current_chunk;
-        static std::vector<SDLW::Texture*> chunk_textures;
+        static std::uint32_t current_chunk; // Top left chunk
+        static SDLW::Texture* chunk_textures[9];
       };
 
       extern Manager::RegisterSystem<Map> map_system;

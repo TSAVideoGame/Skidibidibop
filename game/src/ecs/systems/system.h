@@ -65,7 +65,7 @@ namespace Game
           {
             static_assert(std::is_base_of<System, T>::value, "System does not dervie from Game::ECS::Systems::System");
             Manager::get_instance().systems.push_back(new T());
-            Manager::get_instance().get_system<T>()->init();
+            Manager::get_instance().get_system<T>();
           }
         };
 
@@ -75,6 +75,10 @@ namespace Game
 
           return dynamic_cast<T*>(systems[i]);
         }
+
+        // TODO: Make these friends of Core so no one else calls them
+        void init();
+        void quit();
       private:
         Manager();
         ~Manager();

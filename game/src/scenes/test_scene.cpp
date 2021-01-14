@@ -39,7 +39,7 @@ Game::Scenes::TestScene::TestScene()
 
   SDL_Rect src_rect = {0, 6 * 32, 32, 32};
   rm->set_src_rect(rmi, src_rect);
-  SDL_Rect dest_rect = {0, 0, 32, 32};
+  SDL_Rect dest_rect = {0, 0, 64, 64};
   rm->set_dest_rect(rmi, dest_rect);
 
   ECS::Components::PhysicsManager::Instance pmi = pm->add_component(player);
