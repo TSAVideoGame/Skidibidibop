@@ -4,8 +4,44 @@
 #include <fstream>
 #include "ffm_data.h"
 
-int main()
+int main(int argc, char* args[])
 {
+  if (argc > 1)
+  {
+    // DEBUG MODE
+    // Makes a debug map
+    //
+    // Contains nothing except incrementing background ids
+
+    std::ofstream out_file("map.ffmf", std::ofstream::binary | std::ofstream::trunc);
+    std::ofstream out_file_helper("map.ffmfd", std::ofstream::binary | std::ofstream::trunc);
+   
+    int x = 9, y = 9;
+
+    FFM::Data::Types::Map map;
+    map.offsets.reserve(x * y + 1);
+    map.offsets.push_back(0);
+    map.x = x;
+    map.y = y;
+
+    for (std::uint32_t i = 0; i < x * y; ++i)
+    {
+      FFM::Data::Types::Chunk c;
+      c.background_id = i + 1;
+      c.save(out_file);
+      
+      map.offsets.push_back(map.offsets[i] + c.size());
+    }
+
+    map.offsets.erase(map.offsets.end() - 1); // There will be an extra offset
+    map.save(out_file_helper);
+      
+    out_file.close();
+    out_file_helper.close();
+    
+    return 1;
+  }
+
   std::cout << "FFM Builder\nBuilds the map given chunks\n\n" << std::endl;
   std::cout << "Enter map chunk dimensions (x,y):" << std::endl;
 

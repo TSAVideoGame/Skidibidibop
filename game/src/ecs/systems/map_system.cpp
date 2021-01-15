@@ -42,7 +42,6 @@ void Game::ECS::Systems::Map::quit()
   }
 }
 
-#include <iostream> // Remove later
 void Game::ECS::Systems::Map::update()
 {
   // Load / Unload chunks
@@ -150,6 +149,74 @@ void Game::ECS::Systems::Map::update()
   }
 
   // Y
+  if (current_chunk / Core::map_helper.x != cm->get_y(cmi) / 800)
+  {
+    // Load bottom row
+    if (current_chunk / Core::map_helper.x < cm->get_y(cmi) / 800)
+    {
+      if (current_chunk / Core::map_helper.x < Core::map_helper.y - 1)
+      {
+        current_chunk += Core::map_helper.x;
+
+        // Rotate chunks and textures
+        std::rotate(chunks.begin(), chunks.begin() + 3, chunks.end());
+        
+        std::vector<SDLW::Texture*> new_textures(chunk_textures, chunk_textures + 9);
+        std::rotate(new_textures.begin(), new_textures.begin() + 3, new_textures.end());
+        std::copy(new_textures.begin(), new_textures.end(), chunk_textures);
+
+        // Add the new row of chunks
+        for (int i = 0; i < 3; ++i)
+        {
+          FFM::Data::Types::Chunk c;
+          if (current_chunk / Core::map_helper.x + 2 < Core::map_helper.y)
+          {
+            Core::map_file.clear();
+            Core::map_file.seekg(Core::map_helper.offsets[current_chunk + Core::map_helper.x * 2 + i]);
+            c.load(Core::map_file);
+
+            // Load Texture
+            std::string fpath = "res/chunk_images/" + std::to_string(c.background_id) + ".png";
+            delete chunk_textures[6 + i];
+            chunk_textures[6 + i] = new SDLW::Texture(fpath.c_str(), Core::renderer);
+          }
+          chunks[6 + i] = c;
+        }
+      }
+    }
+    // Load top row
+    else
+    {
+      if (current_chunk / Core::map_helper.x > 0)
+      {
+        current_chunk -= Core::map_helper.x;
+
+        // Rotate chunks and textures
+        std::rotate(chunks.begin(), chunks.begin() + 6, chunks.end());
+        
+        std::vector<SDLW::Texture*> new_textures(chunk_textures, chunk_textures + 9);
+        std::rotate(new_textures.begin(), new_textures.begin() + 6, new_textures.end());
+        std::copy(new_textures.begin(), new_textures.end(), chunk_textures);
+
+        // Add the new row of chunks
+        for (int i = 0; i < 3; ++i)
+        {
+          FFM::Data::Types::Chunk c;
+          
+          Core::map_file.clear();
+          Core::map_file.seekg(Core::map_helper.offsets[current_chunk + i]);
+          c.load(Core::map_file);
+
+          // Load Texture
+          std::string fpath = "res/chunk_images/" + std::to_string(c.background_id) + ".png";
+          delete chunk_textures[i];
+          chunk_textures[i] = new SDLW::Texture(fpath.c_str(), Core::renderer);
+          
+          chunks[i] = c;
+        }
+      }
+    }
+  }
 }
 
 void Game::ECS::Systems::Map::draw(SDLW::Renderer* renderer)
@@ -161,8 +228,8 @@ void Game::ECS::Systems::Map::draw(SDLW::Renderer* renderer)
   Components::CameraManager::Instance cmi = cs->get_active_camera();
 
   // cm_x and cm_y are camera values relative to the current chunk
-  int cm_x = cm->get_x(cmi) % 800;
-  int cm_y = cm->get_y(cmi) % 800;
+  int cm_x = cm->get_x(cmi) - (current_chunk % Core::map_helper.x * 800);
+  int cm_y = cm->get_y(cmi) - (current_chunk / Core::map_helper.x * 800);
   SDL_Rect dest_rect = {0, 0, 800, 800};
   for (int row = 0; row < 3; ++row)
   {
