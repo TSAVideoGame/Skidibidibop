@@ -243,7 +243,7 @@ static void draw_objects(SDLW::Renderer* renderer)
   {
     FFM::Data::Types::Chunk::Vertex v = FFM::ChunkEditor::Window::object_vertices[i->vertex];
     SDL_Rect src_rect = {i->id * 32, 0, 32, 32};
-    SDL_Rect dest_rect = {v.x + FFM::ChunkEditor::Constants::Window.TOOL_WIDTH, v.y, 32, 32};
+    SDL_Rect dest_rect = {v.x + FFM::ChunkEditor::Constants::Window.TOOL_WIDTH, v.y, 64, 64};
     renderer->copy(FFM::ChunkEditor::Window::get_spritesheet(), &src_rect, &dest_rect);
   }
 }
@@ -254,7 +254,7 @@ static void draw_monsters(SDLW::Renderer* renderer)
   {
     FFM::Data::Types::Chunk::Vertex v = FFM::ChunkEditor::Window::monster_vertices[i->vertex];
     //SDL_Rect src_rect = {i->id * 32, 0, 32, 32};
-    SDL_Rect dest_rect = {v.x + FFM::ChunkEditor::Constants::Window.TOOL_WIDTH, v.y, 32, 32};
+    SDL_Rect dest_rect = {v.x + FFM::ChunkEditor::Constants::Window.TOOL_WIDTH, v.y, 64, 64};
     //renderer->copy(FFM::ChunkEditor::Window::get_spritesheet(), &src_rect, &dest_rect);
     renderer->set_draw_color(255, 0, 0, 255);
     SDL_RenderFillRect(renderer->get_SDL(), &dest_rect);
@@ -267,7 +267,7 @@ static void draw_npcs(SDLW::Renderer* renderer)
   {
     FFM::Data::Types::Chunk::Vertex v = FFM::ChunkEditor::Window::npc_vertices[i->vertex];
     //SDL_Rect src_rect = {i->id * 32, 0, 32, 32};
-    SDL_Rect dest_rect = {v.x + FFM::ChunkEditor::Constants::Window.TOOL_WIDTH, v.y, 32, 32};
+    SDL_Rect dest_rect = {v.x + FFM::ChunkEditor::Constants::Window.TOOL_WIDTH, v.y, 64, 64};
     //renderer->copy(FFM::ChunkEditor::Window::get_spritesheet(), &src_rect, &dest_rect);
     renderer->set_draw_color(0, 0, 255, 255);
     SDL_RenderFillRect(renderer->get_SDL(), &dest_rect);
