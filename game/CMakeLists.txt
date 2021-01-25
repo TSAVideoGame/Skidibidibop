@@ -21,6 +21,7 @@ add_executable(game
 
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/camera_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/map_system.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/menu_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/physics_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/render_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/system.cpp

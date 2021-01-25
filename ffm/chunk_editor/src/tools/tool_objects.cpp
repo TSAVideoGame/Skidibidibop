@@ -206,7 +206,7 @@ void FFM::ChunkEditor::Tools::Objects::Images::draw()
   if (selected_id != -1)
   {
     SDL_Rect src_rect = {selected_id * 32, 0, 32, 32};
-    SDL_Rect dest_rect = {Window::get_inputs().mouse_x, Window::get_inputs().mouse_y, 32, 32};
+    SDL_Rect dest_rect = {Window::get_inputs().mouse_x, Window::get_inputs().mouse_y, 64, 64};
     renderer->copy(Window::get_spritesheet(), &src_rect, &dest_rect);
   }
 }
