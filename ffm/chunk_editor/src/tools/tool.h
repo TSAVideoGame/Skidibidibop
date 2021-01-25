@@ -8,6 +8,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "window.h"
 #include "confirmation_string.h"
+#include <cmath>
 
 namespace FFM
 {

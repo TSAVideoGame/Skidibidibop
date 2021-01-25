@@ -33,11 +33,13 @@ target_include_directories(editor PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../data/include
   ${CMAKE_CURRENT_LIST_DIR}/../../sdlw/include
   /usr/include/SDL2
+  C:/cpplib/SDL2-1.0.10/include
 )
 
 target_link_directories(editor PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../data/lib
   ${CMAKE_CURRENT_LIST_DIR}/../../sdlw/lib
+  ${CMAKE_CURRENT_LIST_DIR}
 )
 
 target_link_libraries(editor ffmdata sdlw SDL2 SDL2_image SDL2_ttf)
@@ -46,3 +48,6 @@ set_target_properties(editor PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+if (WIN32)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-subsystem,windows")
+endif (WIN32)

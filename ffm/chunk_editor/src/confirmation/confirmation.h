@@ -3,6 +3,7 @@
 
 #include "sdlw.h"
 #include "window_inputs.h"
+#include <cstdlib>
 
 namespace FFM
 {
@@ -16,7 +17,7 @@ namespace FFM
       public:
         struct Data
         {
-          ~Data() { if (result != nullptr) free(result); }
+          ~Data() { if (result != nullptr) std::free(result); }
           void* result = nullptr;
           ResultType result_type;
           size_t size;

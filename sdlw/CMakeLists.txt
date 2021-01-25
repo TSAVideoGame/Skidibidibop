@@ -13,6 +13,11 @@ target_include_directories(sdlw PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/src
   ${CMAKE_CURRENT_LIST_DIR}/include
   /usr/include/SDL2
+  C:/cpplib/SDL2-2.0.10/include
+)
+
+target_link_directories(sdlw PUBLIC
+  ${CMAKE_CURRENT_LIST_DIR}
 )
 
 target_link_libraries(sdlw SDL2 SDL2_image)
