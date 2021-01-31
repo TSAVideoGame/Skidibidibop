@@ -20,8 +20,8 @@ void Game::ECS::Systems::Render::draw(SDLW::Renderer* renderer)
     {
       Components::CameraManager* cm = Components::Manager::get_instance().get_component<Components::CameraManager>();
       Components::CameraManager::Instance cmi = Manager::get_instance().get_system<Camera>()->get_active_camera();
-      rm->data.dest_rect[i].x = tm->get_offset_x(tmi) - cm->get_x(cmi);
-      rm->data.dest_rect[i].y = tm->get_offset_y(tmi) - cm->get_y(cmi);
+      rm->data.dest_rect[i].x = tm->get_x(tmi) - cm->get_x(cmi);
+      rm->data.dest_rect[i].y = tm->get_y(tmi) - cm->get_y(cmi);
     }
     // Temporary, texture shouldn't be obtained like this
     renderer->copy(Core::get_texture(), &rm->data.src_rect[i], &rm->data.dest_rect[i]);

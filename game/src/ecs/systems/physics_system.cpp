@@ -25,8 +25,8 @@ void Game::ECS::Systems::Physics::update()
     Components::TransformManager::Instance ti = tm->get_instance(pm->data.entity[i]);
     if (ti.index != 0)
     {
-      tm->set_offset_x(ti, tm->get_offset_x(ti) + static_cast<int>(pm->data.x_vel[i]));
-      tm->set_offset_y(ti, tm->get_offset_y(ti) + static_cast<int>(pm->data.y_vel[i]));
+      tm->set_x(ti, tm->get_x(ti) + static_cast<int>(pm->data.x_vel[i]));
+      tm->set_y(ti, tm->get_y(ti) + static_cast<int>(pm->data.y_vel[i]));
     }
   }
 }

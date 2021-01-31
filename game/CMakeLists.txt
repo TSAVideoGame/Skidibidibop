@@ -49,12 +49,14 @@ target_include_directories(game PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../sdlw/include
   ${CMAKE_CURRENT_LIST_DIR}/../ffm/data/include
   /usr/include/SDL2
+  C:/cpplib/SDL2-2.0.10/include
 )
 
 target_link_directories(game PUBLIC
   ${CMAKE_CURRENT_LIST_DIR}/../data/lib
   ${CMAKE_CURRENT_LIST_DIR}/../sdlw/lib
   ${CMAKE_CURRENT_LIST_DIR}/../ffm/data/lib
+  ${CMAKE_CURRENT_LIST_DIR}
 )
 
 target_link_libraries(game sbbdata ffmdata sdlw SDL2 SDL2_mixer)

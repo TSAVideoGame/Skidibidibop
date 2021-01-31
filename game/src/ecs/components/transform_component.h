@@ -32,10 +32,8 @@ namespace Game
           void* buffer;
 
           Entity* entity;
-          std::uint16_t* tile_x;
-          std::uint16_t* tile_y;
-          int* offset_x;
-          int* offset_y;
+          std::uint32_t* x;
+          std::uint32_t* y;
         };
 
         // An instance of the component
@@ -46,17 +44,11 @@ namespace Game
 
         Instance get_instance(const Entity&);
 
-        std::uint16_t get_tile_x(Instance&);
-        void          set_tile_x(Instance&, std::uint16_t);
+        std::uint32_t get_x(Instance&);
+        void          set_x(Instance&, std::uint32_t);
 
-        std::uint16_t get_tile_y(Instance&);
-        void          set_tile_y(Instance&, std::uint16_t);
-
-        int           get_offset_x(Instance&);
-        void          set_offset_x(Instance&, int);
-
-        int           get_offset_y(Instance&);
-        void          set_offset_y(Instance&, int);
+        std::uint32_t get_y(Instance&);
+        void          set_y(Instance&, std::uint32_t);
 
         Instance add_component(const Entity&);
         void destroy_component(Instance&);

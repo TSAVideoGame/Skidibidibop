@@ -3,7 +3,7 @@
 const char * const Game::Logger::code_names[8] = {
   "LOG",
   "ERROR",
-  "",
+  "DEBUG",
   "",
   "",
   "",
@@ -13,13 +13,16 @@ const char * const Game::Logger::code_names[8] = {
 
 Game::Logger::Logger(const std::string& fpath)
 {
-  file.open(fpath, std::ofstream::trunc);
+  file_path = fpath;
   code = 0;
+
+  std::ofstream file(file_path, std::ofstream::trunc);
+  file.close();
 }
 
 Game::Logger::~Logger()
 {
-  file.close();
+
 }
 
 /*
@@ -34,6 +37,8 @@ void Game::Logger::log(std::uint8_t c, const std::string& msg)
 {
   if (c | code)
   {
+    std::ofstream file(file_path);
+
     std::uint8_t a = 1;
     int position = 0;
 
@@ -45,6 +50,8 @@ void Game::Logger::log(std::uint8_t c, const std::string& msg)
     }
 
     file << code_names[position] << ": " << msg << "\n";
+
+    file.close();
   }
 }
 

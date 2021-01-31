@@ -28,7 +28,7 @@ namespace Game
     {
       LOG    = 1 << 0,
       ERROR  = 1 << 1,
-      SLOT_3 = 1 << 2,
+      DEBUG  = 1 << 2,
       SLOT_4 = 1 << 3,
       SLOT_5 = 1 << 4,
       SLOT_6 = 1 << 5,
@@ -43,7 +43,7 @@ namespace Game
     void enable(std::uint8_t);
     void disable(std::uint8_t);
   private:
-    std::ofstream file;
+    std::string file_path;
     std::uint8_t code;
 
     static const char * const code_names[8];

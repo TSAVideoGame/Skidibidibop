@@ -34,8 +34,8 @@ Game::Scenes::TestScene::TestScene()
 
   ECS::Components::TransformManager::Instance tmi = tm->add_component(player);
 
-  tm->set_offset_x(tmi, Constants.Window.width / 2);
-  tm->set_offset_y(tmi, Constants.Window.height / 2);
+  tm->set_x(tmi, Constants.Window.width / 2);
+  tm->set_y(tmi, Constants.Window.height / 2);
   
   ECS::Components::RenderManager::Instance rmi = rm->add_component(player);
 
@@ -115,8 +115,8 @@ void Game::Scenes::TestScene::update()
     // Move camera if player is at a certain 'box'
     ECS::Components::TransformManager* tm = ECS::Components::Manager::get_instance().get_component<ECS::Components::TransformManager>();
     ECS::Components::TransformManager::Instance tmi = tm->get_instance(player);
-    int player_x = tm->get_offset_x(tmi) - ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Camera>()->get_x();
-    int player_y = tm->get_offset_y(tmi) - ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Camera>()->get_y();
+    int player_x = tm->get_x(tmi) - ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Camera>()->get_x();
+    int player_y = tm->get_y(tmi) - ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Camera>()->get_y();
 
     if (player_x > 860)
     {

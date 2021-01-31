@@ -20,9 +20,11 @@ namespace Game
         {
           std::uint32_t x;
           std::uint32_t y;
+          std::uint32_t w;
+          std::uint32_t h;
         };
 
-        AABB get_AABB(Entity);
+        static AABB get_AABB(Entity);
       };
 
       extern Manager::RegisterSystem<Collision> collision_system;
