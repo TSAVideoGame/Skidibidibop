@@ -1,0 +1,5 @@
+﻿  collision_system.cpp
+C:\Users\JJ\Documents\GitHub\Skidibidibop\game\src\ecs\systems\collision_system.cpp(68,11): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\JJ\Documents\GitHub\Skidibidibop\game\src\ecs\systems\collision_system.cpp(69,21): warning C4244: '=': conversion from 'double' to 'uint32_t', possible loss of data
+C:\Users\JJ\Documents\GitHub\Skidibidibop\game\src\ecs\systems\collision_system.cpp(70,21): warning C4244: '=': conversion from 'double' to 'uint32_t', possible loss of data
+  game.vcxproj -> C:\Users\JJ\Documents\GitHub\Skidibidibop\game\bin\Debug\game.exe

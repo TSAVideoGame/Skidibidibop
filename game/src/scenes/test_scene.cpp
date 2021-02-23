@@ -10,6 +10,15 @@
 #include "menu_system.h"
 #include "core.h"
 #include "constants.h"
+<<<<<<< Updated upstream
+=======
+#include "direction_component.h"
+#include "animation_component.h"
+#include "animation_system.h"
+#include "line_debug_system.h"
+#include "collision_component.h"
+#include "collision_system.h"
+>>>>>>> Stashed changes
 
 static Game::ECS::Entity player = Game::ECS::EntityManager::get_instance().get_null();
 static bool paused = false;
@@ -111,6 +120,10 @@ void Game::Scenes::TestScene::update()
     }
 
     ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Physics>()->update();
+
+    ECS::Systems::Manager::get_instance().get_system<ECS::Systems::Collision>()->update();
+
+
 
     // Move camera if player is at a certain 'box'
     ECS::Components::TransformManager* tm = ECS::Components::Manager::get_instance().get_component<ECS::Components::TransformManager>();
