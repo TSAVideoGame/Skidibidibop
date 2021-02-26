@@ -68,7 +68,7 @@ int main(int argc, char* args[])
  
   for (std::uint16_t i = 0; i < x * y; ++i)
   {
-    std::ifstream chunkf(dir_path + std::to_string(i % x) + "_" + std::to_string(i / x) + ".ffmc");
+    std::ifstream chunkf(std::to_string(i % x) + "_" + std::to_string(i / x) + ".ffmc");
     if (chunkf.is_open())
     {
       FFM::Data::Types::Chunk c(chunkf);

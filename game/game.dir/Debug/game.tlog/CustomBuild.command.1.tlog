@@ -1,6 +1,6 @@
-^C:\USERS\JJ\DOCUMENTS\GITHUB\SKIDIBIDIBOP\GAME\CMAKELISTS.TXT
+^C:\USERS\MIHIR\DOWNLOADS\SKIDIBIDIBOP-MASTER(4)\SKIDIBIDIBOP-MASTER\GAME\CMAKELISTS.TXT
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/JJ/Documents/GitHub/Skidibidibop/game -BC:/Users/JJ/Documents/GitHub/Skidibidibop/game --check-stamp-file C:/Users/JJ/Documents/GitHub/Skidibidibop/game/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Mihir/Downloads/Skidibidibop-master(4)/Skidibidibop-master/game -BC:/Users/Mihir/Downloads/Skidibidibop-master(4)/Skidibidibop-master/game --check-stamp-file C:/Users/Mihir/Downloads/Skidibidibop-master(4)/Skidibidibop-master/game/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone

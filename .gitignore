@@ -8,6 +8,23 @@ Makefile
 bin
 lib
 
+# Windows Build (look at all this mess :(
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.dll
+*.exp
+*.ilk
+*.pdb
+*.sln
+*.lib
+*.exe
+Debug
+Release
+MinSizeRel
+RelWithDebInfo
+.vs
+
 # Editor stuff
 .clangd
 compile_commands.json

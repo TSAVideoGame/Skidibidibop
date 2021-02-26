@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Users\JJ\Documents\GitHub\Skidibidibop\game\CMakeFiles\b4ab4fd93937f88973cbdabbb7cca05c\generate.stamp.rule">
+    <CustomBuild Include="C:\Users\Mihir\Downloads\Skidibidibop-master(4)\Skidibidibop-master\game\CMakeFiles\7cec93c8f2b0ced366391119c8514b44\generate.stamp.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{E9B27678-F683-3F4C-959B-C95E96AF9EF1}</UniqueIdentifier>
+      <UniqueIdentifier>{771F819D-866D-32C4-AD59-BD850E188042}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

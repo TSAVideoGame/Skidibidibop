@@ -13,22 +13,30 @@ add_executable(game
 
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/entity.cpp
 
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/animation_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/camera_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/component.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/collision_component.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/direction_component.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/line_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/physics_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/render_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/transform_component.cpp
 
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/animation_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/camera_system.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/collision_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/map_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/menu_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/physics_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/render_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/system.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/line_debug_system.cpp
 
   ${CMAKE_CURRENT_LIST_DIR}/src/logger/logger.cpp
 
   ${CMAKE_CURRENT_LIST_DIR}/src/scenes/test_scene.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/scenes/title_scene.cpp
 )
 
 # Ignore the /usr/include/SDL2 part, my VIM is messed up :(

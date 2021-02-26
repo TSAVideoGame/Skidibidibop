@@ -1,14 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
-  <ProjectOutputs>
-    <ProjectOutput>
-      <FullPath>C:\Users\JJ\Documents\GitHub\Skidibidibop\game\Debug\ZERO_CHECK</FullPath>
-    </ProjectOutput>
-    <ProjectOutput>
-      <FullPath>C:\Users\JJ\Documents\GitHub\Skidibidibop\game\bin\Debug\game.exe</FullPath>
-    </ProjectOutput>
-  </ProjectOutputs>
-  <ContentFiles />
-  <SatelliteDlls />
-  <NonRecipeFileRefs />
+  <ProjectOutputs>C:\Users\Mihir\Downloads\Skidibidibop-master(4)\Skidibidibop-master\game\Debug\ZERO_CHECK;C:\Users\Mihir\Downloads\Skidibidibop-master(4)\Skidibidibop-master\game\bin\Debug\game.exe</ProjectOutputs>
+  <ContentFiles></ContentFiles>
+  <SatelliteDlls></SatelliteDlls>
+  <NonRecipeFileRefs></NonRecipeFileRefs>
 </Project>

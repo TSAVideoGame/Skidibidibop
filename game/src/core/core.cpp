@@ -6,6 +6,7 @@
 #include <cstdint>
 
 #include "test_scene.h"
+#include "title_scene.h"
 
 /*
  * ========================================
@@ -49,6 +50,8 @@ std::uint32_t Game::Core::current_chunk = 0;
 void Game::Core::init()
 {
   logger.enable(Logger::LOG | Logger::ERROR);
+  logger.log(Logger::LOG, "Testing log");
+  logger.log(Logger::LOG, "Testing log again");
 
   // Initialize SDL and subsystems
   if (SDL_Init(0))
@@ -72,14 +75,15 @@ void Game::Core::init()
   running = true;
 
   // Use the test scene
-  Scenes::Manager::get_instance().set_scene(Scenes::Manager::get_instance().get_scene<Scenes::TestScene>());
+  Scenes::Manager::get_instance().set_scene(Scenes::Manager::get_instance().get_scene<Scenes::Title>());
 
   // Init systems
   ECS::Systems::Manager::get_instance().init();
 
   // Testing plugins
-  Plugins::Manager::get_instance().get_plugin<Plugins::Audio>()->add_music("res/music/TSA_test_1.wav");
-  Plugins::Manager::get_instance().get_plugin<Plugins::Audio>()->play_music(0);
+  for (int i = 1; i <= 24; ++i)
+    Plugins::Manager::get_instance().get_plugin<Plugins::Audio>()->add_music("res/music/TSA_test_" + std::to_string(i) +".wav");
+  Plugins::Manager::get_instance().get_plugin<Plugins::Audio>()->play_music(23);
 }
 
 /*
