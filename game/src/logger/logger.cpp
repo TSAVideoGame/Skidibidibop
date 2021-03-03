@@ -37,7 +37,7 @@ void Game::Logger::log(std::uint8_t c, const std::string& msg)
 {
   if (c | code)
   {
-    std::ofstream file(file_path);
+    std::ofstream file(file_path, std::ofstream::app);
 
     std::uint8_t a = 1;
     int position = 0;

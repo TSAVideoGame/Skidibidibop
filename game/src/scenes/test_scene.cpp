@@ -42,8 +42,8 @@ Game::Scenes::TestScene::TestScene()
 
   ECS::Components::TransformManager::Instance tmi = tm->add_component(player);
 
-  tm->set_x(tmi, 800 * 10 + 454);
-  tm->set_y(tmi, 800 * 14 + 468);
+  tm->set_x(tmi, 0);
+  tm->set_y(tmi, 0);
   
   ECS::Components::RenderManager::Instance rmi = rm->add_component(player);
 
