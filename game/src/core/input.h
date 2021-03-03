@@ -28,7 +28,7 @@ namespace Game
       SDL_Keycode slot_b = SDLK_2;
       SDL_Keycode slot_c = SDLK_3;
 
-      SDL_Keycode attack = SDLK_o;
+      SDL_Keycode attack = SDLK_SPACE;
 
       SDL_Keycode pause = SDLK_RETURN;
     };

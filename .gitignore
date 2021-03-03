@@ -23,6 +23,7 @@ Debug
 Release
 MinSizeRel
 RelWithDebInfo
+Win32
 .vs
 
 # Editor stuff
