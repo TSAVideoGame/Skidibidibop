@@ -112,6 +112,7 @@ void Game::ECS::Systems::Map::update_music()
   }
 }
 
+#include "core.h"
 void Game::ECS::Systems::Map::update()
 {
   // Load / Unload chunks
@@ -127,14 +128,14 @@ void Game::ECS::Systems::Map::update()
     if (current_chunk % Core::map_helper.x < cm->get_x(cmi) / 800)
     {
       // Load chunks to the right
-      if (current_chunk % Core::map_helper.x < Core::map_helper.x - 1)
+      if (((current_chunk + 1) % Core::map_helper.x) + 2 < Core::map_helper.x)
       {
         ++current_chunk;
         // Fancy rotate stuff
         // The first column needs to be moved to the end
         // Do this by rotating so the 2nd item in a grouping of 3 becomes the first
         // Do this for chunks and chunk_textures
-        
+
         for (int i = 0; i < 3; ++i)
         {
           std::vector<FFM::Data::Types::Chunk>::iterator begin = chunks.begin() + i * 3;
@@ -142,6 +143,8 @@ void Game::ECS::Systems::Map::update()
         }
 
         std::vector<SDLW::Texture*> new_textures;
+        new_textures.reserve(9);
+
         for (int i = 0; i < 3; ++i)
         {
           new_textures.push_back(chunk_textures[3 * i + 1]);
@@ -154,7 +157,7 @@ void Game::ECS::Systems::Map::update()
         for (int i = 0; i < 3; ++i)
         {
           FFM::Data::Types::Chunk c;
-          if (current_chunk % Core::map_helper.x + 2 < Core::map_helper.x - 1)
+          if ((current_chunk % Core::map_helper.x) + 2 < Core::map_helper.x)
           {
             Core::map_file.clear();
             Core::map_file.seekg(Core::map_helper.offsets[Core::map_helper.x * i + current_chunk + 2]);
@@ -175,14 +178,14 @@ void Game::ECS::Systems::Map::update()
     else
     {
       // Load chunk to the left
-      if (current_chunk % Core::map_helper.x > 0)
+      if ((current_chunk - 1) % Core::map_helper.x >= 0)
       {
         --current_chunk;
         // Fancy rotate stuff
         // The last column needs to be moved to the beginning
         // Do this by rotating
         // Do this for chunks and chunk_textures
-        
+
         for (int i = 0; i < 3; ++i)
         {
           std::vector<FFM::Data::Types::Chunk>::iterator begin = chunks.begin() + i * 3;
@@ -229,7 +232,7 @@ void Game::ECS::Systems::Map::update()
     // Load bottom row
     if (current_chunk / Core::map_helper.x < cm->get_y(cmi) / 800)
     {
-      if (current_chunk / Core::map_helper.x < Core::map_helper.y - 3)
+      if (((current_chunk + Core::map_helper.x) / Core::map_helper.x) + 2 < Core::map_helper.y)
       {
         current_chunk += Core::map_helper.x;
 
@@ -244,7 +247,7 @@ void Game::ECS::Systems::Map::update()
         for (int i = 0; i < 3; ++i)
         {
           FFM::Data::Types::Chunk c;
-          if (current_chunk / Core::map_helper.x < Core::map_helper.y - 3)
+          if (current_chunk / Core::map_helper.x + 2 < Core::map_helper.y)
           {
             Core::map_file.clear();
             Core::map_file.seekg(Core::map_helper.offsets.at(current_chunk + Core::map_helper.x * 2 + i));
@@ -254,6 +257,8 @@ void Game::ECS::Systems::Map::update()
             std::string fpath = "res/chunk_images/" + std::to_string(c.background_id) + ".png";
             delete chunk_textures[6 + i];
             chunk_textures[6 + i] = new SDLW::Texture(fpath.c_str(), Core::renderer);
+
+            load_stuff(6 + i);
           }
           chunks[6 + i] = c;
         }
@@ -262,7 +267,7 @@ void Game::ECS::Systems::Map::update()
     // Load top row
     else
     {
-      if (current_chunk / Core::map_helper.x > 0)
+      if ((current_chunk - Core::map_helper.x) / Core::map_helper.x >= 0)
       {
         current_chunk -= Core::map_helper.x;
 
@@ -286,6 +291,8 @@ void Game::ECS::Systems::Map::update()
           std::string fpath = "res/chunk_images/" + std::to_string(c.background_id) + ".png";
           delete chunk_textures[i];
           chunk_textures[i] = new SDLW::Texture(fpath.c_str(), Core::renderer);
+
+          load_stuff(i);
           
           chunks[i] = c;
         }
