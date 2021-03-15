@@ -1,6 +1,7 @@
 #include "core.h"
+#include <Windows.h>
 
-int main(int argc, char* args[])
+int WINAPI WinMain(HINSTANCE hi, HINSTANCE hpi, LPSTR lp, int cmd)
 {
   const int FPS = 30;
   const int FRAME_DELAY = 1000 / FPS;

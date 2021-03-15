@@ -50,10 +50,10 @@ void Game::ECS::Systems::Collision::update()
 
 			if (minX > maxX) 
 			{
-				Core::logger.log(Logger::LOG, "Failed X axis");
+				//Core::logger.log(Logger::LOG, "Failed X axis");
 				continue;
 			}
-			Core::logger.log(Logger::LOG, "Succeeded X axis");
+			//Core::logger.log(Logger::LOG, "Succeeded X axis");
 
 			//Y PORTION
 			std::uint32_t minY = lm->data.v1_y[j];
@@ -90,11 +90,11 @@ void Game::ECS::Systems::Collision::update()
 
 			if (minY > maxY)
 			{
-				Core::logger.log(Logger::LOG, "Failed Y axis");
+				//Core::logger.log(Logger::LOG, "Failed Y axis");
 				continue;
 			}
 
-			Core::logger.log(Logger::LOG, "Collided");
+			//Core::logger.log(Logger::LOG, "Collided");
 			Components::PhysicsManager::Instance pi = pm->get_instance(cm->data.entity[i]);
 			if (pi.index != 0)
 			{
