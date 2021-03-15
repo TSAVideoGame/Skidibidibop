@@ -32,7 +32,7 @@ Game::Input::KeyBindings Game::Core::key_bindings;
 // State
 Game::GameState Game::Core::game_state = Game::GameState::NORMAL;
 // Logger
-Game::Logger Game::Core::logger("log");
+Game::Logger Game::Core::logger("log.txt");
 // Resources
 SDLW::Texture* Game::Core::spritesheet = nullptr;
 std::ifstream Game::Core::map_file;
