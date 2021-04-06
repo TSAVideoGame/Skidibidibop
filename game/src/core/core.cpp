@@ -27,7 +27,7 @@ SDLW::Window* Game::Core::window = nullptr;
 SDLW::Renderer* Game::Core::renderer = nullptr;
 bool Game::Core::running = false;
 // Input
-Game::Input::Data Game::Core::inputs = {false, false, false, false, false, false, false, false, false};
+Game::Input::Data Game::Core::inputs = {false, false, false, false, false, false, false, false, false, false, false};
 Game::Input::KeyBindings Game::Core::key_bindings;
 // State
 Game::GameState Game::Core::game_state = Game::GameState::NORMAL;
@@ -135,10 +135,14 @@ void Game::Core::input()
           inputs.slot_b = true;
         if (key == key_bindings.slot_c)
           inputs.slot_c = true;
+        if (key == key_bindings.slot_d)
+          inputs.slot_d = true;
         if (key == key_bindings.attack)
           inputs.attack = true;
         if (key == key_bindings.pause)
           inputs.pause = true;
+        if (key == key_bindings.space)
+          inputs.space = true;
 
         break;
       }
@@ -160,10 +164,14 @@ void Game::Core::input()
           inputs.slot_b = false;
         if (key == key_bindings.slot_c)
           inputs.slot_c = false;
+        if (key == key_bindings.slot_d)
+          inputs.slot_d = false;
         if (key == key_bindings.attack)
           inputs.attack = false;
         if (key == key_bindings.pause)
           inputs.pause = false;
+        if (key == key_bindings.space)
+          inputs.space = true;
 
         break;
       }

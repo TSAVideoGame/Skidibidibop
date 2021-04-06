@@ -20,18 +20,24 @@ add_executable(game
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/direction_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/line_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/physics_component.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/projectile_component.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/projectile_def_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/render_component.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/transform_component.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/components/weapon_component.cpp
 
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/animation_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/camera_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/collision_system.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/inventory_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/map_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/menu_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/physics_system.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/projectile_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/render_system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/system.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/line_debug_system.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/ecs/systems/weapon_system.cpp
 
   ${CMAKE_CURRENT_LIST_DIR}/src/logger/logger.cpp
 
