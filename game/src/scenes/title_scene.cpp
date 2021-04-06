@@ -26,7 +26,7 @@ void Game::Scenes::Title::update()
 
   Input::Data in = Core::get_inputs();
 
-  if (in.attack)
+  if (in.space)
   {
     Scenes::Manager::get_instance().set_scene(Scenes::Manager::get_instance().get_scene<TestScene>());
   }

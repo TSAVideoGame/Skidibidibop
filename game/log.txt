@@ -1,0 +1,2 @@
+LOG: Testing log
+LOG: Testing log again
